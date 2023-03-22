@@ -1,6 +1,9 @@
-# nvc_cinemas
+# nvc_cinemas - NVC Cinemas
+# Novation - Vital - Cultural
 
-A new Flutter project.
+Đồ Án Tốt Nghiệp - Trường Đại học Công nghiệp Hà Nội
+Họ và tên: Nguyễn Vũ Chí Tình
+Khoá: K14
 
 ## Getting Started
 
