@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "751820433025",
+    "project_id": "nvc-cinemas",
+    "storage_bucket": "nvc-cinemas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751820433025:android:05f18c16c27e9b3e174f80",
+        "android_client_info": {
+          "package_name": "vn.nvc_cinemas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751820433025-n179urcag99mh9g1vsgru14uciqpbp8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD85Fruj7pLFFDF7uBR-87gOLGNnWV1pKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751820433025-n179urcag99mh9g1vsgru14uciqpbp8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
