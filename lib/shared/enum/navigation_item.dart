@@ -6,4 +6,6 @@ enum NavigationItem {
   personalAccount,
   settings,
   seeMore,
+  movie,
+  showtimes,
 }

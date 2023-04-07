@@ -1,71 +1,81 @@
-// import 'package:callio_mobile/gen/colors.gen.dart';
-// import 'package:callio_mobile/l10n/l10n.dart';
-// import 'package:flutter/material.dart';
-// import 'package:one_context/one_context.dart';
-// import 'package:rflutter_alert/rflutter_alert.dart';
-// import 'package:url_launcher/url_launcher.dart';
-//
-// class FunctionUlti {
-//   // ignore: long-parameter-list
-//   static void alertPopUpConfirm({
-//     required VoidCallback onPressedConfirm,
-//     required AlertType type,
-//     required String title,
-//     required String desc,
-//     bool? isConfirm = false,
-//   }) {
-//     final context = OneContext().context;
-//     Alert(
-//       context: context!,
-//       type: type,
-//       title: title,
-//       desc: desc.isNotEmpty ? desc : null,
-//       style: const AlertStyle(
-//         titleStyle: TextStyle(
-//           fontSize: 17,
-//           fontWeight: FontWeight.bold,
-//         ),
-//         descStyle: TextStyle(
-//           fontSize: 15,
-//         ),
-//       ),
-//       buttons: [
-//         DialogButton(
-//           color: ColorName.primary,
-//           radius: const BorderRadius.all(Radius.circular(5)),
-//           height: 44,
-//           onPressed: () {
-//             onPressedConfirm();
-//             Navigator.pop(context);
-//           },
-//           child: const Text(
-//             'OK',
-//             style: TextStyle(
-//               color: ColorName.btnText,
-//               fontWeight: FontWeight.bold,
-//               fontSize: 14,
-//             ),
-//           ),
-//         ),
-//         if (!isConfirm!)
-//           DialogButton(
-//             color: const Color(0xFFAAAAAA),
-//             radius: const BorderRadius.all(Radius.circular(5)),
-//             height: 44,
-//             onPressed: () => Navigator.pop(context),
-//             child: Text(
-//               context.l10n.cancel,
-//               style: const TextStyle(
-//                 color: ColorName.btnText,
-//                 fontWeight: FontWeight.bold,
-//                 fontSize: 14,
-//               ),
-//             ),
-//           ),
-//       ],
-//     ).show();
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:nvc_cinemas/gen/colors.gen.dart';
+import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:one_context/one_context.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+class FunctionUtil {
+  // ignore: long-parameter-list
+  static void alertPopUpConfirm({
+    required VoidCallback onPressedConfirm,
+    required AlertType type,
+    required String title,
+    required String desc,
+    bool? isConfirm = false,
+  }) {
+    final context = OneContext().context;
+    Alert(
+      context: context!,
+      type: type,
+      title: title,
+      desc: desc.isNotEmpty ? desc : null,
+      style: const AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: ColorName.primary,
+          radius: const BorderRadius.all(Radius.circular(5)),
+          height: 44,
+          onPressed: () {
+            onPressedConfirm();
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'OK',
+            style: TextStyle(
+              color: ColorName.btnText,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        if (!isConfirm!)
+          DialogButton(
+            color: const Color(0xFFAAAAAA),
+            radius: const BorderRadius.all(Radius.circular(5)),
+            height: 44,
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              context.l10n.cancel,
+              style: const TextStyle(
+                color: ColorName.btnText,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+      ],
+    ).show();
+  }
+
+  static String genderSelectToFormValue(BuildContext context, String gender) {
+    final map = {
+      context.l10n.unknown: 'unknown',
+      context.l10n.male: 'male',
+      context.l10n.female: 'female',
+    };
+
+    return map[gender] ?? 'unknown';
+  }
+
+}
 //
 // class URLUlti {
 //   static Future<void> launchURL({

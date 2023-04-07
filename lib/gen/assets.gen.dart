@@ -25,12 +25,20 @@ class $AssetsImagesGen {
   /// File path: assets/images/chat.png
   AssetGenImage get chat => const AssetGenImage('assets/images/chat.png');
 
+  /// File path: assets/images/google-logo.png
+  AssetGenImage get googleLogo =>
+      const AssetGenImage('assets/images/google-logo.png');
+
   /// File path: assets/images/icon-1024x1024.png
   AssetGenImage get icon1024x1024 =>
       const AssetGenImage('assets/images/icon-1024x1024.png');
 
+  /// File path: assets/images/logo-png.png
+  AssetGenImage get logoPng =>
+      const AssetGenImage('assets/images/logo-png.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [chat, icon1024x1024];
+  List<AssetGenImage> get values => [chat, googleLogo, icon1024x1024, logoPng];
 }
 
 class Assets {

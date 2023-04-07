@@ -88,6 +88,46 @@ class SnackBarSupport {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  static void loginFailed({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text(context.l10n.loginFail),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void signInFailed({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text('Dien day du thong tin'),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   static void connectivityStatus({
     required BuildContext context,
     required ConnectivityResult result,

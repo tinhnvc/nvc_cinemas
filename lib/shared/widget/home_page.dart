@@ -1,7 +1,10 @@
+import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:nvc_cinemas/shared/widget/bottom_navigation_widget.dart';
+import 'package:nvc_cinemas/shared/widget/see_more_screen.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +87,7 @@ class _HomePageState extends ConsumerState<HomePage>
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: ColorName.pageBackground,
           toolbarHeight: 80,
           elevation: 0,
           actions: [Container()],
@@ -98,13 +101,14 @@ class _HomePageState extends ConsumerState<HomePage>
   Widget getPage(NavigationItem item) {
     Widget widget;
     final map = {
-      NavigationItem.home: const HomePage(),
+      NavigationItem.home: const Home(),
+      NavigationItem.seeMore: const SeeMoreScreen(),
       // NavigationItem.notification: const NotificationPage(),
       // NavigationItem.ticket: const Ticket(),
       // NavigationItem.history: const History(),
       // NavigationItem.seeMore: const SeeMoreScreen(),SeeMoreScreen
     };
-    widget = map[item] ?? HomePage();
+    widget = map[item] ?? Home();
 
     return widget;
   }

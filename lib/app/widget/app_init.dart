@@ -100,9 +100,9 @@ class _AppInitState extends ConsumerState<AppInit> with WidgetsBindingObserver {
     final fcmToken = await getDeviceToken();
     print('FCM/APNS TOKEN: $fcmToken');
     await FcmTokenRepository().saveFcmToken(fcmToken ?? '');
-    final currentLanguage =
-        await ref.watch(languageRepositoryProvider).fetchLanguage();
-    ref.read(languageProvider.notifier).update(currentLanguage ?? 'vi');
+    // final currentLanguage =
+    //     await ref.watch(languageRepositoryProvider).fetchLanguage();
+    // ref.read(languageProvider.notifier).update(currentLanguage ?? 'vi');
 
     await ref.read(tokenRepositoryProvider).fetchToken().then((token) {
       if (token != null) {

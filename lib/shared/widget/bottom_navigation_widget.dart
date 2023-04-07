@@ -1,3 +1,4 @@
+import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
@@ -24,11 +25,11 @@ class BottomNavigationWidget extends ConsumerWidget {
       case NavigationItem.home:
         currentIndex = 0;
         break;
-      case NavigationItem.notification:
+      case NavigationItem.movie:
         currentIndex = 1;
         break;
       // case NavigationItem.sales:
-      case NavigationItem.ticket:
+      case NavigationItem.showtimes:
         currentIndex = 2;
         break;
       case NavigationItem.seeMore:
@@ -43,9 +44,9 @@ class BottomNavigationWidget extends ConsumerWidget {
         case 0:
           return NavigationItem.home;
         case 1:
-          return NavigationItem.notification;
+          return NavigationItem.movie;
         case 2:
-          return NavigationItem.ticket;
+          return NavigationItem.showtimes;
         case 3:
           return NavigationItem.seeMore;
         default:
@@ -65,12 +66,12 @@ class BottomNavigationWidget extends ConsumerWidget {
       ),
       child: NavigationBarTheme(
         data: NavigationBarThemeData(
-          indicatorColor: const Color(0xFF6968BE).withOpacity(0.15),
+          indicatorColor: ColorName.primary.withOpacity(0.15),
           labelTextStyle: MaterialStateProperty.all(
             const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF6968BE),
+              color: ColorName.primary,
             ),
           ),
         ),
@@ -86,47 +87,47 @@ class BottomNavigationWidget extends ConsumerWidget {
                 );
           },
           destinations: [
-            const NavigationDestination(
+            NavigationDestination(
               selectedIcon: Icon(
                 Icons.home,
-                color: Color(0XFFBFEBEE),
+                color: ColorName.primary.withOpacity(0.8),
               ),
               icon: Icon(
                 Icons.home_outlined,
-                color: Color(0XFFBFEBEE),
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              label: 'Trang chủ',
+              label: context.l10n.home,
             ),
             NavigationDestination(
-              selectedIcon: const Icon(
-                Icons.notifications,
-                color: Color(0XFFBFEBEE),
+              selectedIcon: Icon(
+                Icons.video_collection,
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              icon: const Icon(
-                Icons.notifications_none,
-                color: Color(0XFFBFEBEE),
+              icon: Icon(
+                Icons.video_collection_outlined,
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              label: 'Thông báo',
+              label: context.l10n.movie,
             ),
             NavigationDestination(
-              selectedIcon: const Icon(
-                Icons.sticky_note_2_rounded,
-                color: Color(0XFFBFEBEE),
+              selectedIcon: Icon(
+                Icons.calendar_month,
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              icon: const Icon(
-                Icons.sticky_note_2_outlined,
-                color: Color(0XFFBFEBEE),
+              icon: Icon(
+                Icons.calendar_today,
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              label: 'Ticket',
+              label: context.l10n.showtimes,
             ),
             NavigationDestination(
-              selectedIcon: const Icon(
+              selectedIcon: Icon(
                 Icons.more,
-                color: Color(0XFFBFEBEE),
+                color: ColorName.primary.withOpacity(0.8),
               ),
-              icon: const Icon(
+              icon: Icon(
                 Icons.more_outlined,
-                color: Color(0XFFBFEBEE),
+                color: ColorName.primary.withOpacity(0.8),
               ),
               label: context.l10n.seeMore,
             ),

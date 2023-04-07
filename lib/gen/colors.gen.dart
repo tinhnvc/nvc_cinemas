@@ -13,15 +13,15 @@ import 'package:flutter/material.dart';
 class ColorName {
   ColorName._();
 
-  /// Color: #FFFFFF
-  static const Color btnText = Color(0xFFFFFFFF);
+  /// Color: #FF363E59
+  static const Color btnText = Color(0xFF363E59);
 
-  /// Color: #F1F3FA
-  static const Color pageBackground = Color(0xFFF1F3FA);
+  /// Color: #EFE0E0
+  static const Color pageBackground = Color(0xFFEFE0E0);
 
-  /// Color: #6968BE
-  static const Color primary = Color(0xFF6968BE);
+  /// Color: #FB9057
+  static const Color primary = Color(0xFFFB9057);
 
-  /// Color: #75787b
-  static const Color textNormal = Color(0xFF75787B);
+  /// Color: #4B5574
+  static const Color textNormal = Color(0xFF4B5574);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#6968BE</color>
-    <color name="textNormal">#75787b</color>
-    <color name="btnText">#FFFFFF</color>
-    <color name="pageBackground">#F1F3FA</color>
+    <color name="primary">#FB9057</color>
+    <color name="textNormal">#4B5574</color>
+    <color name="btnText">#FF363E59</color>
+    <color name="pageBackground">#EFE0E0</color>
 </resources>
