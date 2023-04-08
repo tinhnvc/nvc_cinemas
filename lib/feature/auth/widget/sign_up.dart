@@ -31,6 +31,7 @@ class SignUp extends ConsumerWidget {
       context.l10n.female,
     ];
     final genderValue = ref.watch(genderSignUpProvider);
+    final isVisibility = ref.watch(isVisibilitySignUpPassword)! as bool;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -80,13 +81,19 @@ class SignUp extends ConsumerWidget {
                             formControlName: 'password',
                             labelText: context.l10n.password,
                             size: FormTextFieldSize.lg,
-                            obscureText: true,
+                            obscureText: isVisibility,
                             suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.password,
-                                size: 19,
-                                color: Color(0xFF8698B7),
+                              onPressed: () {
+                                ref
+                                    .read(isVisibilitySignUpPassword.notifier)
+                                    .changed = !isVisibility;
+                              },
+                              icon: Icon(
+                                isVisibility
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                size: 20,
+                                color: Color(0xFF8698B6),
                               ),
                             ),
                           ),

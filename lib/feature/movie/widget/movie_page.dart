@@ -4,23 +4,17 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
-import 'package:nvc_cinemas/gen/assets.gen.dart';
+import 'package:nvc_cinemas/feature/movie/widget/movie_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class MoviePage extends ConsumerWidget {
+  const MoviePage({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends ConsumerState<Home> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     final inset = MediaQuery.of(context).viewInsets;
@@ -32,7 +26,6 @@ class _HomeState extends ConsumerState<Home> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ColorName.pageBackground,
-      // endDrawer: const EndDrawerWidget(),
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(
@@ -45,29 +38,28 @@ class _HomeState extends ConsumerState<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${context.l10n.hi} ${user.fullName},',
-                      style: TextStyle(
-                        color: ColorName.btnText,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          context.l10n.nowShowing.toUpperCase(),
+                          style: TextStyle(
+                            color: ColorName.btnText,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          context.l10n.comingSoon.toUpperCase(),
+                          style: TextStyle(
+                            color: ColorName.btnText,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Avatar 3 sắp ra mắt,'
-                      ' ${context.l10n.bookTicketNow.toLowerCase()}!',
-                      style: TextStyle(
-                        color: ColorName.btnText,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SearchWidget(searchHint: 'Sự trở lại của Askhan'),
                     const SizedBox(
                       height: 10,
                     ),
@@ -101,30 +93,23 @@ class _HomeState extends ConsumerState<Home> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      context.l10n.propose,
-                      style: TextStyle(
-                        color: ColorName.btnText,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           // const SliverGridDelegateWithFixedCrossAxisCount(
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 300.0,
-                        mainAxisExtent: 270,
+                        maxCrossAxisExtent: 150.0,
+                        mainAxisExtent: 250,
                         crossAxisSpacing: 12.0,
                         mainAxisSpacing: 12.0,
                       ),
                       itemCount: 10,
-                      itemBuilder: (context, index) => ProposeMovieWidget(),
+                      itemBuilder: (context, index) => InkWell(
+                        onTap: () =>
+                            Navigator.pushNamed(context, '/booking-by-movie'),
+                        child: MovieItem(),
+                      ),
                     )
                   ],
                 ),
@@ -137,11 +122,11 @@ class _HomeState extends ConsumerState<Home> {
   }
 }
 
-final indexPageViewHomeScreen =
-    StateNotifierProvider((ref) => IndexPageViewHomeScreen());
+final indexPageViewMovieScreen =
+    StateNotifierProvider((ref) => IndexPageViewMovieScreen());
 
-class IndexPageViewHomeScreen extends StateNotifier<int> {
-  IndexPageViewHomeScreen() : super(0);
+class IndexPageViewMovieScreen extends StateNotifier<int> {
+  IndexPageViewMovieScreen() : super(0);
 
   set value(int index) => state = index;
 }

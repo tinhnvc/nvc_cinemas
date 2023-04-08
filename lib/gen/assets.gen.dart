@@ -22,6 +22,30 @@ class $AssetsEnvGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/carousel_1.png
+  AssetGenImage get carousel1 =>
+      const AssetGenImage('assets/images/carousel_1.png');
+
+  /// File path: assets/images/carousel_1j.jpg
+  AssetGenImage get carousel1j =>
+      const AssetGenImage('assets/images/carousel_1j.jpg');
+
+  /// File path: assets/images/carousel_2.png
+  AssetGenImage get carousel2 =>
+      const AssetGenImage('assets/images/carousel_2.png');
+
+  /// File path: assets/images/carousel_2j.jpg
+  AssetGenImage get carousel2j =>
+      const AssetGenImage('assets/images/carousel_2j.jpg');
+
+  /// File path: assets/images/carousel_3.png
+  AssetGenImage get carousel3 =>
+      const AssetGenImage('assets/images/carousel_3.png');
+
+  /// File path: assets/images/carousel_3j.jpg
+  AssetGenImage get carousel3j =>
+      const AssetGenImage('assets/images/carousel_3j.jpg');
+
   /// File path: assets/images/chat.png
   AssetGenImage get chat => const AssetGenImage('assets/images/chat.png');
 
@@ -38,7 +62,18 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/logo-png.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [chat, googleLogo, icon1024x1024, logoPng];
+  List<AssetGenImage> get values => [
+        carousel1,
+        carousel1j,
+        carousel2,
+        carousel2j,
+        carousel3,
+        carousel3j,
+        chat,
+        googleLogo,
+        icon1024x1024,
+        logoPng
+      ];
 }
 
 class Assets {

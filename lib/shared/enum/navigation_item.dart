@@ -8,4 +8,5 @@ enum NavigationItem {
   seeMore,
   movie,
   showtimes,
+  promotions,
 }

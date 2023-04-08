@@ -4,6 +4,13 @@ import 'package:nvc_cinemas/feature/auth/widget/sign_in.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up_successful.dart';
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
+import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
+import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
+import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
+import 'package:nvc_cinemas/feature/setting/widget/setting_page.dart';
+import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
+import 'package:nvc_cinemas/feature/ticket/widget/ticket_page.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/gen/fonts.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -39,12 +46,19 @@ class App extends ConsumerWidget {
     final callRoutes = <String, PageContentBuilder>{
       '/init': ([Object? arguments]) => const AppInit(),
       '/home-page': ([Object? arguments]) => const HomePage(),
-      '/home': ([Object? arguments]) => const Home(),
       '/sign-in': ([Object? arguments]) => const SignIn(),
       '/sign-up': ([Object? arguments]) => const SignUp(),
       '/sign-up-successful': ([Object? arguments]) => const SignUpSuccessful(),
       '/forgot-password': ([Object? arguments]) => const ForgotPassword(),
+      '/home': ([Object? arguments]) => const Home(),
+      '/movie-page': ([Object? arguments]) => const MoviePage(),
+      '/showtimes-page': ([Object? arguments]) => const ShowtimesPage(),
+      '/ticket-page': ([Object? arguments]) => const TicketPage(),
+      '/promotion-page': ([Object? arguments]) => const PromotionPage(),
       '/see-more': ([Object? arguments]) => const SeeMoreScreen(),
+      '/setting': ([Object? arguments]) => const Settings(),
+      '/booking-by-movie': ([Object? arguments]) => const BookingByMovie(),
+      '/movie-detail': ([Object? arguments]) => const MovieDetail(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -72,6 +86,7 @@ class App extends ConsumerWidget {
     return MaterialApp(
       builder: OneContext().builder,
       navigatorKey: OneContext().navigator.key,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           accentColor: ColorName.primary,

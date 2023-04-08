@@ -1,3 +1,4 @@
+import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
@@ -17,7 +18,7 @@ class SeeMoreScreen extends ConsumerWidget {
     final ratio = height / size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorName.pageBackground,
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(
@@ -35,17 +36,22 @@ class SeeMoreScreen extends ConsumerWidget {
                       SeeMoreItem(
                         icon: Icons.sticky_note_2_sharp,
                         content: context.l10n.ticket,
-                        onPressed: () {},
+                        onPressed: () => ref
+                            .read(navigationProvider.notifier)
+                            .setNavigationItem(NavigationItem.ticket),
                       ),
                       SeeMoreItem(
                         icon: Icons.percent_rounded,
                         content: context.l10n.promotions,
-                        onPressed: () {},
+                        onPressed: () => ref
+                            .read(navigationProvider.notifier)
+                            .setNavigationItem(NavigationItem.promotions),
                       ),
                       SeeMoreItem(
                         icon: Icons.settings,
                         content: context.l10n.settings,
-                        onPressed: () {},
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/setting'),
                       ),
                     ],
                   ),

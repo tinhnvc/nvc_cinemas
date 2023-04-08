@@ -8,6 +8,7 @@ import 'package:nvc_cinemas/feature/auth/provider/user_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/email_sender.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:one_context/one_context.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -25,7 +26,6 @@ class AuthProvider {
 
   final Reader _reader;
 
-  // late final ApiProvider _apiProvider = _reader(apiProvider);
   final loginForm = FormGroup({
     'email': FormControl<String>(),
     'password': FormControl<String>(),
@@ -60,6 +60,7 @@ class AuthProvider {
     if (users.isNotEmpty) {
       for (final item in users) {
         if (item.email == email && item.password == password) {
+          ref.read(userProvider.notifier).fetchUser(item);
           response = true;
         }
       }
@@ -248,6 +249,11 @@ class AuthProvider {
     print('Send request: ${response.body}');
   }
 
+  Future<void> logout() async {
+    await OneContext()
+        .pushNamedAndRemoveUntil('/sign-in', (Route<dynamic> route) => false);
+  }
+
   void resetPasswordSuccessPopup() {
     final ctx = OneContext().context;
     if (ctx != null) {
@@ -402,6 +408,15 @@ final isVisibilityPassword =
 
 class IsVisibilityPassword extends StateNotifier<bool> {
   IsVisibilityPassword() : super(true);
+
+  set changed(bool value) => state = value;
+}
+
+final isVisibilitySignUpPassword =
+    StateNotifierProvider((ref) => IsVisibilitySignUpPassword());
+
+class IsVisibilitySignUpPassword extends StateNotifier<bool> {
+  IsVisibilitySignUpPassword() : super(true);
 
   set changed(bool value) => state = value;
 }

@@ -120,7 +120,7 @@ class SignIn extends ConsumerWidget {
                         ),
                         onSubmitted: () {},
                       ),
-                      SizedBox(height: ratio < 1.95 ? 10 : 40),
+                      SizedBox(height: ratio < 1.95 ? 10 : 20),
                       RoundedLoadingButton(
                         color: ColorName.primary,
                         borderRadius: 20,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 import 'package:one_context/one_context.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -75,6 +78,10 @@ class FunctionUtil {
     return map[gender] ?? 'unknown';
   }
 
+  static Future<void> changeLanguageApp(WidgetRef ref, String language) async {
+    await ref.read(languageRepositoryProvider).saveLanguage(language);
+    ref.read(languageProvider.notifier).update(language);
+  }
 }
 //
 // class URLUlti {

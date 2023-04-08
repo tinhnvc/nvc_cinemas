@@ -11,3 +11,12 @@ class LanguageNotifier extends StateNotifier<String> {
     state = value;
   }
 }
+
+final appLanguage = StateNotifierProvider((ref) => AppLanguage());
+
+class AppLanguage extends StateNotifier<bool> {
+  AppLanguage() : super(false);
+  // true - vi
+  // false - en
+  set changed(bool value) => state = value;
+}

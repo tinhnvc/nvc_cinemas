@@ -1,9 +1,16 @@
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
+import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
+import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
+import 'package:nvc_cinemas/feature/ticket/widget/ticket_page.dart';
+import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/widget/bottom_navigation_widget.dart';
+import 'package:nvc_cinemas/shared/widget/drawer_widget.dart';
 import 'package:nvc_cinemas/shared/widget/see_more_screen.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +70,7 @@ class _HomePageState extends ConsumerState<HomePage>
   Widget build(BuildContext context) {
     var timeBackPress = DateTime.now();
     // final profile = ref.watch(profileProvider);
+    final user = ref.watch(userProvider);
 
     return WillPopScope(
       onWillPop: () async {
@@ -88,10 +96,46 @@ class _HomePageState extends ConsumerState<HomePage>
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: ColorName.pageBackground,
-          toolbarHeight: 80,
-          elevation: 0,
+          // backgroundColor: Colors.red,
+          iconTheme: IconThemeData(color: Colors.black87),
+          toolbarHeight: 60,
+          elevation: 3,
+          flexibleSpace: SafeArea(
+            child: Container(
+              margin: const EdgeInsets.only(right: 10),
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () => ref
+                        .read(navigationProvider.notifier)
+                        .setNavigationItem(NavigationItem.home),
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 40),
+                        child: Assets.images.logoPng
+                            .image(width: 90, fit: BoxFit.contain)),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: const Color(0xFFB7CFFC),
+                    radius: 20,
+                    child: Text(
+                      user.fullName != null
+                          ? ref.read(userProvider.notifier).getSortName()
+                          : 'C',
+                      style: const TextStyle(
+                          color: Color(0xFF4B5574),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           actions: [Container()],
         ),
+        drawer: DrawerWidget(),
         body: buildPage(context, ref),
         bottomNavigationBar: const BottomNavigationWidget(),
       ),
@@ -103,10 +147,10 @@ class _HomePageState extends ConsumerState<HomePage>
     final map = {
       NavigationItem.home: const Home(),
       NavigationItem.seeMore: const SeeMoreScreen(),
-      // NavigationItem.notification: const NotificationPage(),
-      // NavigationItem.ticket: const Ticket(),
-      // NavigationItem.history: const History(),
-      // NavigationItem.seeMore: const SeeMoreScreen(),SeeMoreScreen
+      NavigationItem.movie: const MoviePage(),
+      NavigationItem.showtimes: const ShowtimesPage(),
+      NavigationItem.ticket: const TicketPage(),
+      NavigationItem.promotions: const PromotionPage(),
     };
     widget = map[item] ?? Home();
 

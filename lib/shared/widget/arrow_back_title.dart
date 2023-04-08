@@ -7,8 +7,10 @@ class ArrowBackTitle extends ConsumerWidget {
     Key? key,
     required this.title,
     required this.onPressed,
+    this.textSize,
   }) : super(key: key);
   final String title;
+  final double? textSize;
   final VoidCallback onPressed;
 
   @override
@@ -20,9 +22,9 @@ class ArrowBackTitle extends ConsumerWidget {
           onTap: onPressed,
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_ios,
-              size: 30,
+              size: textSize != null ? 25 : 30,
               color: Color(0xFF3F414D),
             ),
           ),
@@ -31,8 +33,8 @@ class ArrowBackTitle extends ConsumerWidget {
           child: Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
+            style: TextStyle(
+              fontSize: textSize ?? 22,
               fontWeight: FontWeight.bold,
               color: Color(0xFF363E59),
             ),

@@ -24,4 +24,7 @@ class ColorName {
 
   /// Color: #4B5574
   static const Color textNormal = Color(0xFF4B5574);
+
+  /// Color: #363E59
+  static const Color titleText = Color(0xFF363E59);
 }
