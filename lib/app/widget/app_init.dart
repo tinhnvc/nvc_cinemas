@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:nvc_cinemas/shared/provider/util_provider.dart';
-import 'package:nvc_cinemas/shared/repository/language_repository.dart';
+import 'package:nvc_cinemas/gen/assets.gen.dart';
+import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/shared/repository/token_repository.dart';
 import 'package:nvc_cinemas/shared/util/fcm/fcm_util.dart';
 import 'package:nvc_cinemas/shared/util/fcm/notification_service.dart';
@@ -10,7 +10,6 @@ import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -80,11 +79,20 @@ class _AppInitState extends ConsumerState<AppInit> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     NotificationService.initialize();
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
       () => _init(context, ref),
     );
 
-    return Container();
+    return Scaffold(
+      backgroundColor: ColorName.pageBackground,
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            child: Assets.images.logoPng.image(width: 250, fit: BoxFit.cover),
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _setupInteractedMessage() async {

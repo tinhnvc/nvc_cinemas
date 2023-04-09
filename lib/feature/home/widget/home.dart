@@ -57,7 +57,8 @@ class _HomeState extends ConsumerState<Home> {
                       height: 10,
                     ),
                     Text(
-                      'Avatar 3 sắp ra mắt,'
+                      'Avatar 3 '
+                      '${context.l10n.comingSoon.toLowerCase()},'
                       ' ${context.l10n.bookTicketNow.toLowerCase()}!',
                       style: TextStyle(
                         color: ColorName.btnText,

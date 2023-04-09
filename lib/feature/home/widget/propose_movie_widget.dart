@@ -31,7 +31,7 @@ class ProposeMovieWidget extends ConsumerWidget {
           height: 5,
         ),
         Text(
-          'Ngôi làng của lá 2 Ngôi làng của lá 2',
+          'Ngôi làng của lá',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(

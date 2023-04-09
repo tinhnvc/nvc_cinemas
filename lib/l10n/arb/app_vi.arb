@@ -119,7 +119,7 @@
     "newAndPromotion": "Tin mới & Ưu đãi",
     "news": "Tin mới",
     "copy": "Sao chép",
-    "copied": "Đã sao chép vào bộ nhớ tạm",
+    "copied": "✓ Đã sao chép vào bộ nhớ tạm",
     "accountInfo": "Thông tin tài khoản",
     "changePassword": "Đổi mật khẩu",
     "oldPassword": "Mật khẩu cũ",
@@ -174,7 +174,7 @@
     "content": "Nội dung",
     "startTime": "Bắt đầu",
     "endTime": "Kết thúc",
-    "couponCode": "Mã khuyến mãi",
+    "couponCode": "Mã giảm giá",
     "amount": "Số lượng",
     "status": "Trạng thái",
     "payed": "Đã thanh toán",
@@ -185,5 +185,13 @@
     "loginFail": "Thông tin email hoặc mật khẩu không chính xác!",
     "alreadyAccount": "Đã có tài khoản?",
     "phoneNumber": "Số điện thoại",
-    "signUpDone": "Xin chúc mừng!"
+    "nvcCinemasLocation": "NVC Cinemas Vạn Phúc",
+    "fillAllInformation": "Điền đầy đủ thông tin",
+    "copyContent": "Sao chép nội dung",
+    "copyBank": "Sao chép STK",
+    "internetOk": "Đã khôi phục kết nối Internet.",
+    "internetFail": "Mất kết nối Internet. Kiểm tra lại kết nối và thử lại.",
+    "noPermission": "Không có quyền thực hiện chức năng",
+    "payOk": "Tôi đã hoàn tất thanh toán",
+    "signUpAt": "Ngày đăng ký"
 }

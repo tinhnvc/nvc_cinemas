@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/model/user.dart';
 import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
-import 'package:nvc_cinemas/feature/auth/provider/user_provider.dart';
+import 'package:nvc_cinemas/feature/auth/provider/users_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/email_sender.dart';

@@ -116,17 +116,23 @@ class _HomePageState extends ConsumerState<HomePage>
                         child: Assets.images.logoPng
                             .image(width: 90, fit: BoxFit.contain)),
                   ),
-                  CircleAvatar(
-                    backgroundColor: const Color(0xFFB7CFFC),
-                    radius: 20,
-                    child: Text(
-                      user.fullName != null
-                          ? ref.read(userProvider.notifier).getSortName()
-                          : 'C',
-                      style: const TextStyle(
-                          color: Color(0xFF4B5574),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      '/account-information',
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: const Color(0xFFB7CFFC),
+                      radius: 20,
+                      child: Text(
+                        user.fullName != null
+                            ? ref.read(userProvider.notifier).getSortName()
+                            : 'C',
+                        style: const TextStyle(
+                            color: Color(0xFF4B5574),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17),
+                      ),
                     ),
                   ),
                 ],
@@ -149,8 +155,8 @@ class _HomePageState extends ConsumerState<HomePage>
       NavigationItem.seeMore: const SeeMoreScreen(),
       NavigationItem.movie: const MoviePage(),
       NavigationItem.showtimes: const ShowtimesPage(),
-      NavigationItem.ticket: const TicketPage(),
-      NavigationItem.promotions: const PromotionPage(),
+      // NavigationItem.ticket: const TicketPage(),
+      // NavigationItem.promotions: const PromotionPage(),
     };
     widget = map[item] ?? Home();
 

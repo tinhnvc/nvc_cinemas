@@ -24,6 +24,8 @@ class PrimaryButtonWidget extends ConsumerWidget {
       onPressed: onPressed,
       child: Text(
         content,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
           color: ColorName.btnText,
           fontWeight: FontWeight.bold,

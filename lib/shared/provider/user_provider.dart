@@ -52,96 +52,44 @@ class UserNotifier extends StateNotifier<User> {
   }
 }
 
-// final profileFormProvider = Provider<ProfileFormProvider>(
-//   (ref) => ProfileFormProvider(ref.read),
-// );
-//
-// class ProfileFormProvider {
-//   ProfileFormProvider(this._reader);
-//
-//   final Reader _reader;
-//   late final ApiProvider _apiProvider = _reader(apiProvider);
-//
-//   final editProfileForm = FormGroup({
-//     'email': FormControl<String>(),
-//     'name': FormControl<String>(),
-//     'phone': FormControl<String>(),
-//     'language': FormControl<String>(),
-//     'desc': FormControl<String>(),
-//     'password': FormControl<String>(),
-//   });
-//
-//   final editPasswordForm = FormGroup({
-//     'oldPassword': FormControl<String>(),
-//     'password': FormControl<String>(),
-//     'rePassword': FormControl<String>(),
-//   });
-//
-//   final buttonController = RoundedLoadingButtonController();
-//
-//   Future<void> updateProfile(WidgetRef ref, BuildContext context) async {
-//     final response =
-//         await _apiProvider.request('profile', 'put', editProfileForm.value);
-//     final profile = ref.watch(profileProvider);
-//
-//     await response.when(
-//       success: (success) async {
-//         await ref.read(profileProvider.notifier).refresh(ref, context);
-//         FunctionUlti.alertPopUpConfirm(
-//           onPressedConfirm: () {},
-//           type: AlertType.success,
-//           title: context.l10n.success,
-//           desc: context.l10n.updated,
-//           isConfirm: true,
-//         );
-//         // await FunctionUlti.changeLanguageApp(ref);
-//       },
-//       error: (error) {
-//         displayFormErrors(error, editProfileForm);
-//       },
-//     );
-//
-//     if (response is APISuccess) {
-//       final data = response.value;
-//
-//       try {} catch (e) {}
-//     }
-//   }
-//
-//   Future<void> updatePassword(WidgetRef ref, BuildContext context) async {
-//     buttonController.start();
-//     final response = await _apiProvider.request(
-//       'profile/password',
-//       'put',
-//       editPasswordForm.value,
-//     );
-//
-//     await response.when(
-//       success: (success) async {
-//         final tokenRepository = _reader(tokenRepositoryProvider);
-//         await tokenRepository.remove();
-//         FunctionUlti.alertPopUpConfirm(
-//           onPressedConfirm: () {},
-//           isConfirm: true,
-//           type: AlertType.success,
-//           title: context.l10n.resetSuccess,
-//           desc: '',
-//         );
-//         await OneContext().pushReplacementNamed('/sign-in');
-//       },
-//       error: (error) {
-//         displayFormErrors(error, editPasswordForm);
-//       },
-//     );
-//
-//     if (response is APISuccess) {
-//       final data = response.value;
-//
-//       try {} catch (e) {}
-//     }
-//     buttonController.reset();
-//   }
-// }
+final userFormProvider = Provider<ProfileFormProvider>(
+  (ref) => ProfileFormProvider(),
+);
+
+class ProfileFormProvider {
+  ProfileFormProvider();
+
+  final editProfileForm = FormGroup({
+    'email': FormControl<String>(),
+    'password': FormControl<String>(),
+    'fullName': FormControl<String>(),
+    'phoneNumber': FormControl<String>(),
+    'gender': FormControl<String>(),
+    'yob': FormControl<String>(),
+  });
+
+  final editPasswordForm = FormGroup({
+    'oldPassword': FormControl<String>(),
+    'password': FormControl<String>(),
+    'rePassword': FormControl<String>(),
+  });
+
+  final buttonController = RoundedLoadingButtonController();
+
+  Future<void> updateProfile(WidgetRef ref, BuildContext context) async {}
+
+  Future<void> updatePassword(WidgetRef ref, BuildContext context) async {
+    buttonController.start();
+    FunctionUtil.alertPopUpConfirm(
+      onPressedConfirm: () {},
+      isConfirm: true,
+      type: AlertType.success,
+      title: context.l10n.resetSuccess,
+      desc: '',
+    );
+    await OneContext().pushReplacementNamed('/sign-in');
+  }
+}
 
 final isSecureOldPasswordProvider =
     StateNotifierProvider((ref) => IsSecureOldPasswordNotifier());
@@ -166,6 +114,15 @@ final isSecureRePasswordProvider =
 
 class IsSecureRePasswordNotifier extends StateNotifier<bool> {
   IsSecureRePasswordNotifier() : super(true);
+
+  set changed(bool value) => state = value;
+}
+
+final editingPersonalInformation =
+StateNotifierProvider((ref) => EditingPersonalInformation());
+
+class EditingPersonalInformation extends StateNotifier<bool> {
+  EditingPersonalInformation() : super(false);
 
   set changed(bool value) => state = value;
 }

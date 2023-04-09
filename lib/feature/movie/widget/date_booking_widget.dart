@@ -23,7 +23,7 @@ class DateBookingWidget extends ConsumerWidget {
             date,
             style: TextStyle(
               color: ColorName.btnText,
-              fontSize: 16,
+              fontSize: 25,
               fontWeight: isSelect ? FontWeight.bold : null,
             ),
           ),

@@ -1,20 +1,20 @@
 import 'dart:ui';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/rate_movie_widget.dart';
-import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/highlight_card.dart';
 import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
+import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
-class MovieDetail extends ConsumerWidget {
-  const MovieDetail({Key? key}) : super(key: key);
+class PromotionDetail extends ConsumerWidget {
+  const PromotionDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,15 +36,16 @@ class MovieDetail extends ConsumerWidget {
           children: [
             SingleChildScrollView(
               child: Container(
+                height: height * 0.8,
                 margin: const EdgeInsets.only(left: 20, right: 20),
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
-                    image: new ExactAssetImage('assets/images/logo-png.png'),
+                    image: new ExactAssetImage('assets/images/promotions.png'),
                     fit: BoxFit.contain,
                   ),
                 ),
                 child: BackdropFilter(
-                  filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                  filter: new ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
                   child: Container(
                     decoration: new BoxDecoration(
                       color: ColorName.pageBackground.withOpacity(0.7),
@@ -54,7 +55,7 @@ class MovieDetail extends ConsumerWidget {
                       children: [
                         const SizedBox(height: 20),
                         ArrowBackTitle(
-                          title: context.l10n.filmDetail,
+                          title: context.l10n.newAndPromotion,
                           textSize: 19,
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -83,7 +84,7 @@ class MovieDetail extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Ngôi làng của lá và sự trở lại của Mask',
+                                    'Thành viên NVC Cinemas - Đồng giá 45k',
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -95,16 +96,12 @@ class MovieDetail extends ConsumerWidget {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  HighlightCard(
-                                    widget: Text(
-                                      '13+',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: ColorName.textNormal,
-                                      ),
+                                  Text(
+                                    '09:22 - 11/01/2023',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: ColorName.textNormal,
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 3),
                                   ),
                                 ],
                               ),
@@ -114,36 +111,8 @@ class MovieDetail extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        rowInformation(
-                          title: context.l10n.director,
-                          content: 'John Mask',
-                          width: width,
-                        ),
-                        rowInformation(
-                          title: context.l10n.cast,
-                          content: 'Mikey, Rock, Mandle, Mikey, Rock, Mandle',
-                          width: width,
-                        ),
-                        rowInformation(
-                          title: context.l10n.categories,
-                          content: 'Tâm lý, hành động',
-                          width: width,
-                        ),
-                        rowInformation(
-                          title: context.l10n.runTime,
-                          content: '104 phút',
-                          width: width,
-                        ),
-                        rowInformation(
-                          title: context.l10n.releaseDate,
-                          content: '13/02/2023',
-                          width: width,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
                         Text(
-                          'Cuộc phiêu lưu của cậu bé Max khi trở lại ngôi làng lá của mình sau 12 năm xa cách. Nhóm thợ săn đã truy lùng các thành viên trong bộ lạc của cậu, liệu cậu có giải cứu được họ không?',
+                          'Thành viên NVC Cinemas trong tháng 1 này nhận ngập tràn ưu đãi. Đồng giá 45k cho toàn bộ vé khi đặt trực truyến trên ứng dụng. Chương trình áp dụng đến hết ngày 31/01/2023.',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 15,
@@ -154,64 +123,24 @@ class MovieDetail extends ConsumerWidget {
                           height: 10,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(
-                              Icons.star,
-                              size: 19,
-                              color: ColorName.btnText,
-                            ),
                             Text(
-                              ' 4.6',
-                              textAlign: TextAlign.justify,
+                              '${context.l10n.couponCode}: COU15',
                               style: TextStyle(
-                                fontSize: 15,
-                                color: ColorName.textNormal,
-                                fontWeight: FontWeight.w600,
+                                color: ColorName.btnText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Icon(
-                              Icons.horizontal_rule,
-                              size: 15,
-                              color: ColorName.btnText,
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              '12 lượt đánh giá',
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: ColorName.textNormal,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            RoundedButtonWidget(
+                              content: context.l10n.copy,
+                              onPressed: () async {
+                                await FlutterClipboard.copy('COU15');
+                                SnackBarSupport.copied(context: context);
+                              },
                             ),
                           ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 15),
-                          child: const Divider(
-                            color: ColorName.btnText,
-                            height: 2,
-                          ),
-                        ),
-                        RateMovieWidget(),
-                        RateMovieWidget(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            PrimaryButtonWidget(
-                              content: context.l10n.comment,
-                              width: 120,
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
                         ),
                       ],
                     ),

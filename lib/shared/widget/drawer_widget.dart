@@ -4,9 +4,6 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/provider/util_provider.dart';
-import 'package:nvc_cinemas/shared/util/format_support.dart';
-import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,7 +41,7 @@ class DrawerWidget extends ConsumerWidget {
                         // InitUtil.initSettingProfile(context, ref);
                         Navigator.pushNamed(
                           context,
-                          '/settings',
+                          '/account-information',
                         );
                         selectItem(context, ref, NavigationItem.home);
                       },
@@ -208,11 +205,41 @@ class DrawerWidget extends ConsumerWidget {
         Navigator.pop(context);
         selectItem(context, ref, item);
 
+        if (item == NavigationItem.personalAccount) {
+          // InitUtil.initSettingProfile(context, ref);
+          Navigator.pushNamed(
+            context,
+            '/account-information',
+          );
+          selectItem(context, ref, NavigationItem.home);
+
+          return;
+        }
         if (item == NavigationItem.settings) {
           // InitUtil.initSettingProfile(context, ref);
           Navigator.pushNamed(
             context,
             '/setting',
+          );
+          selectItem(context, ref, NavigationItem.home);
+
+          return;
+        }
+        if (item == NavigationItem.promotions) {
+          // InitUtil.initSettingProfile(context, ref);
+          Navigator.pushNamed(
+            context,
+            '/promotion-page',
+          );
+          selectItem(context, ref, NavigationItem.home);
+
+          return;
+        }
+        if (item == NavigationItem.ticket) {
+          // InitUtil.initSettingProfile(context, ref);
+          Navigator.pushNamed(
+            context,
+            '/ticket-page',
           );
           selectItem(context, ref, NavigationItem.home);
 

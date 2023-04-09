@@ -22,6 +22,10 @@ class $AssetsEnvGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/book-ticket.png
+  AssetGenImage get bookTicket =>
+      const AssetGenImage('assets/images/book-ticket.png');
+
   /// File path: assets/images/carousel_1.png
   AssetGenImage get carousel1 =>
       const AssetGenImage('assets/images/carousel_1.png');
@@ -61,8 +65,17 @@ class $AssetsImagesGen {
   AssetGenImage get logoPng =>
       const AssetGenImage('assets/images/logo-png.png');
 
+  /// File path: assets/images/payment-gateway.png
+  AssetGenImage get paymentGateway =>
+      const AssetGenImage('assets/images/payment-gateway.png');
+
+  /// File path: assets/images/payment_qr.png
+  AssetGenImage get paymentQr =>
+      const AssetGenImage('assets/images/payment_qr.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
+        bookTicket,
         carousel1,
         carousel1j,
         carousel2,
@@ -72,7 +85,9 @@ class $AssetsImagesGen {
         chat,
         googleLogo,
         icon1024x1024,
-        logoPng
+        logoPng,
+        paymentGateway,
+        paymentQr
       ];
 }
 

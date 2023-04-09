@@ -5,12 +5,16 @@ import 'package:nvc_cinemas/feature/auth/widget/sign_up.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up_successful.dart';
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
+import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
+import 'package:nvc_cinemas/feature/payment/widget/payment_page.dart';
+import 'package:nvc_cinemas/feature/promotion/widget/promotion_detail.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
 import 'package:nvc_cinemas/feature/setting/widget/setting_page.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
 import 'package:nvc_cinemas/feature/ticket/widget/ticket_page.dart';
+import 'package:nvc_cinemas/feature/user/widget/account_information.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/gen/fonts.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -58,7 +62,13 @@ class App extends ConsumerWidget {
       '/see-more': ([Object? arguments]) => const SeeMoreScreen(),
       '/setting': ([Object? arguments]) => const Settings(),
       '/booking-by-movie': ([Object? arguments]) => const BookingByMovie(),
+      '/booking-by-movie-detail': ([Object? arguments]) =>
+          const BookingByMovieDetail(),
+      '/account-information': ([Object? arguments]) =>
+          const AccountInformation(),
+      '/payment': ([Object? arguments]) => const PaymentPage(),
       '/movie-detail': ([Object? arguments]) => const MovieDetail(),
+      '/promotion-detail': ([Object? arguments]) => const PromotionDetail(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

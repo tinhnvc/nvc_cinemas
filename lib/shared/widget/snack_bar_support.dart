@@ -73,7 +73,7 @@ class SnackBarSupport {
     bool? hideAction,
   }) {
     final snackBar = SnackBar(
-      content: Text('Không có quyền thực hiện chức năng'),
+      content: Text(context.l10n.noPermission),
       duration: const Duration(seconds: 2),
       backgroundColor: Colors.black.withOpacity(0.7),
       behavior: SnackBarBehavior.floating,
@@ -113,7 +113,27 @@ class SnackBarSupport {
     bool? hideAction,
   }) {
     final snackBar = SnackBar(
-      content: Text('Dien day du thong tin'),
+      content: Text(context.l10n.fillAllInformation),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void copied({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text(context.l10n.copied),
       duration: const Duration(seconds: 2),
       backgroundColor: Colors.black.withOpacity(0.7),
       behavior: SnackBarBehavior.floating,
@@ -134,12 +154,12 @@ class SnackBarSupport {
   }) {
     var content = '';
     if (result == ConnectivityResult.none) {
-      content = 'Mất kết nối Internet. Kiểm tra lại kết nối và thử lại.';
+      content = context.l10n.internetFail;
     }
 
     if (result == ConnectivityResult.wifi ||
         result == ConnectivityResult.mobile) {
-      content = 'Đã khôi phục kết nối Internet.';
+      content = context.l10n.internetOk;
     }
 
     final snackBar = SnackBar(

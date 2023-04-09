@@ -15,6 +15,7 @@ class SeeMoreScreen extends ConsumerWidget {
     final padding = MediaQuery.of(context).padding;
     final inset = MediaQuery.of(context).viewInsets;
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
+    final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
 
     return Scaffold(
@@ -36,16 +37,14 @@ class SeeMoreScreen extends ConsumerWidget {
                       SeeMoreItem(
                         icon: Icons.sticky_note_2_sharp,
                         content: context.l10n.ticket,
-                        onPressed: () => ref
-                            .read(navigationProvider.notifier)
-                            .setNavigationItem(NavigationItem.ticket),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/ticket-page'),
                       ),
                       SeeMoreItem(
                         icon: Icons.percent_rounded,
                         content: context.l10n.promotions,
-                        onPressed: () => ref
-                            .read(navigationProvider.notifier)
-                            .setNavigationItem(NavigationItem.promotions),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/promotion-page'),
                       ),
                       SeeMoreItem(
                         icon: Icons.settings,

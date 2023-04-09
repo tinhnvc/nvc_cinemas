@@ -20,10 +20,10 @@ class TimeBookingWidget extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
             decoration: BoxDecoration(
-              color: ColorName.primary.withOpacity(0.3),
+              color: ColorName.primary.withOpacity(0.5),
               borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(6),
-                right: Radius.circular(6),
+                left: Radius.circular(15),
+                right: Radius.circular(15),
               ),
             ),
             child: Text(

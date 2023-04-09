@@ -43,7 +43,7 @@ class FunctionUtil {
           child: const Text(
             'OK',
             style: TextStyle(
-              color: ColorName.btnText,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -58,7 +58,7 @@ class FunctionUtil {
             child: Text(
               context.l10n.cancel,
               style: const TextStyle(
-                color: ColorName.btnText,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
