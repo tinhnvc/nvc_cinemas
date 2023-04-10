@@ -7,15 +7,10 @@ Họ và tên: Nguyễn Vũ Chí Tình
 
 Khoá: K14
 
-## Getting Started
+Đề tài: Xây dựng ứng dụng di động quản lý và đặt vé rạp chiếu phim NVC.
 
-This project is a starting point for a Flutter application.
+Ngôn ngữ, công nghệ: Dart, framework Flutter, Google Firebase.
 
-A few resources to get you started if this is your first Flutter project:
+Mục tiêu: Xây dựng một ứng dụng di động với đầy đủ các chức năng cho phép quản lý và đặt vé xem phim trực tuyến. Triển khai áp dụng ứng dụng vào thực tế.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://github.com/tinhnvc/nvc_cinemas/blob/master/assets/images/logo-png.png" alt="..." width="250" />
