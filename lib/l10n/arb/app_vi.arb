@@ -164,7 +164,7 @@
     "account": "Tài khoản",
     "role": "Quyền",
     "manager": "Quản lý",
-    "admin": "Admin",
+    "admin": "Quản trị viên",
     "customer": "Khách hàng",
     "seatName": "Tên loại ghế",
     "price": "Giá",
@@ -193,5 +193,10 @@
     "internetFail": "Mất kết nối Internet. Kiểm tra lại kết nối và thử lại.",
     "noPermission": "Không có quyền thực hiện chức năng",
     "payOk": "Tôi đã hoàn tất thanh toán",
-    "signUpAt": "Ngày đăng ký"
+    "signUpAt": "Ngày đăng ký",
+    "update": "Cập nhật",
+    "back": "Quay lại",
+    "rateMovie": "Đánh giá phim",
+    "input": "Nhập",
+    "inputComment": "Nhập bình luận đánh giá phim..."
 }

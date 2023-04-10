@@ -73,7 +73,7 @@ class FormTextField<T> extends ReactiveTextField<T> {
                 isCrudForm ? FloatingLabelBehavior.never : null,
             filled: true,
             fillColor: isEditProfileForm || isCrudForm
-                ? Colors.white
+                ? Colors.white.withOpacity(0.3)
                 : const Color(0xFFEFF1F9),
             enabledBorder: isEditProfileForm
                 ? null

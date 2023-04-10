@@ -60,7 +60,6 @@ class ProfileFormProvider {
   ProfileFormProvider();
 
   final editProfileForm = FormGroup({
-    'email': FormControl<String>(),
     'password': FormControl<String>(),
     'fullName': FormControl<String>(),
     'phoneNumber': FormControl<String>(),
@@ -72,6 +71,11 @@ class ProfileFormProvider {
     'oldPassword': FormControl<String>(),
     'password': FormControl<String>(),
     'rePassword': FormControl<String>(),
+  });
+
+  final rateMovieForm = FormGroup({
+    'star': FormControl<String>(),
+    'comment': FormControl<String>(),
   });
 
   final buttonController = RoundedLoadingButtonController();

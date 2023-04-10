@@ -10,8 +10,8 @@ import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-class EditAccountInformationModalSheet extends ConsumerWidget {
-  const EditAccountInformationModalSheet({Key? key}) : super(key: key);
+class CommentModalSheet extends ConsumerWidget {
+  const CommentModalSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,8 +52,7 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${context.l10n.edit} '
-                      '${context.l10n.accountInfo.toLowerCase()}',
+                      context.l10n.rateTimes,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -80,124 +79,66 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
+                          horizontal: 25,
+                          vertical: 15,
                         ),
                         child: ReactiveForm(
-                          formGroup: ref.read(userFormProvider).editProfileForm,
+                          formGroup: ref.read(userFormProvider).rateMovieForm,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              FormTextField(
-                                formControlName: 'fullName',
-                                labelText: context.l10n.fullName,
-                                maxLine: 1,
-                                isEditProfileForm: true,
-                                textInputAction: TextInputAction.next,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.perm_contact_cal_rounded,
-                                    size: 19,
-                                    color: Color(0xFF8698B7),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: ColorName.primary,
                                   ),
-                                ),
-                              ),
-                              const Divider(
-                                color: Color(0xFFE3E8F9),
-                                thickness: 1.5,
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: ColorName.primary,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: ColorName.primary,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: ColorName.primary,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: ColorName.textNormal,
+                                  ),
+                                ],
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 10,
                               ),
-                              FormTextField(
-                                isEditProfileForm: true,
-                                formControlName: 'phoneNumber',
-                                labelText: context.l10n.phoneNumber,
-                                maxLine: 1,
-                                textInputType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.phone,
-                                    size: 19,
-                                    color: Color(0xFF8698B7),
-                                  ),
-                                ),
-                              ),
-                              const Divider(
-                                color: Color(0xFFE3E8F9),
-                                thickness: 1.5,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              FormTextField(
-                                isEditProfileForm: true,
-                                formControlName: 'yob',
-                                labelText: context.l10n.yearOfBirth,
-                                textInputType: TextInputType.number,
-                                maxLine: 1,
-                                textInputAction: TextInputAction.next,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.date_range_sharp,
-                                    size: 19,
-                                    color: Color(0xFF8698B7),
-                                  ),
-                                ),
-                              ),
-                              const Divider(
-                                color: Color(0xFFE3E8F9),
-                                thickness: 1.5,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(
-                                  context.l10n.gender,
-                                  style: const TextStyle(
-                                    color: Color(0xFF363E59),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                  ),
+                              Text(
+                                context.l10n.comment,
+                                style: const TextStyle(
+                                  color: Color(0xFF363E59),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(
-                                  bottom: 10,
-                                  left: 10,
-                                  right: width * 0.3,
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 10,
                                 ),
-                                child: DropdownWidget(
-                                  value: genderValue.isNotEmpty
-                                      ? genderValue
-                                      : context.l10n.unknown,
-                                  values: genderList,
-                                  onChanged: (String value) {
-                                    final gender =
-                                        FunctionUtil.genderSelectToFormValue(
-                                      context,
-                                      value,
-                                    );
-                                    ref
-                                        .read(genderSignUpProvider.notifier)
-                                        .update(value);
-                                    ref
-                                        .read(userFormProvider)
-                                        .editProfileForm
-                                        .control('gender')
-                                        .value = gender;
-                                  },
+                                child: FormTextField(
+                                  isCrudForm: true,
+                                  formControlName: 'comment',
+                                  maxLine: 5,
+                                  textInputAction: TextInputAction.newline,
+                                  labelText: context.l10n.comment,
+                                  hintText: 'Nhập bình luận đánh giá phim...',
                                 ),
-                              ),
-                              const Divider(
-                                color: Color(0xFFE3E8F9),
-                                thickness: 1.5,
                               ),
                             ],
                           ),
@@ -214,7 +155,7 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                             TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: Text(
-                                context.l10n.cancel,
+                                context.l10n.back,
                                 style: const TextStyle(
                                   color: Color(0xFF363E59),
                                   fontSize: 14,
@@ -236,10 +177,10 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                               onPressed: () {
                                 // ref
                                 //     .read(userFormProvider)
-                                //     .edit(ref, customerId);
+                                //     .comment(ref);
                               },
                               child: Text(
-                                context.l10n.save,
+                                context.l10n.comment,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,

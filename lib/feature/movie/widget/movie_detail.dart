@@ -9,6 +9,7 @@ import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
+import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/highlight_card.dart';
 import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -206,7 +207,9 @@ class MovieDetail extends ConsumerWidget {
                             PrimaryButtonWidget(
                               content: context.l10n.comment,
                               width: 120,
-                              onPressed: () {},
+                              onPressed: () {
+                                CallModalSheet.commentMovie(context);
+                              },
                             ),
                           ],
                         ),

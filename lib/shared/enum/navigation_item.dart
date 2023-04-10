@@ -9,4 +9,12 @@ enum NavigationItem {
   movie,
   showtimes,
   promotions,
+  mCategory,
+  mMovie,
+  mRoom,
+  mAccount,
+  mSeat,
+  mPromotion,
+  mTicket,
+  mRevenue,
 }

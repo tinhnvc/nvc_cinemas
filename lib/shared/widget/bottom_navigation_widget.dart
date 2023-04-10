@@ -4,6 +4,7 @@ import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 
 final indexProvider = StateNotifierProvider((ref) => IndexNavigationBar());
 
@@ -18,7 +19,13 @@ class BottomNavigationWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final profile = ref.watch(profileProvider);
+    var role = 'customer';
+    final user = ref.watch(userProvider);
+    if (user.role != null) {
+      role = user.role!.roleName!;
+    }
+    final isCustomer = role != 'admin' && role != 'manager';
+
     final navigationItem = ref.watch(navigationProvider);
     var currentIndex = 0;
     switch (navigationItem) {
@@ -34,6 +41,15 @@ class BottomNavigationWidget extends ConsumerWidget {
         break;
       case NavigationItem.seeMore:
         currentIndex = 3;
+        break;
+      case NavigationItem.mCategory:
+        currentIndex = 0;
+        break;
+      case NavigationItem.mMovie:
+        currentIndex = 1;
+        break;
+      case NavigationItem.mRoom:
+        currentIndex = 2;
         break;
       default:
         currentIndex = 3;
@@ -51,6 +67,21 @@ class BottomNavigationWidget extends ConsumerWidget {
           return NavigationItem.seeMore;
         default:
           return NavigationItem.home;
+      }
+    }
+
+    NavigationItem convertIndexAdmin(int index) {
+      switch (index) {
+        case 0:
+          return NavigationItem.mCategory;
+        case 1:
+          return NavigationItem.mMovie;
+        case 2:
+          return NavigationItem.mRoom;
+        case 3:
+          return NavigationItem.seeMore;
+        default:
+          return NavigationItem.mCategory;
       }
     }
 
@@ -82,44 +113,88 @@ class BottomNavigationWidget extends ConsumerWidget {
           animationDuration: const Duration(seconds: 1),
           height: 65,
           onDestinationSelected: (index) {
-            ref.read(navigationProvider.notifier).setNavigationItem(
-                  convertIndex(index),
-                );
+            isCustomer
+                ? ref.read(navigationProvider.notifier).setNavigationItem(
+                      convertIndex(index),
+                    )
+                : ref.read(navigationProvider.notifier).setNavigationItem(
+                      convertIndexAdmin(index),
+                    );
           },
           destinations: [
-            NavigationDestination(
-              selectedIcon: Icon(
-                Icons.home,
-                color: ColorName.primary.withOpacity(0.8),
+            if (isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.home,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.home_outlined,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.home,
               ),
-              icon: Icon(
-                Icons.home_outlined,
-                color: ColorName.primary.withOpacity(0.8),
+            if (isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.video_collection,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.video_collection_outlined,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.movie,
               ),
-              label: context.l10n.home,
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(
-                Icons.video_collection,
-                color: ColorName.primary.withOpacity(0.8),
+            if (isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.calendar_month,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.showtimes,
               ),
-              icon: Icon(
-                Icons.video_collection_outlined,
-                color: ColorName.primary.withOpacity(0.8),
+// with admin or manager:
+            if (!isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.category,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.category_outlined,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.categories,
               ),
-              label: context.l10n.movie,
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(
-                Icons.calendar_month,
-                color: ColorName.primary.withOpacity(0.8),
+            if (!isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.videocam_rounded,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.videocam_outlined,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.movie,
               ),
-              icon: Icon(
-                Icons.calendar_today,
-                color: ColorName.primary.withOpacity(0.8),
+            if (!isCustomer)
+              NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.dataset,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                icon: Icon(
+                  Icons.dataset_outlined,
+                  color: ColorName.primary.withOpacity(0.8),
+                ),
+                label: context.l10n.rooms,
               ),
-              label: context.l10n.showtimes,
-            ),
             NavigationDestination(
               selectedIcon: Icon(
                 Icons.more,

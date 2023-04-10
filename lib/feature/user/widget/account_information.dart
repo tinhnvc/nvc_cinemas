@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
+import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/user/widget/edit_account_information.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -10,6 +12,7 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
+import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 
 class AccountInformation extends ConsumerWidget {
@@ -106,7 +109,9 @@ class AccountInformation extends ConsumerWidget {
                                       child: Text(
                                         user.role!.roleName == 'customer'
                                             ? context.l10n.customer
-                                            : context.l10n.admin,
+                                            : user.role!.roleName == 'admin'
+                                                ? context.l10n.admin
+                                                : context.l10n.manager,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
@@ -140,7 +145,10 @@ class AccountInformation extends ConsumerWidget {
                             children: [
                               RoundedButtonWidget(
                                 content: context.l10n.edit,
-                                onPressed: () {},
+                                onPressed: () {
+                                  CallModalSheet.editAccountInformation(
+                                      context);
+                                },
                               ),
                             ],
                           ),
@@ -184,13 +192,17 @@ class AccountInformation extends ConsumerWidget {
                           rowButton(
                             title: context.l10n.changePassword,
                             icon: Icons.arrow_forward_ios_outlined,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/change-password');
+                            },
                           ),
                           rowButton(
                             title: context.l10n.logout,
                             icon: Icons.logout,
                             isSpecial: true,
-                            onPressed: () {},
+                            onPressed: () {
+                              ref.read(authProvider).logout();
+                            },
                           ),
                         ],
                       ),
@@ -251,29 +263,32 @@ class AccountInformation extends ConsumerWidget {
     required VoidCallback onPressed,
     bool? isSpecial,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.3)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              overflow: TextOverflow.clip,
-              fontSize: 15,
-              color: isSpecial ?? false ? Colors.red : ColorName.textNormal,
-              fontWeight: FontWeight.w600,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.3)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                overflow: TextOverflow.clip,
+                fontSize: 15,
+                color: isSpecial ?? false ? Colors.red : ColorName.textNormal,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          Icon(
-            icon,
-            size: 20,
-            color: isSpecial ?? false ? Colors.red : ColorName.textNormal,
-          )
-        ],
+            Icon(
+              icon,
+              size: 20,
+              color: isSpecial ?? false ? Colors.red : ColorName.textNormal,
+            )
+          ],
+        ),
       ),
     );
   }

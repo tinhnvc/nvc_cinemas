@@ -193,5 +193,10 @@
     "internetFail": "No internet. Check your connection and try again.",
     "noPermission": "No permission",
     "payOk": "I completed payment",
-    "signUpAt": "Sign up at"
+    "signUpAt": "Sign up at",
+    "update": "Update",
+    "back": "Back",
+    "rateMovie": "Rate movie",
+    "input": "Input",
+    "inputComment": "Input comment about this film..."
 }

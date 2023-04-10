@@ -46,7 +46,7 @@ class _HomeState extends ConsumerState<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${context.l10n.hi} ${user.fullName},',
+                      '${context.l10n.hi}, ${user.fullName}',
                       style: TextStyle(
                         color: ColorName.btnText,
                         fontSize: 17,

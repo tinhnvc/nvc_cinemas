@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 
 class InitUtil {
   static void initSignUpForm(
@@ -16,5 +18,12 @@ class InitUtil {
     ref
       ..refresh(isAcceptTerms)
       ..refresh(genderSignUpProvider);
+  }
+
+  static void initSetting(WidgetRef ref) async {
+    final languageSave =
+        await ref.read(languageRepositoryProvider).fetchLanguage();
+    ref.read(appLanguage.notifier).changed =
+        languageSave == 'vi' ? true : false;
   }
 }

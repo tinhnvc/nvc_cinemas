@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 import 'package:nvc_cinemas/shared/repository/token_repository.dart';
 import 'package:nvc_cinemas/shared/util/fcm/fcm_util.dart';
 import 'package:nvc_cinemas/shared/util/fcm/notification_service.dart';
@@ -108,9 +110,9 @@ class _AppInitState extends ConsumerState<AppInit> with WidgetsBindingObserver {
     final fcmToken = await getDeviceToken();
     print('FCM/APNS TOKEN: $fcmToken');
     await FcmTokenRepository().saveFcmToken(fcmToken ?? '');
-    // final currentLanguage =
-    //     await ref.watch(languageRepositoryProvider).fetchLanguage();
-    // ref.read(languageProvider.notifier).update(currentLanguage ?? 'vi');
+    final currentLanguage =
+        await ref.watch(languageRepositoryProvider).fetchLanguage();
+    ref.read(languageProvider.notifier).update(currentLanguage ?? 'vi');
 
     await ref.read(tokenRepositoryProvider).fetchToken().then((token) {
       if (token != null) {

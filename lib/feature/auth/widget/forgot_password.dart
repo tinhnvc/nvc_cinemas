@@ -24,7 +24,7 @@ class ForgotPassword extends ConsumerWidget {
     final formGroup = ref.watch(authProvider).forgotPasswordForm;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: ColorName.pageBackground,
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(
@@ -106,7 +106,7 @@ class ForgotPassword extends ConsumerWidget {
       ),
       bottomSheet: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        color: const Color(0xFFFFFFFF),
+        color: ColorName.pageBackground,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

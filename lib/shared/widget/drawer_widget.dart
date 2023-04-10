@@ -4,6 +4,7 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +22,11 @@ class DrawerWidget extends ConsumerWidget {
     final currentSelected = ref.watch(navigationProvider)! as NavigationItem;
 
     final user = ref.watch(userProvider);
+    var role = 'customer';
+    if (user.role != null) {
+      role = user.role!.roleName!;
+    }
+    final isCustomer = role != 'admin' && role != 'manager';
 
     return Drawer(
       backgroundColor: ColorName.primary,
@@ -104,46 +110,123 @@ class DrawerWidget extends ConsumerWidget {
               const Divider(
                 color: Colors.white,
               ),
-              buildNavigationItemDrawer(
-                context: context,
-                ref: ref,
-                title: context.l10n.home,
-                currentSelected: currentSelected,
-                item: NavigationItem.home,
-                icon: Icons.home,
-              ),
-              buildNavigationItemDrawer(
-                context: context,
-                ref: ref,
-                title: context.l10n.movie,
-                currentSelected: currentSelected,
-                item: NavigationItem.movie,
-                icon: Icons.video_collection,
-              ),
-              buildNavigationItemDrawer(
-                context: context,
-                ref: ref,
-                title: context.l10n.showtimes,
-                currentSelected: currentSelected,
-                item: NavigationItem.showtimes,
-                icon: Icons.date_range,
-              ),
-              buildNavigationItemDrawer(
-                context: context,
-                ref: ref,
-                title: context.l10n.ticket,
-                currentSelected: currentSelected,
-                item: NavigationItem.ticket,
-                icon: Icons.sticky_note_2_sharp,
-              ),
-              buildNavigationItemDrawer(
-                context: context,
-                ref: ref,
-                title: context.l10n.promotions,
-                currentSelected: currentSelected,
-                item: NavigationItem.promotions,
-                icon: Icons.percent,
-              ),
+              if (isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.home,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.home,
+                  icon: Icons.home,
+                ),
+              if (isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.movie,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.movie,
+                  icon: Icons.video_collection,
+                ),
+              if (isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.showtimes,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.showtimes,
+                  icon: Icons.date_range,
+                ),
+              if (isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.ticket,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.ticket,
+                  icon: Icons.sticky_note_2_sharp,
+                ),
+              if (isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.promotions,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.promotions,
+                  icon: Icons.percent,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.categories,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mCategory,
+                  icon: Icons.category,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.movie,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mMovie,
+                  icon: Icons.videocam_rounded,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.rooms,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mRoom,
+                  icon: Icons.dataset,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.account,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mAccount,
+                  icon: Icons.supervisor_account,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.seat,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mSeat,
+                  icon: Icons.chair,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.promotions,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mPromotion,
+                  icon: Icons.percent_rounded,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.ticket,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mTicket,
+                  icon: Icons.sticky_note_2_sharp,
+                ),
+              if (!isCustomer)
+                buildNavigationItemDrawer(
+                  context: context,
+                  ref: ref,
+                  title: context.l10n.revenue,
+                  currentSelected: currentSelected,
+                  item: NavigationItem.mRevenue,
+                  icon: Icons.stacked_bar_chart,
+                ),
               const Divider(
                 color: Colors.white,
               ),
@@ -216,7 +299,7 @@ class DrawerWidget extends ConsumerWidget {
           return;
         }
         if (item == NavigationItem.settings) {
-          // InitUtil.initSettingProfile(context, ref);
+          InitUtil.initSetting(ref);
           Navigator.pushNamed(
             context,
             '/setting',

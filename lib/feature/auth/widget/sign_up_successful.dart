@@ -21,7 +21,7 @@ class SignUpSuccessful extends ConsumerWidget {
     final ratio = height / size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: ColorName.pageBackground,
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(
