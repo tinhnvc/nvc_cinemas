@@ -56,7 +56,7 @@ class SignIn extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFEFE0E0),
+        backgroundColor: const Color(0xFFFFFFFF),
         body: Container(
           margin: EdgeInsets.zero,
           // decoration: BoxDecoration(

@@ -240,7 +240,7 @@ class Settings extends ConsumerWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.3),
+          color: ColorName.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Row(

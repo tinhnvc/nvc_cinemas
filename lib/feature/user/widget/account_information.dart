@@ -225,7 +225,7 @@ class AccountInformation extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.3)),
+      decoration: BoxDecoration(color: ColorName.primary.withOpacity(0.1)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -268,7 +268,7 @@ class AccountInformation extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.3)),
+        decoration: BoxDecoration(color: ColorName.primary.withOpacity(0.1)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

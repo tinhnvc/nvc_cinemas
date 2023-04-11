@@ -16,8 +16,8 @@ class ColorName {
   /// Color: #FF363E59
   static const Color btnText = Color(0xFF363E59);
 
-  /// Color: #EFE0E0
-  static const Color pageBackground = Color(0xFFEFE0E0);
+  /// Color: #FFFFFF
+  static const Color pageBackground = Color(0xFFFFFFFF);
 
   /// Color: #FB9057
   static const Color primary = Color(0xFFFB9057);

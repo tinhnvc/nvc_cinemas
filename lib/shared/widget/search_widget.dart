@@ -14,7 +14,8 @@ class SearchWidget extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: Colors.white54),
+            borderRadius: BorderRadius.circular(12),
+            color: ColorName.primary.withOpacity(0.3)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           child: Row(

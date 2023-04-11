@@ -1,4 +1,6 @@
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
+import 'package:nvc_cinemas/feature/m_movie/m_movie_page.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
@@ -71,6 +73,11 @@ class _HomePageState extends ConsumerState<HomePage>
     var timeBackPress = DateTime.now();
     // final profile = ref.watch(profileProvider);
     final user = ref.watch(userProvider);
+    var role = 'customer';
+    if (user.role != null) {
+      role = user.role!.roleName!;
+    }
+    final isCustomer = role != 'admin' && role != 'manager';
 
     return WillPopScope(
       onWillPop: () async {
@@ -108,9 +115,13 @@ class _HomePageState extends ConsumerState<HomePage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => ref
-                        .read(navigationProvider.notifier)
-                        .setNavigationItem(NavigationItem.home),
+                    onTap: isCustomer
+                        ? () => ref
+                            .read(navigationProvider.notifier)
+                            .setNavigationItem(NavigationItem.home)
+                        : () => ref
+                            .read(navigationProvider.notifier)
+                            .setNavigationItem(NavigationItem.mCategory),
                     child: Container(
                         margin: const EdgeInsets.only(left: 40),
                         child: Assets.images.logoPng
@@ -155,6 +166,8 @@ class _HomePageState extends ConsumerState<HomePage>
       NavigationItem.seeMore: const SeeMoreScreen(),
       NavigationItem.movie: const MoviePage(),
       NavigationItem.showtimes: const ShowtimesPage(),
+      NavigationItem.mCategory: const MCategoryPage(),
+      NavigationItem.mMovie: const MMoviePage(),
       // NavigationItem.ticket: const TicketPage(),
       // NavigationItem.promotions: const PromotionPage(),
     };

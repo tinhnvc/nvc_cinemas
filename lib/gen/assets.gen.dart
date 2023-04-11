@@ -22,6 +22,10 @@ class $AssetsEnvGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/account-infor.png
+  AssetGenImage get accountInfor =>
+      const AssetGenImage('assets/images/account-infor.png');
+
   /// File path: assets/images/book-ticket.png
   AssetGenImage get bookTicket =>
       const AssetGenImage('assets/images/book-ticket.png');
@@ -50,6 +54,10 @@ class $AssetsImagesGen {
   AssetGenImage get carousel3j =>
       const AssetGenImage('assets/images/carousel_3j.jpg');
 
+  /// File path: assets/images/change-password.png
+  AssetGenImage get changePassword =>
+      const AssetGenImage('assets/images/change-password.png');
+
   /// File path: assets/images/chat.png
   AssetGenImage get chat => const AssetGenImage('assets/images/chat.png');
 
@@ -73,8 +81,21 @@ class $AssetsImagesGen {
   AssetGenImage get paymentQr =>
       const AssetGenImage('assets/images/payment_qr.png');
 
+  /// File path: assets/images/promotions.png
+  AssetGenImage get promotions =>
+      const AssetGenImage('assets/images/promotions.png');
+
+  /// File path: assets/images/see-more.png
+  AssetGenImage get seeMore =>
+      const AssetGenImage('assets/images/see-more.png');
+
+  /// File path: assets/images/settings.png
+  AssetGenImage get settings =>
+      const AssetGenImage('assets/images/settings.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
+        accountInfor,
         bookTicket,
         carousel1,
         carousel1j,
@@ -82,12 +103,16 @@ class $AssetsImagesGen {
         carousel2j,
         carousel3,
         carousel3j,
+        changePassword,
         chat,
         googleLogo,
         icon1024x1024,
         logoPng,
         paymentGateway,
-        paymentQr
+        paymentQr,
+        promotions,
+        seeMore,
+        settings
       ];
 }
 
