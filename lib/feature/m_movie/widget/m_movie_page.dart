@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
-import 'package:nvc_cinemas/feature/m_movie/m_movie_item.dart';
+import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';

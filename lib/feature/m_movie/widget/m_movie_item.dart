@@ -49,7 +49,7 @@ class MMovieItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.3,
                       child: Text(
-                        'Ngôi làng của lá và sự trở lại của Mask',
+                        'Ngôi làng của lá và sự trở lại của Mask mark mark mark',
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -64,11 +64,11 @@ class MMovieItem extends ConsumerWidget {
                       children: [
                         GestureDetector(
                           onTap: () =>
-                              Navigator.pushNamed(context, '/edit-movie'),
+                              Navigator.pushNamed(context, '/add-showtimes'),
                           child: Icon(
                             Icons.date_range_rounded,
                             size: 25,
-                            color: ColorName.btnText,
+                            color: ColorName.primary,
                           ),
                         ),
                         const SizedBox(
@@ -80,7 +80,7 @@ class MMovieItem extends ConsumerWidget {
                           child: Icon(
                             Icons.edit_note,
                             size: 25,
-                            color: ColorName.btnText,
+                            color: ColorName.primary,
                           ),
                         ),
                         Transform.scale(

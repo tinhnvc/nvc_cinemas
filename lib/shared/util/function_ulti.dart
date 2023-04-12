@@ -82,6 +82,86 @@ class FunctionUtil {
     await ref.read(languageRepositoryProvider).saveLanguage(language);
     ref.read(languageProvider.notifier).update(language);
   }
+
+  static void alertPopUpCreated({
+    required VoidCallback onPressedConfirm,
+  }) {
+    final context = OneContext().context;
+    Alert(
+      context: context!,
+      type: AlertType.success,
+      title: '${context.l10n.addNew} ${context.l10n.success}',
+      desc: null,
+      style: const AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: ColorName.primary,
+          radius: const BorderRadius.all(Radius.circular(5)),
+          height: 44,
+          onPressed: () {
+            onPressedConfirm();
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'OK',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    ).show();
+  }
+
+  static void alertPopUpUpdated({
+    required VoidCallback onPressedConfirm,
+  }) {
+    final context = OneContext().context;
+    Alert(
+      context: context!,
+      type: AlertType.success,
+      title: '${context.l10n.updated} ${context.l10n.success}',
+      desc: null,
+      style: const AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: ColorName.primary,
+          radius: const BorderRadius.all(Radius.circular(5)),
+          height: 44,
+          onPressed: () {
+            onPressedConfirm();
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'OK',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    ).show();
+  }
 }
 //
 // class URLUlti {

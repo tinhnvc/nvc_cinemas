@@ -7,7 +7,9 @@ import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/auth/provider/users_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/link/email_sender.dart';
+import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:one_context/one_context.dart';
@@ -61,6 +63,11 @@ class AuthProvider {
       for (final item in users) {
         if (item.email == email && item.password == password) {
           ref.read(userProvider.notifier).fetchUser(item);
+          if (item.role!.roleName == 'admin') {
+            ref
+                .read(navigationProvider.notifier)
+                .setNavigationItem(NavigationItem.mCategory);
+          }
           response = true;
         }
       }

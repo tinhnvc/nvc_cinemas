@@ -22,13 +22,6 @@ class CommentModalSheet extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
 
-    final genderList = [
-      context.l10n.unknown,
-      context.l10n.male,
-      context.l10n.female,
-    ];
-    final genderValue = ref.watch(genderSignUpProvider);
-
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Center(
