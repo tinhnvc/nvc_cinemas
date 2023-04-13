@@ -10,6 +10,7 @@ import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_movie.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_showtimes.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/edit_movie.dart';
+import 'package:nvc_cinemas/feature/m_room/widget/add_room.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
@@ -83,6 +84,7 @@ class App extends ConsumerWidget {
       '/add-movie': ([Object? arguments]) => const AddMovie(),
       '/edit-movie': ([Object? arguments]) => const EditMovie(),
       '/add-showtimes': ([Object? arguments]) => const AddShowtimes(),
+      '/add-room': ([Object? arguments]) => const AddRoom(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

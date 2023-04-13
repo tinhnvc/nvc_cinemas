@@ -1,6 +1,7 @@
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_page.dart';
+import 'package:nvc_cinemas/feature/m_room/widget/m_room_page.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
@@ -168,6 +169,7 @@ class _HomePageState extends ConsumerState<HomePage>
       NavigationItem.showtimes: const ShowtimesPage(),
       NavigationItem.mCategory: const MCategoryPage(),
       NavigationItem.mMovie: const MMoviePage(),
+      NavigationItem.mRoom: const MRoomPage(),
       // NavigationItem.ticket: const TicketPage(),
       // NavigationItem.promotions: const PromotionPage(),
     };
