@@ -94,23 +94,29 @@ class SeeMoreScreen extends ConsumerWidget {
                                     SeeMoreItem(
                                       icon: Icons.supervisor_account_sharp,
                                       content: context.l10n.account,
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, '/ticket-page'),
+                                      onPressed: () => ref
+                                          .read(navigationProvider.notifier)
+                                          .setNavigationItem(
+                                            NavigationItem.mAccount,
+                                          ),
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.chair,
                                       content: context.l10n.seat,
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, '/promotion-page'),
+                                      onPressed: () => ref
+                                          .read(navigationProvider.notifier)
+                                          .setNavigationItem(
+                                            NavigationItem.mSeat,
+                                          ),
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.percent_rounded,
                                       content: context.l10n.promotions,
-                                      onPressed: () {
-                                        InitUtil.initSetting(ref);
-                                        Navigator.pushNamed(
-                                            context, '/setting');
-                                      },
+                                      onPressed: () => ref
+                                          .read(navigationProvider.notifier)
+                                          .setNavigationItem(
+                                            NavigationItem.mPromotion,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -125,14 +131,20 @@ class SeeMoreScreen extends ConsumerWidget {
                                     SeeMoreItem(
                                       icon: Icons.sticky_note_2_sharp,
                                       content: context.l10n.ticket,
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, '/ticket-page'),
+                                      onPressed: () => ref
+                                          .read(navigationProvider.notifier)
+                                          .setNavigationItem(
+                                            NavigationItem.mTicket,
+                                          ),
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.bar_chart,
                                       content: context.l10n.revenue,
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, '/promotion-page'),
+                                      onPressed: () => ref
+                                          .read(navigationProvider.notifier)
+                                          .setNavigationItem(
+                                            NavigationItem.mRevenue,
+                                          ),
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.settings,

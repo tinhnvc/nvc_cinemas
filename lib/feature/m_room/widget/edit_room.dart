@@ -9,11 +9,12 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
 import 'package:nvc_cinemas/shared/widget/select/seat_widget.dart';
+import 'package:nvc_cinemas/shared/widget/time_create_and_update.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-class AddRoom extends ConsumerWidget {
-  const AddRoom({Key? key}) : super(key: key);
+class EditRoom extends ConsumerWidget {
+  const EditRoom({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +42,7 @@ class AddRoom extends ConsumerWidget {
                   children: [
                     const SizedBox(height: 20),
                     ArrowBackTitle(
-                      title: context.l10n.addRoom,
+                      title: context.l10n.editRoom,
                       textSize: 19,
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -80,7 +81,7 @@ class AddRoom extends ConsumerWidget {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         context.l10n.sizeW,
@@ -99,7 +100,7 @@ class AddRoom extends ConsumerWidget {
                                             formControlName: 'sizeW',
                                             maxLine: 1,
                                             textInputAction:
-                                                TextInputAction.next,
+                                            TextInputAction.next,
                                             labelText: '${context.l10n.input} '
                                                 '${context.l10n.sizeW.toLowerCase()}'),
                                       ),
@@ -112,7 +113,7 @@ class AddRoom extends ConsumerWidget {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         context.l10n.sizeH,
@@ -131,7 +132,7 @@ class AddRoom extends ConsumerWidget {
                                             formControlName: 'sizeH',
                                             maxLine: 1,
                                             textInputAction:
-                                                TextInputAction.next,
+                                            TextInputAction.next,
                                             labelText: '${context.l10n.input} '
                                                 '${context.l10n.sizeH.toLowerCase()}'),
                                       ),
@@ -301,6 +302,10 @@ class AddRoom extends ConsumerWidget {
                                 ),
                               ],
                             ),
+                            TimeCrateAndUpdate(
+                              createTime: 1676352825000,
+                              updateTime: 1676539365000,
+                            ),
                             Container(
                               margin: const EdgeInsets.only(
                                 bottom: 25,
@@ -337,7 +342,7 @@ class AddRoom extends ConsumerWidget {
                                           .addCategory(ref, context);
                                     },
                                     child: Text(
-                                      context.l10n.addNew,
+                                      context.l10n.update,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,

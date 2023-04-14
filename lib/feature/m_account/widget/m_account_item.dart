@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 
-class MRoomItem extends ConsumerWidget {
-  const MRoomItem({Key? key}) : super(key: key);
+class MAccountItem extends ConsumerWidget {
+  const MAccountItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +39,7 @@ class MRoomItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.4,
                       child: Text(
-                        'P12',
+                        'Nguyễn Xuân Anh',
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -53,7 +54,7 @@ class MRoomItem extends ConsumerWidget {
                       children: [
                         GestureDetector(
                           onTap: () =>
-                              Navigator.pushNamed(context, '/edit-room'),
+                              Navigator.pushNamed(context, '/edit-account'),
                           child: Icon(
                             Icons.edit_note,
                             size: 25,
@@ -77,7 +78,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.seatAmount}: 30 ${context.l10n.seat}',
+                  'Email: xuananh@gmail.com',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
@@ -87,7 +88,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.size}: 5 x 6',
+                  '${context.l10n.yearOfBirth}: 1998',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,

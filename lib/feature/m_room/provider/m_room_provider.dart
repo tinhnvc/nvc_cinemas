@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-final roomFormProvider = Provider<MovieFormProvider>(
-      (ref) => MovieFormProvider(),
+final roomFormProvider = Provider<RoomFormProvider>(
+  (ref) => RoomFormProvider(),
 );
 
-class MovieFormProvider {
-  MovieFormProvider();
+class RoomFormProvider {
+  RoomFormProvider();
 
   final addRoomForm = FormGroup({
     'roomName': FormControl<String>(),
@@ -28,8 +28,8 @@ class MovieFormProvider {
 }
 
 final roomAddShowtimeProvider =
-StateNotifierProvider<RoomAddShowtimeNotifier, String>(
-      (ref) => RoomAddShowtimeNotifier(),
+    StateNotifierProvider<RoomAddShowtimeNotifier, String>(
+  (ref) => RoomAddShowtimeNotifier(),
 );
 
 class RoomAddShowtimeNotifier extends StateNotifier<String> {

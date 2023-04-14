@@ -165,7 +165,7 @@
     "manager": "Manager",
     "admin": "Admin",
     "customer": "Customer",
-    "seatName": "Seat name",
+    "seatName": "Seat type name",
     "price": "Price",
     "otherPrice": "Price (holiday)",
     "findPromotion": "Find promotion",
@@ -198,5 +198,6 @@
     "back": "Back",
     "rateMovie": "Rate movie",
     "input": "Input",
-    "inputComment": "Input comment about this film..."
+    "inputComment": "Input comment about this film...",
+    "seatType": "Seat type"
 }

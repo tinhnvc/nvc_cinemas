@@ -198,5 +198,6 @@
     "back": "Quay lại",
     "rateMovie": "Đánh giá phim",
     "input": "Nhập",
-    "inputComment": "Nhập bình luận đánh giá phim..."
+    "inputComment": "Nhập bình luận đánh giá phim...",
+    "seatType": "Loại ghế"
 }

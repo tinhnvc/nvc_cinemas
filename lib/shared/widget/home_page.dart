@@ -1,7 +1,10 @@
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/feature/m_account/widget/m_account_page.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_page.dart';
+import 'package:nvc_cinemas/feature/m_promotion/widget/m_promotion_page.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/m_room_page.dart';
+import 'package:nvc_cinemas/feature/m_seat/widget/m_seat_page.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
@@ -170,6 +173,9 @@ class _HomePageState extends ConsumerState<HomePage>
       NavigationItem.mCategory: const MCategoryPage(),
       NavigationItem.mMovie: const MMoviePage(),
       NavigationItem.mRoom: const MRoomPage(),
+      NavigationItem.mAccount: const MAccountPage(),
+      NavigationItem.mSeat: const MSeatPage(),
+      NavigationItem.mPromotion: const MPromotionPage(),
       // NavigationItem.ticket: const TicketPage(),
       // NavigationItem.promotions: const PromotionPage(),
     };

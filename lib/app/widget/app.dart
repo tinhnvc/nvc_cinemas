@@ -4,13 +4,20 @@ import 'package:nvc_cinemas/feature/auth/widget/sign_in.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up_successful.dart';
 import 'package:nvc_cinemas/feature/home/widget/home.dart';
+import 'package:nvc_cinemas/feature/m_account/widget/add_account.dart';
+import 'package:nvc_cinemas/feature/m_account/widget/edit_account.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/add_category.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/edit_category.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_movie.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_showtimes.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/edit_movie.dart';
+import 'package:nvc_cinemas/feature/m_promotion/widget/add_promotion.dart';
+import 'package:nvc_cinemas/feature/m_promotion/widget/edit_promotion.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/add_room.dart';
+import 'package:nvc_cinemas/feature/m_room/widget/edit_room.dart';
+import 'package:nvc_cinemas/feature/m_seat/widget/add_seat.dart';
+import 'package:nvc_cinemas/feature/m_seat/widget/edit_seat.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
@@ -85,6 +92,13 @@ class App extends ConsumerWidget {
       '/edit-movie': ([Object? arguments]) => const EditMovie(),
       '/add-showtimes': ([Object? arguments]) => const AddShowtimes(),
       '/add-room': ([Object? arguments]) => const AddRoom(),
+      '/edit-room': ([Object? arguments]) => const EditRoom(),
+      '/add-account': ([Object? arguments]) => const AddAccount(),
+      '/edit-account': ([Object? arguments]) => const EditAccount(),
+      '/add-seat': ([Object? arguments]) => const AddSeat(),
+      '/edit-seat': ([Object? arguments]) => const EditSeat(),
+      '/add-promotion': ([Object? arguments]) => const AddPromotion(),
+      '/edit-promotion': ([Object? arguments]) => const EditPromotion(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

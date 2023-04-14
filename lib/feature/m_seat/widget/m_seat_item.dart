@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 
-class MRoomItem extends ConsumerWidget {
-  const MRoomItem({Key? key}) : super(key: key);
+class MSeatItem extends ConsumerWidget {
+  const MSeatItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +38,7 @@ class MRoomItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.4,
                       child: Text(
-                        'P12',
+                        context.l10n.normalSeat,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -53,7 +53,7 @@ class MRoomItem extends ConsumerWidget {
                       children: [
                         GestureDetector(
                           onTap: () =>
-                              Navigator.pushNamed(context, '/edit-room'),
+                              Navigator.pushNamed(context, '/edit-seat'),
                           child: Icon(
                             Icons.edit_note,
                             size: 25,
@@ -77,17 +77,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.seatAmount}: 30 ${context.l10n.seat}',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: ColorName.textNormal,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  '${context.l10n.size}: 5 x 6',
+                  '${context.l10n.price}: 45.000đ',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,

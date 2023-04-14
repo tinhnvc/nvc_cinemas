@@ -52,12 +52,21 @@ class UserNotifier extends StateNotifier<User> {
   }
 }
 
-final userFormProvider = Provider<ProfileFormProvider>(
-  (ref) => ProfileFormProvider(),
+final userFormProvider = Provider<UserFormProvider>(
+  (ref) => UserFormProvider(),
 );
 
-class ProfileFormProvider {
-  ProfileFormProvider();
+class UserFormProvider {
+  UserFormProvider();
+
+  final addAccountForm = FormGroup({
+    'email': FormControl<String>(),
+    'password': FormControl<String>(),
+    'fullName': FormControl<String>(),
+    'phoneNumber': FormControl<String>(),
+    'gender': FormControl<String>(),
+    'yob': FormControl<String>(),
+  });
 
   final editProfileForm = FormGroup({
     'password': FormControl<String>(),
@@ -81,6 +90,8 @@ class ProfileFormProvider {
   final buttonController = RoundedLoadingButtonController();
 
   Future<void> updateProfile(WidgetRef ref, BuildContext context) async {}
+
+  Future<void> addAccount(WidgetRef ref, BuildContext context) async {}
 
   Future<void> updatePassword(WidgetRef ref, BuildContext context) async {
     buttonController.start();
@@ -123,10 +134,36 @@ class IsSecureRePasswordNotifier extends StateNotifier<bool> {
 }
 
 final editingPersonalInformation =
-StateNotifierProvider((ref) => EditingPersonalInformation());
+    StateNotifierProvider((ref) => EditingPersonalInformation());
 
 class EditingPersonalInformation extends StateNotifier<bool> {
   EditingPersonalInformation() : super(false);
 
   set changed(bool value) => state = value;
+}
+
+final genderAddAccountProvider =
+    StateNotifierProvider<GenderAddAccountNotifier, String>(
+  (ref) => GenderAddAccountNotifier(),
+);
+
+class GenderAddAccountNotifier extends StateNotifier<String> {
+  GenderAddAccountNotifier() : super('');
+
+  void update(String value) {
+    state = value;
+  }
+}
+
+final roleAddAccountProvider =
+    StateNotifierProvider<RoleAddAccountNotifier, String>(
+  (ref) => RoleAddAccountNotifier(),
+);
+
+class RoleAddAccountNotifier extends StateNotifier<String> {
+  RoleAddAccountNotifier() : super('');
+
+  void update(String value) {
+    state = value;
+  }
 }

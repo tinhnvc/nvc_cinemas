@@ -34,7 +34,6 @@ class TimeCrateAndUpdate extends ConsumerWidget {
                   FormatSupport.toDateTimeNonSecond(createTime),
                   style: const TextStyle(
                     color: Color(0xFF363E59),
-                    fontStyle: FontStyle.italic,
                     fontSize: 15,
                   ),
                 ),
@@ -58,7 +57,6 @@ class TimeCrateAndUpdate extends ConsumerWidget {
                   FormatSupport.toDateTimeNonSecond(updateTime),
                   style: const TextStyle(
                     color: Color(0xFF363E59),
-                    fontStyle: FontStyle.italic,
                     fontSize: 15,
                   ),
                 ),
