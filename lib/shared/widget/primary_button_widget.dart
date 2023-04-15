@@ -8,16 +8,20 @@ class PrimaryButtonWidget extends ConsumerWidget {
     required this.content,
     required this.width,
     required this.onPressed,
+    this.active,
     Key? key,
   }) : super(key: key);
   final String content;
   final double width;
   final VoidCallback onPressed;
+  final bool? active;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DialogButton(
-      color: ColorName.primary,
+      color: active ?? false
+          ? ColorName.primary
+          : ColorName.primary.withOpacity(0.5),
       radius: const BorderRadius.all(Radius.circular(5)),
       height: 40,
       width: width,
@@ -27,7 +31,7 @@ class PrimaryButtonWidget extends ConsumerWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
-          color: ColorName.btnText,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 15,
         ),

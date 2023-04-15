@@ -1,21 +1,22 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
-import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
+import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/movie/widget/rate_movie_widget.dart';
-import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/highlight_card.dart';
 import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MovieDetail extends ConsumerWidget {
   const MovieDetail({required this.movie, Key? key}) : super(key: key);
@@ -30,6 +31,12 @@ class MovieDetail extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
+    ref.watch(movieRatingsProvider);
+    final comments =
+        ref.read(movieRatingsProvider.notifier).getByMovieId(movie.id!);
+    final sumRate = ref.read(movieRatingsProvider.notifier).sumRate(movie.id!);
+    final isComment =
+        ref.read(movieRatingsProvider.notifier).isComment(ref, movie.id!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -71,7 +78,7 @@ class MovieDetail extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Container(
-                              height: 200,
+                              height: 220,
                               width: 150,
                               margin: const EdgeInsets.only(right: 15),
                               decoration: BoxDecoration(
@@ -79,8 +86,16 @@ class MovieDetail extends ConsumerWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(6)),
                               ),
-                              child: Assets.images.logoPng
-                                  .image(width: 100, fit: BoxFit.contain),
+                              child: movie.image != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.file(
+                                        File(movie.image!),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Assets.images.logoPng
+                                      .image(width: 100, fit: BoxFit.contain),
                             ),
                             Expanded(
                               child: Column(
@@ -173,7 +188,7 @@ class MovieDetail extends ConsumerWidget {
                               color: ColorName.btnText,
                             ),
                             Text(
-                              ' 4.6',
+                              ' ${sumRate}',
                               textAlign: TextAlign.justify,
                               style: TextStyle(
                                 fontSize: 15,
@@ -193,7 +208,7 @@ class MovieDetail extends ConsumerWidget {
                               width: 15,
                             ),
                             Text(
-                              '12 lượt đánh giá',
+                              '${comments.length} ${context.l10n.rateTimes}',
                               textAlign: TextAlign.justify,
                               style: TextStyle(
                                 fontSize: 15,
@@ -210,17 +225,48 @@ class MovieDetail extends ConsumerWidget {
                             height: 2,
                           ),
                         ),
-                        RateMovieWidget(),
-                        RateMovieWidget(),
+                        comments.isNotEmpty
+                            ? Column(
+                                children: comments
+                                    .map(
+                                      (e) => RateMovieWidget(
+                                        movieRating: e,
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    context.l10n.noComment,
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: ColorName.textNormal,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             PrimaryButtonWidget(
                               content: context.l10n.comment,
                               width: 120,
-                              onPressed: () {
-                                CallModalSheet.commentMovie(context);
-                              },
+                              active: !isComment,
+                              onPressed: isComment
+                                  ? () {}
+                                  : () {
+                                      InitUtil.initComment(
+                                        ref: ref,
+                                        userId: ref.watch(userProvider).userId!,
+                                        movieId: movie.id!,
+                                      );
+                                      CallModalSheet.commentMovie(
+                                          context, movie);
+                                    },
                             ),
                           ],
                         ),

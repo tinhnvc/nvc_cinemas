@@ -19,6 +19,7 @@ class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
     String? id,
     String? categoryName,
+    String? categoryNameEn,
     String? description,
     @Default(true) bool? active,
     int? createAt,

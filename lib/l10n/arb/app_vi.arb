@@ -202,5 +202,6 @@
     "seatType": "Loại ghế",
     "ticketDetail": "Chi tiết vé",
     "revenueDetail": "Chi tiết doanh thu",
-    "notUpdated": "Chưa cập nhật"
+    "notUpdated": "Chưa cập nhật",
+    "noComment": "Chưa có bình luận"
 }

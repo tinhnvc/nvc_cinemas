@@ -202,5 +202,6 @@
     "seatType": "Seat type",
     "ticketDetail": "Ticket detail",
     "revenueDetail": "Revenue detail",
-    "notUpdated": "Not updated"
+    "notUpdated": "Not updated",
+    "noComment": "No comment"
 }

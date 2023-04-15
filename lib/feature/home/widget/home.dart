@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
-import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/service/file_service.dart';
 import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -49,12 +47,18 @@ class _HomeState extends ConsumerState<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${context.l10n.hi}, ${user.fullName}',
-                      style: TextStyle(
-                        color: ColorName.btnText,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () async {
+                        final imagePath = await FileService.pickImage();
+                        print(imagePath);
+                      },
+                      child: Text(
+                        '${context.l10n.hi}, ${user.fullName}',
+                        style: TextStyle(
+                          color: ColorName.btnText,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -127,7 +131,7 @@ class _HomeState extends ConsumerState<Home> {
                       gridDelegate:
                           // const SliverGridDelegateWithFixedCrossAxisCount(
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 300.0,
+                        maxCrossAxisExtent: 330.0,
                         mainAxisExtent: 270,
                         crossAxisSpacing: 12.0,
                         mainAxisSpacing: 12.0,

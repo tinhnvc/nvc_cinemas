@@ -36,7 +36,7 @@ class EditMovie extends ConsumerWidget {
       'T13-',
       'T16-',
       'T18-',
-      'C',
+      'C-',
       'K-',
     ];
 

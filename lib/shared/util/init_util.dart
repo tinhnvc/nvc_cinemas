@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 
@@ -25,5 +26,17 @@ class InitUtil {
         await ref.read(languageRepositoryProvider).fetchLanguage();
     ref.read(appLanguage.notifier).changed =
         languageSave == 'vi' ? true : false;
+  }
+
+  static void initComment({
+    required WidgetRef ref,
+    required String userId,
+    required String movieId,
+  }) async {
+    final formGroup = ref.read(movieRatingFormProvider).addCommentForm;
+    formGroup.control('userId').value = userId;
+    formGroup.control('movieId').value = movieId;
+    formGroup.control('star').value = '5';
+    formGroup.control('comment').value = '';
   }
 }

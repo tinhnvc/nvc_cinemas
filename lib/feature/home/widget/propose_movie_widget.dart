@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
@@ -30,13 +32,21 @@ class ProposeMovieWidget extends ConsumerWidget {
           children: [
             Container(
               height: 220,
-              width: 300,
+              width: 200,
               decoration: BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
-              child:
-                  Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
+              child: movie.image != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.file(
+                        File(movie.image!),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Assets.images.logoPng
+                      .image(width: 100, fit: BoxFit.contain),
             ),
             const SizedBox(
               height: 5,

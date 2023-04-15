@@ -1,8 +1,10 @@
-import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +13,11 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class CommentModalSheet extends ConsumerWidget {
-  const CommentModalSheet({Key? key}) : super(key: key);
+  const CommentModalSheet({
+    required this.movie,
+    Key? key,
+  }) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,7 +51,7 @@ class CommentModalSheet extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      context.l10n.rateTimes,
+                      context.l10n.rateMovie,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -72,42 +78,34 @@ class CommentModalSheet extends ConsumerWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 25,
+                          horizontal: 20,
                           vertical: 15,
                         ),
                         child: ReactiveForm(
-                          formGroup: ref.read(userFormProvider).rateMovieForm,
+                          formGroup:
+                              ref.read(movieRatingFormProvider).addCommentForm,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: ColorName.primary,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: ColorName.primary,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: ColorName.primary,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: ColorName.primary,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: ColorName.textNormal,
-                                  ),
-                                ],
+                              RatingBar.builder(
+                                initialRating: 5,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 4.0),
+                                itemBuilder: (context, _) => Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  ref
+                                      .read(movieRatingFormProvider)
+                                      .addCommentForm
+                                      .control('star')
+                                      .value = rating.toString();
+                                },
                               ),
                               const SizedBox(
                                 height: 10,
@@ -130,7 +128,7 @@ class CommentModalSheet extends ConsumerWidget {
                                   maxLine: 5,
                                   textInputAction: TextInputAction.newline,
                                   labelText: context.l10n.comment,
-                                  hintText: 'Nhập bình luận đánh giá phim...',
+                                  hintText: context.l10n.inputComment,
                                 ),
                               ),
                             ],
@@ -165,12 +163,13 @@ class CommentModalSheet extends ConsumerWidget {
                               height: 40,
                               width: 110,
                               animateOnTap: false,
-                              controller:
-                                  ref.watch(userFormProvider).buttonController,
+                              controller: ref
+                                  .watch(movieRatingFormProvider)
+                                  .buttonController,
                               onPressed: () {
-                                // ref
-                                //     .read(userFormProvider)
-                                //     .comment(ref);
+                                ref
+                                    .read(movieRatingFormProvider)
+                                    .addComment(ref, context);
                               },
                               child: Text(
                                 context.l10n.comment,

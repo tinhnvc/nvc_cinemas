@@ -31,12 +31,12 @@ class AddMovie extends ConsumerWidget {
     ];
 
     final ageTypeDropdownList = [
-      'P-',
+      'P-', // all
       'T13-',
       'T16-',
-      'T18-',
-      'C',
-      'K-',
+      'T18-', // 18 tuổi trở lên
+      'C-', // không phổ biến
+      'K-', // dưới 13, có bố mẹ
     ];
 
     final categoryValue = ref.watch(categoryAddMovieProvider);

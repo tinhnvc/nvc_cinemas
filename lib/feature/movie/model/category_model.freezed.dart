@@ -22,6 +22,7 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 mixin _$CategoryModel {
   String? get id => throw _privateConstructorUsedError;
   String? get categoryName => throw _privateConstructorUsedError;
+  String? get categoryNameEn => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   int? get createAt => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $CategoryModelCopyWith<$Res> {
   $Res call(
       {String? id,
       String? categoryName,
+      String? categoryNameEn,
       String? description,
       bool? active,
       int? createAt,
@@ -63,6 +65,7 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
   $Res call({
     Object? id = freezed,
     Object? categoryName = freezed,
+    Object? categoryNameEn = freezed,
     Object? description = freezed,
     Object? active = freezed,
     Object? createAt = freezed,
@@ -76,6 +79,10 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
       categoryName: freezed == categoryName
           ? _value.categoryName
           : categoryName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryNameEn: freezed == categoryNameEn
+          ? _value.categoryNameEn
+          : categoryNameEn // ignore: cast_nullable_to_non_nullable
               as String?,
       description: freezed == description
           ? _value.description
@@ -108,6 +115,7 @@ abstract class _$$_CategoryModelCopyWith<$Res>
   $Res call(
       {String? id,
       String? categoryName,
+      String? categoryNameEn,
       String? description,
       bool? active,
       int? createAt,
@@ -127,6 +135,7 @@ class __$$_CategoryModelCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? categoryName = freezed,
+    Object? categoryNameEn = freezed,
     Object? description = freezed,
     Object? active = freezed,
     Object? createAt = freezed,
@@ -140,6 +149,10 @@ class __$$_CategoryModelCopyWithImpl<$Res>
       categoryName: freezed == categoryName
           ? _value.categoryName
           : categoryName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryNameEn: freezed == categoryNameEn
+          ? _value.categoryNameEn
+          : categoryNameEn // ignore: cast_nullable_to_non_nullable
               as String?,
       description: freezed == description
           ? _value.description
@@ -167,6 +180,7 @@ class _$_CategoryModel extends _CategoryModel {
   const _$_CategoryModel(
       {this.id,
       this.categoryName,
+      this.categoryNameEn,
       this.description,
       this.active = true,
       this.createAt,
@@ -181,6 +195,8 @@ class _$_CategoryModel extends _CategoryModel {
   @override
   final String? categoryName;
   @override
+  final String? categoryNameEn;
+  @override
   final String? description;
   @override
   @JsonKey()
@@ -192,7 +208,7 @@ class _$_CategoryModel extends _CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel(id: $id, categoryName: $categoryName, description: $description, active: $active, createAt: $createAt, updateAt: $updateAt)';
+    return 'CategoryModel(id: $id, categoryName: $categoryName, categoryNameEn: $categoryNameEn, description: $description, active: $active, createAt: $createAt, updateAt: $updateAt)';
   }
 
   @override
@@ -203,6 +219,8 @@ class _$_CategoryModel extends _CategoryModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.categoryName, categoryName) ||
                 other.categoryName == categoryName) &&
+            (identical(other.categoryNameEn, categoryNameEn) ||
+                other.categoryNameEn == categoryNameEn) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.active, active) || other.active == active) &&
@@ -214,8 +232,8 @@ class _$_CategoryModel extends _CategoryModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, categoryName, description, active, createAt, updateAt);
+  int get hashCode => Object.hash(runtimeType, id, categoryName, categoryNameEn,
+      description, active, createAt, updateAt);
 
   @JsonKey(ignore: true)
   @override
@@ -235,6 +253,7 @@ abstract class _CategoryModel extends CategoryModel {
   const factory _CategoryModel(
       {final String? id,
       final String? categoryName,
+      final String? categoryNameEn,
       final String? description,
       final bool? active,
       final int? createAt,
@@ -248,6 +267,8 @@ abstract class _CategoryModel extends CategoryModel {
   String? get id;
   @override
   String? get categoryName;
+  @override
+  String? get categoryNameEn;
   @override
   String? get description;
   @override
