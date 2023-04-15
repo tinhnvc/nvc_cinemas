@@ -14,10 +14,13 @@ import 'package:nvc_cinemas/feature/m_movie/widget/add_showtimes.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/edit_movie.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/add_promotion.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/edit_promotion.dart';
+import 'package:nvc_cinemas/feature/m_revenue/widget/revenue_detail.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/add_room.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/edit_room.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/add_seat.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/edit_seat.dart';
+import 'package:nvc_cinemas/feature/m_ticket/widget/ticket_detail.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
@@ -76,13 +79,17 @@ class App extends ConsumerWidget {
       '/promotion-page': ([Object? arguments]) => const PromotionPage(),
       '/see-more': ([Object? arguments]) => const SeeMoreScreen(),
       '/setting': ([Object? arguments]) => const Settings(),
-      '/booking-by-movie': ([Object? arguments]) => const BookingByMovie(),
+      '/booking-by-movie': ([Object? arguments]) => BookingByMovie(
+            movie: arguments! as MovieModel,
+          ),
       '/booking-by-movie-detail': ([Object? arguments]) =>
           const BookingByMovieDetail(),
       '/account-information': ([Object? arguments]) =>
           const AccountInformation(),
       '/payment': ([Object? arguments]) => const PaymentPage(),
-      '/movie-detail': ([Object? arguments]) => const MovieDetail(),
+      '/movie-detail': ([Object? arguments]) => MovieDetail(
+            movie: arguments! as MovieModel,
+          ),
       '/promotion-detail': ([Object? arguments]) => const PromotionDetail(),
       '/change-password': ([Object? arguments]) => const ChangePassword(),
       '/m-category-page': ([Object? arguments]) => const MCategoryPage(),
@@ -99,6 +106,8 @@ class App extends ConsumerWidget {
       '/edit-seat': ([Object? arguments]) => const EditSeat(),
       '/add-promotion': ([Object? arguments]) => const AddPromotion(),
       '/edit-promotion': ([Object? arguments]) => const EditPromotion(),
+      '/ticket-detail': ([Object? arguments]) => const TicketDetail(),
+      '/revenue-detail': ([Object? arguments]) => const RevenueDetail(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

@@ -2,12 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/rate_movie_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/highlight_card.dart';
@@ -15,7 +18,8 @@ import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MovieDetail extends ConsumerWidget {
-  const MovieDetail({Key? key}) : super(key: key);
+  const MovieDetail({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,6 +29,7 @@ class MovieDetail extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -84,7 +89,11 @@ class MovieDetail extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Ngôi làng của lá và sự trở lại của Mask',
+                                    isVietnamese
+                                        ? movie.movieNameVi ??
+                                            context.l10n.notUpdated
+                                        : movie.movieNameEn ??
+                                            context.l10n.notUpdated,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -98,7 +107,7 @@ class MovieDetail extends ConsumerWidget {
                                   ),
                                   HighlightCard(
                                     widget: Text(
-                                      '13+',
+                                      movie.type ?? context.l10n.notUpdated,
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: ColorName.textNormal,
@@ -117,34 +126,36 @@ class MovieDetail extends ConsumerWidget {
                         ),
                         rowInformation(
                           title: context.l10n.director,
-                          content: 'John Mask',
+                          content: movie.director ?? context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.cast,
-                          content: 'Mikey, Rock, Mandle, Mikey, Rock, Mandle',
+                          content: movie.actor ?? context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.categories,
-                          content: 'Tâm lý, hành động',
+                          content: movie.category!.categoryName ??
+                              context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.runTime,
-                          content: '104 phút',
+                          content: '${movie.duration} ${context.l10n.minutes}',
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.releaseDate,
-                          content: '13/02/2023',
+                          content:
+                              FormatSupport.toDateTimeNonHour(movie.startTime!),
                           width: width,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'Cuộc phiêu lưu của cậu bé Max khi trở lại ngôi làng lá của mình sau 12 năm xa cách. Nhóm thợ săn đã truy lùng các thành viên trong bộ lạc của cậu, liệu cậu có giải cứu được họ không?',
+                          movie.description ?? context.l10n.notUpdated,
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 15,

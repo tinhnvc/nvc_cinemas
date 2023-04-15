@@ -2,16 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BookingByMovie extends ConsumerWidget {
-  const BookingByMovie({Key? key}) : super(key: key);
+  const BookingByMovie({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +24,7 @@ class BookingByMovie extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -61,7 +65,9 @@ class BookingByMovie extends ConsumerWidget {
                           height: 10,
                         ),
                         Text(
-                          'Ngôi làng của lá',
+                          isVietnamese
+                              ? movie.movieNameVi ?? context.l10n.notUpdated
+                              : movie.movieNameEn ?? context.l10n.notUpdated,
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,
@@ -72,7 +78,8 @@ class BookingByMovie extends ConsumerWidget {
                           height: 5,
                         ),
                         Text(
-                          'Tâm lý, hành động | 104 phút',
+                          '${movie.category!.categoryName} | '
+                          '${movie.duration} ${context.l10n.minutes}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 15,
@@ -83,8 +90,11 @@ class BookingByMovie extends ConsumerWidget {
                         ),
                         RoundedButtonWidget(
                           content: context.l10n.filmDetail,
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/movie-detail'),
+                          onPressed: () => Navigator.pushNamed(
+                            context,
+                            '/movie-detail',
+                            arguments: movie,
+                          ),
                         ),
                         const SizedBox(
                           height: 20,

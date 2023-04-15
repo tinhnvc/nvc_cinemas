@@ -30,15 +30,15 @@ class RolesNotifier extends StateNotifier<List<Role>> {
   }
 
   Role getById(String id) {
-    var user = const Role();
+    var role = const Role();
     if (state.isNotEmpty) {
       for (final item in state) {
         if (item.roleId == id) {
-          user = item;
+          role = item;
         }
       }
     }
 
-    return user;
+    return role;
   }
 }

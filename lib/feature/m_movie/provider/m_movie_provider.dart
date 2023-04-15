@@ -1,7 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/shared/link/movies.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+final moviesProvider = StateNotifierProvider<MoviesNotifier, List<MovieModel>>(
+  (ref) => MoviesNotifier(),
+);
+
+class MoviesNotifier extends StateNotifier<List<MovieModel>> {
+  MoviesNotifier() : super([]) {
+    fetchMovies();
+  }
+
+  Future<void> fetchMovies() async {
+    final moviesFetch = moviesFromJson(movies);
+    state = moviesFetch;
+  }
+
+  void cloneList(List<MovieModel> movies) {
+    state = [...movies];
+  }
+
+  MovieModel getById(String id) {
+    var movie = const MovieModel();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.id == id) {
+          movie = item;
+        }
+      }
+    }
+
+    return movie;
+  }
+}
 
 final movieFormProvider = Provider<MovieFormProvider>(
   (ref) => MovieFormProvider(),

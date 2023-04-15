@@ -199,5 +199,8 @@
     "rateMovie": "Đánh giá phim",
     "input": "Nhập",
     "inputComment": "Nhập bình luận đánh giá phim...",
-    "seatType": "Loại ghế"
+    "seatType": "Loại ghế",
+    "ticketDetail": "Chi tiết vé",
+    "revenueDetail": "Chi tiết doanh thu",
+    "notUpdated": "Chưa cập nhật"
 }

@@ -4,11 +4,13 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -28,6 +30,8 @@ class _HomeState extends ConsumerState<Home> {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final movies = ref.watch(moviesProvider);
+    final language = ref.watch(languageProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -57,9 +61,13 @@ class _HomeState extends ConsumerState<Home> {
                       height: 10,
                     ),
                     Text(
-                      'Avatar 3 '
-                      '${context.l10n.comingSoon.toLowerCase()},'
-                      ' ${context.l10n.bookTicketNow.toLowerCase()}!',
+                      language == 'vi'
+                          ? '${movies[0].movieNameVi} '
+                              '${context.l10n.comingSoon.toLowerCase()},'
+                              ' ${context.l10n.bookTicketNow.toLowerCase()}!'
+                          : '${movies[0].movieNameEn} '
+                              '${context.l10n.comingSoon.toLowerCase()},'
+                              ' ${context.l10n.bookTicketNow.toLowerCase()}!',
                       style: TextStyle(
                         color: ColorName.btnText,
                         fontSize: 16,
@@ -124,8 +132,10 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisSpacing: 12.0,
                         mainAxisSpacing: 12.0,
                       ),
-                      itemCount: 10,
-                      itemBuilder: (context, index) => ProposeMovieWidget(),
+                      itemCount: movies.length,
+                      itemBuilder: (context, index) => ProposeMovieWidget(
+                        movie: movies[index],
+                      ),
                     )
                   ],
                 ),
