@@ -24,41 +24,48 @@ class DateService {
 
     final weekMap = [
       {
-        'day': today,
+        'id': 'c1d8b61c-fc54-4ec9-a9af-16ce093c93a1',
+        'day': today.millisecondsSinceEpoch,
         'dayOfWeek': context.l10n.today,
       },
       {
-        'day': second,
+        'id': 'bb0340a2-8785-4bf1-b5c4-9a985f372630',
+        'day': second.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(second)
             : DateFormat('EE').format(second),
       },
       {
-        'day': third,
+        'id': 'add40aa1-bac9-435e-b556-3bc0f02b6a05',
+        'day': third.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(third)
             : DateFormat('EE').format(third),
       },
       {
-        'day': fourth,
+        'id': '6b43ae31-a32d-44f1-a850-1beb0f936a35',
+        'day': fourth.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(fourth)
             : DateFormat('EE').format(fourth),
       },
       {
-        'day': fifth,
+        'id': '12646fc7-f71f-4a8c-9500-eebdb85b82a3',
+        'day': fifth.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(fifth)
             : DateFormat('EE').format(fifth),
       },
       {
-        'day': sixth,
+        'id': '89427616-088b-4320-a5c8-c267aa2b4a30',
+        'day': sixth.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(sixth)
             : DateFormat('EE').format(sixth),
       },
       {
-        'day': seventh,
+        'id': '2edfd335-056f-42d6-85a7-26f909fa8bd9',
+        'day': seventh.millisecondsSinceEpoch,
         'dayOfWeek': isVietnamese
             ? DateFormat('EE', 'vi').format(seventh)
             : DateFormat('EE').format(seventh),

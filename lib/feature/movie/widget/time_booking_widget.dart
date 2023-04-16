@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
+import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 
 class TimeBookingWidget extends ConsumerWidget {
   const TimeBookingWidget({
     required this.time,
-    required this.seat,
     Key? key,
   }) : super(key: key);
-  final String time;
-  final String seat;
+  final TimeModel time;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
+
     return Container(
       margin: const EdgeInsets.only(right: 25),
       child: Column(
@@ -27,7 +32,7 @@ class TimeBookingWidget extends ConsumerWidget {
               ),
             ),
             child: Text(
-              time,
+              FormatSupport.toDateTimeNonDate(time.from!),
               style: TextStyle(
                 color: ColorName.btnText,
                 fontSize: 16,
@@ -39,7 +44,7 @@ class TimeBookingWidget extends ConsumerWidget {
             height: 5,
           ),
           Text(
-            seat,
+            '${room.availableSeat} ${context.l10n.empty.toLowerCase()}',
             style: TextStyle(
               color: ColorName.btnText,
               fontSize: 15,

@@ -203,5 +203,6 @@
     "ticketDetail": "Ticket detail",
     "revenueDetail": "Revenue detail",
     "notUpdated": "Not updated",
-    "noComment": "No comment"
+    "noComment": "No comment",
+    "noShowtime": "No showtime"
 }

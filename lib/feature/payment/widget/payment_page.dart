@@ -3,21 +3,22 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
-import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
-import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
+import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
-import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
-import 'package:nvc_cinemas/shared/widget/seat_title_widget.dart';
-import 'package:nvc_cinemas/shared/widget/seat_type_widget.dart';
-import 'package:nvc_cinemas/shared/widget/select/seat_widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class PaymentPage extends ConsumerWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({required this.args, Key? key}) : super(key: key);
+  final Map<String, dynamic> args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +28,11 @@ class PaymentPage extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final movie = args['movie'] as MovieModel;
+    final time = args['time'] as TimeModel;
+    final room = args['room'] as RoomModel;
+    final seat = args['seat'] as SeatModel;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -66,7 +72,9 @@ class PaymentPage extends ConsumerWidget {
                           height: 10,
                         ),
                         Text(
-                          'Ngôi làng của lá và sự trở lại của Max cùng với Elise',
+                          isVietnamese
+                              ? movie.movieNameVi ?? context.l10n.notUpdated
+                              : movie.movieNameEn ?? context.l10n.notUpdated,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: ColorName.btnText,
@@ -78,9 +86,13 @@ class PaymentPage extends ConsumerWidget {
                           height: 5,
                         ),
                         Text(
-                          '${context.l10n.twoDimensionalSubtitle} | '
-                          '104 phút | '
-                          'Tâm lý, hành động',
+                          isVietnamese
+                              ? '${context.l10n.twoDimensionalSubtitle} | '
+                                  '${movie.duration} ${context.l10n.minutes} | '
+                                  '${movie.category!.categoryName}'
+                              : '${context.l10n.twoDimensionalSubtitle} | '
+                                  '${movie.duration} ${context.l10n.minutes} | '
+                                  '${movie.category!.categoryNameEn}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 15,
@@ -91,39 +103,45 @@ class PaymentPage extends ConsumerWidget {
                         ),
                         rowInformation(
                           title: context.l10n.cinemas,
-                          content: 'NVC Cinemas Van Phuc',
+                          content: context.l10n.nvcCinemasLocation,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.dateShow,
-                          content: '13/02/2023',
+                          content: FormatSupport.toDateTimeNonHour(time.from!),
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.timeShow,
-                          content: '11:20',
+                          content: FormatSupport.toDateTimeNonDate(time.from!),
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.roomShow,
-                          content: 'P12',
+                          content: room.name ?? context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.seat,
-                          content: 'D7',
+                          content: seat.position ?? context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.ticketType,
-                          content: 'VIP',
+                          content: ref
+                                      .read(seatTypesProvider.notifier)
+                                      .getById(seat.seatTypeId!)
+                                      .typeName! ==
+                                  'Ghế thường'
+                              ? context.l10n.normalSeat
+                              : context.l10n.vipSeat,
                           width: width,
                         ),
-                        rowInformation(
-                          title: context.l10n.couponCode,
-                          content: 'COU15',
-                          width: width,
-                        ),
+                        // rowInformation(
+                        //   title: context.l10n.couponCode,
+                        //   content: 'COU15',
+                        //   width: width,
+                        // ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -135,16 +153,20 @@ class PaymentPage extends ConsumerWidget {
                         ),
                         rowPaymentInformation(
                           title: context.l10n.total,
-                          content: '60.000đ',
+                          content: ref
+                              .read(seatTypesProvider.notifier)
+                              .getPriceById(seat.seatTypeId!),
                         ),
                         rowPaymentInformation(
                           title: context.l10n.discountPrice,
-                          content: '15.000đ',
+                          content: '0đ',
                           isDiscount: true,
                         ),
                         rowPaymentInformation(
                           title: context.l10n.needPay,
-                          content: '60.000đ',
+                          content: ref
+                              .read(seatTypesProvider.notifier)
+                              .getPriceById(seat.seatTypeId!),
                         ),
                         const Divider(
                           color: ColorName.btnText,

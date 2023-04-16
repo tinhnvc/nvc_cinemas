@@ -2,19 +2,29 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
-import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
+import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/seat_title_widget.dart';
 import 'package:nvc_cinemas/shared/widget/seat_type_widget.dart';
 import 'package:nvc_cinemas/shared/widget/select/seat_widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
 class BookingByMovieDetail extends ConsumerWidget {
-  const BookingByMovieDetail({Key? key}) : super(key: key);
+  const BookingByMovieDetail({
+    required this.args,
+    Key? key,
+  }) : super(key: key);
+  final Map<String, dynamic> args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,6 +34,39 @@ class BookingByMovieDetail extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final movie = args['movie'] as MovieModel;
+    final time = args['time'] as TimeModel;
+    final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
+    final seatTypes = ref.watch(seatTypesProvider);
+    // final seats = ref.read(seatsProvider.notifier).getByRoomId(room.id!);
+    final allSeats = ref.watch(seatsProvider);
+    final priceNormal = ref.read(seatTypesProvider.notifier).getPriceByIndex(0);
+    final priceVip = ref.read(seatTypesProvider.notifier).getPriceByIndex(1);
+    final row = int.parse(room.size!.split(' x ')[0]);
+    final col = int.parse(room.size!.split(' x ')[1]);
+    var rowList = [];
+    var colList = [];
+    var indexList = [];
+    for (int i = 0; i < row; i++) {
+      rowList.add(i + 1);
+    }
+    for (int i = 0; i < col; i++) {
+      colList.add(i + 1);
+    }
+    for (int i = 0; i < row * col; i++) {
+      indexList.add(i);
+    }
+    final seats = <SeatModel>[];
+    if (allSeats.isNotEmpty) {
+      for (final item in allSeats) {
+        if (item.roomId == room.id) {
+          seats.add(item);
+        }
+      }
+    }
+    seats.sort((a, b) => a.position!.compareTo(b.position!));
+    final seatSelected = ref.read(seatsProvider.notifier).getSelected();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -62,7 +105,9 @@ class BookingByMovieDetail extends ConsumerWidget {
                           height: 10,
                         ),
                         Text(
-                          'Ngôi làng của lá và sự trở lại của Max cùng với Elise',
+                          isVietnamese
+                              ? movie.movieNameVi ?? context.l10n.notUpdated
+                              : movie.movieNameEn ?? context.l10n.notUpdated,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: ColorName.btnText,
@@ -75,8 +120,8 @@ class BookingByMovieDetail extends ConsumerWidget {
                         ),
                         Text(
                           '${context.l10n.twoDimensionalSubtitle} | '
-                          '104 phút | '
-                          '11:20 - 13/02/2023',
+                          '${movie.duration} ${context.l10n.minutes.toLowerCase()} | '
+                          '${FormatSupport.toDateTimeNonSecond(time.from!)}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 15,
@@ -114,13 +159,13 @@ class BookingByMovieDetail extends ConsumerWidget {
                                   SeatTypeWidget(
                                     color: Colors.grey,
                                     seatType: context.l10n.normalSeat,
-                                    price: '45.000đ',
+                                    price: priceNormal,
                                     isNormal: true,
                                   ),
                                   SeatTypeWidget(
                                     color: Colors.grey,
                                     seatType: context.l10n.vipSeat,
-                                    price: '60.000đ',
+                                    price: priceVip,
                                     isNormal: false,
                                   ),
                                 ],
@@ -146,7 +191,7 @@ class BookingByMovieDetail extends ConsumerWidget {
                           height: 10,
                         ),
                         Container(
-                          width: 210,
+                          width: 170,
                           height: 10,
                           decoration: BoxDecoration(
                             color: ColorName.btnText,
@@ -158,163 +203,44 @@ class BookingByMovieDetail extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
+                        // Column(
+                        //   children: rowList.map(
+                        //     (eRow) {
+                        //       return Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: colList
+                        //             .map((eCol) => SeatWidget(
+                        //                   seat: seats[eRow * eCol - 1],
+                        //                 ))
+                        //             .toList(),
+                        //       );
+                        //     },
+                        //   ).toList(),
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SeatWidget(
-                              seatPosition: 'A1',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A2',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A3',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A4',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A5',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A6',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'A7',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SeatWidget(
-                              seatPosition: 'B1',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B2',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B3',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B4',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B5',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B6',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'B7',
-                              color: Colors.grey,
-                              isNormal: true,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SeatWidget(
-                              seatPosition: 'C1',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C2',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C3',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C4',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C5',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C6',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'C7',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SeatWidget(
-                              seatPosition: 'D1',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D2',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D3',
-                              color: Colors.red,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D4',
-                              color: Colors.red,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D5',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D6',
-                              color: Colors.grey,
-                              isNormal: false,
-                            ),
-                            SeatWidget(
-                              seatPosition: 'D7',
-                              color: ColorName.primary,
-                              isNormal: false,
+                            Container(
+                              margin: const EdgeInsets.only(left: 30),
+                              height: 300,
+                              width: 330,
+                              child: GridView.count(
+                                crossAxisCount: col,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                children: indexList
+                                    .map((e) => GestureDetector(
+                                          onTap: () {
+                                            ref
+                                                .read(seatsProvider.notifier)
+                                                .onceSelect(seats[e].id!);
+                                          },
+                                          child: SeatWidget(
+                                            seat: seats[e],
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
                             ),
                           ],
                         ),
@@ -328,7 +254,7 @@ class BookingByMovieDetail extends ConsumerWidget {
         ),
       ),
       bottomSheet: Container(
-        color: Colors.white,
+        color: ColorName.primary.withOpacity(0.1),
         height: 70,
         child: Row(
           children: [
@@ -351,14 +277,15 @@ class BookingByMovieDetail extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'D7',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Color(0xFF4B5574),
-                        fontWeight: FontWeight.bold,
+                    if (seatSelected.id != null)
+                      Text(
+                        seatSelected.position ?? 'A1',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Color(0xFF4B5574),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -383,7 +310,11 @@ class BookingByMovieDetail extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      '60.000đ',
+                      seatSelected.seatTypeId != null
+                          ? ref
+                              .read(seatTypesProvider.notifier)
+                              .getPriceById(seatSelected.seatTypeId!)
+                          : '0đ',
                       style: const TextStyle(
                         fontSize: 20,
                         color: ColorName.primary,
@@ -399,7 +330,23 @@ class BookingByMovieDetail extends ConsumerWidget {
                 child: RoundedButtonWidget(
                   content: context.l10n.next,
                   fontSize: 18,
-                  onPressed: () => Navigator.pushNamed(context, '/payment'),
+                  onPressed: seatSelected.id != null
+                      ? () => Navigator.pushNamed(
+                            context,
+                            '/payment',
+                            arguments: {
+                              'movie': movie,
+                              'time': time,
+                              'room': room,
+                              'seat': seatSelected,
+                            },
+                          )
+                      : () {
+                          SnackBarSupport.requiredSelectSeat(
+                            context: context,
+                            hideAction: true,
+                          );
+                        },
                 ),
               ),
             ),

@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 
 class ProposeMovieWidget extends ConsumerWidget {
   const ProposeMovieWidget({required this.movie, Key? key}) : super(key: key);
@@ -24,8 +26,10 @@ class ProposeMovieWidget extends ConsumerWidget {
     final isVietnamese = ref.watch(languageProvider) == 'vi';
 
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, '/booking-by-movie', arguments: movie),
+      onTap: () {
+        InitUtil.initBookingByMovie(ref: ref);
+        Navigator.pushNamed(context, '/booking-by-movie', arguments: movie);
+      },
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

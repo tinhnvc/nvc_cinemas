@@ -82,11 +82,14 @@ class App extends ConsumerWidget {
       '/booking-by-movie': ([Object? arguments]) => BookingByMovie(
             movie: arguments! as MovieModel,
           ),
-      '/booking-by-movie-detail': ([Object? arguments]) =>
-          const BookingByMovieDetail(),
+      '/booking-by-movie-detail': ([Object? arguments]) => BookingByMovieDetail(
+            args: arguments! as Map<String, dynamic>,
+          ),
       '/account-information': ([Object? arguments]) =>
           const AccountInformation(),
-      '/payment': ([Object? arguments]) => const PaymentPage(),
+      '/payment': ([Object? arguments]) => PaymentPage(
+            args: arguments! as Map<String, dynamic>,
+          ),
       '/movie-detail': ([Object? arguments]) => MovieDetail(
             movie: arguments! as MovieModel,
           ),

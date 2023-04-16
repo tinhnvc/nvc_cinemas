@@ -141,7 +141,7 @@ class AddRoom extends ConsumerWidget {
                               ],
                             ),
                             Text(
-                              '${context.l10n.seatAmount}: 24',
+                              '${context.l10n.seatAmount}: 28',
                               style: const TextStyle(
                                 color: Color(0xFF363E59),
                                 fontWeight: FontWeight.w600,

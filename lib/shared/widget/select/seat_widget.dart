@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 
 class SeatWidget extends ConsumerWidget {
   const SeatWidget({
-    required this.seatPosition,
-    required this.color,
-    required this.isNormal,
+    required this.seat,
+    // required this.seatPosition,
+    // required this.color,
+    // required this.isNormal,
     Key? key,
   }) : super(key: key);
 
-  final String seatPosition;
-  final Color color;
-  final bool isNormal;
+  final SeatModel seat;
+
+  // final String seatPosition;
+  // final Color color;
+  // final bool isNormal;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isNormal = seat.seatTypeId == '212c58aa-c7c1-4de8-b3c9-75103eca4a7e';
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -31,20 +37,25 @@ class SeatWidget extends ConsumerWidget {
                   vertical: 3,
                 ),
                 decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: isNormal
-                      ? BorderRadius.all(
-                          Radius.circular(10),
-                        )
-                      : BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8),
-                        ),
+                  color: seat.isSold ?? false
+                      ? Colors.red
+                      : seat.isSelected ?? false
+                          ? ColorName.primary
+                          : Colors.grey,
+                  borderRadius:
+                      seat.seatTypeId == '212c58aa-c7c1-4de8-b3c9-75103eca4a7e'
+                          ? BorderRadius.all(
+                              Radius.circular(10),
+                            )
+                          : BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
                 ),
                 child: Center(
                   child: FittedBox(
                     child: Text(
-                      seatPosition,
+                      seat.position.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -60,7 +71,11 @@ class SeatWidget extends ConsumerWidget {
                 height: 2,
                 margin: const EdgeInsets.only(top: 1),
                 decoration: BoxDecoration(
-                  color: color,
+                  color: seat.isSold ?? false
+                      ? Colors.red
+                      : seat.isSelected ?? false
+                          ? ColorName.primary
+                          : Colors.grey,
                 ),
               ),
               if (!isNormal)
@@ -69,7 +84,11 @@ class SeatWidget extends ConsumerWidget {
                   height: 2,
                   margin: const EdgeInsets.only(top: 1),
                   decoration: BoxDecoration(
-                    color: color,
+                    color: seat.isSold ?? false
+                        ? Colors.red
+                        : seat.isSelected ?? false
+                            ? ColorName.primary
+                            : Colors.grey,
                   ),
                 ),
             ],

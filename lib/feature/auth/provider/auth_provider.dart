@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/model/user.dart';
 import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/auth/provider/users_provider.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -72,6 +73,7 @@ class AuthProvider {
         }
       }
     }
+    ref.read(dayOfWeekProvider.notifier).fetchDayOfWeek(ref, context);
     if (response) {
       Navigator.pushNamedAndRemoveUntil(
         context,

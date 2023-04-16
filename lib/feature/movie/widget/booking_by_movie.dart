@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
@@ -29,7 +31,9 @@ class BookingByMovie extends ConsumerWidget {
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
 
-    final weekMap = DateService.dateRangeInWeek(ref, context);
+    final weekMap = ref.watch(dayOfWeekProvider);
+    final timesShowByDay =
+        ref.read(timesProvider.notifier).getByDay(ref: ref, movieId: movie.id!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -141,70 +145,51 @@ class BookingByMovie extends ConsumerWidget {
                             scrollDirection: Axis.horizontal,
                             children: weekMap
                                 .map(
-                                  (e) => DateBookingWidget(
-                                    date: e['day'].day.toString(),
-                                    dayOfWeek: e['day'].day ==
-                                            DateTime.now().day
-                                        ? '${e['dayOfWeek']}'
-                                        : '0${e['day'].month.toString()} - ${e['dayOfWeek']}',
-                                    isSelect:
-                                        e['day'].day == DateTime.now().day,
+                                  (e) => GestureDetector(
+                                    onTap: () {
+                                      ref
+                                          .read(dayOfWeekProvider.notifier)
+                                          .onceSelect(e.id!);
+                                    },
+                                    child: DateBookingWidget(
+                                      date: DateTime.fromMillisecondsSinceEpoch(
+                                              e.day!)
+                                          .day
+                                          .toString(),
+                                      dayOfWeek: DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          e.day!)
+                                                  .day ==
+                                              DateTime.now().day
+                                          ? '${e.dayOfWeek}'
+                                          : '0${DateTime.fromMillisecondsSinceEpoch(e.day!).month.toString()} - ${e.dayOfWeek}',
+                                      isSelect: e.isSelected ?? false,
+                                    ),
                                   ),
                                 )
                                 .toList(),
-                            //
-                            // children: [
-                            //   DateBookingWidget(
-                            //     date: '13',
-                            //     dayOfWeek: 'Hôm nay',
-                            //     isSelect: true,
-                            //   ),
-                            //   DateBookingWidget(
-                            //     date: '14',
-                            //     dayOfWeek: '02 - T3',
-                            //     isSelect: false,
-                            //   ),
-                            //   DateBookingWidget(
-                            //     date: '15',
-                            //     dayOfWeek: '02 - T4',
-                            //     isSelect: false,
-                            //   ),
-                            //   DateBookingWidget(
-                            //     date: '16',
-                            //     dayOfWeek: '02 - T5',
-                            //     isSelect: false,
-                            //   ),
-                            //   DateBookingWidget(
-                            //     date: '17',
-                            //     dayOfWeek: '02 - T6',
-                            //     isSelect: false,
-                            //   ),
-                            //   DateBookingWidget(
-                            //     date: '18',
-                            //     dayOfWeek: '02 - T7',
-                            //     isSelect: false,
-                            //   ),
-                            // ],
                           ),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              context.l10n.twoDimensionalSubtitle,
-                              style: TextStyle(
-                                color: ColorName.btnText,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                        if (timesShowByDay.isNotEmpty)
+                          Row(
+                            children: [
+                              Text(
+                                context.l10n.twoDimensionalSubtitle,
+                                style: TextStyle(
+                                  color: ColorName.btnText,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                            ],
+                          ),
+                        if (timesShowByDay.isNotEmpty)
+                          const SizedBox(
+                            height: 20,
+                          ),
                         SizedBox(
                           width: width,
                           height: 60,
@@ -212,25 +197,54 @@ class BookingByMovie extends ConsumerWidget {
                             physics: AlwaysScrollableScrollPhysics(
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/booking-by-movie-detail'),
-                                child: TimeBookingWidget(
-                                  time: '11:20',
-                                  seat:
-                                      '25 ${context.l10n.empty.toLowerCase()}',
-                                ),
-                              ),
-                              TimeBookingWidget(
-                                time: '14:10',
-                                seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              ),
-                              TimeBookingWidget(
-                                time: '21:00',
-                                seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              ),
-                            ],
+                            children: timesShowByDay.isNotEmpty
+                                ? timesShowByDay
+                                    .map((e) => GestureDetector(
+                                        onTap: () => Navigator.pushNamed(
+                                              context,
+                                              '/booking-by-movie-detail',
+                                              arguments: {
+                                                'movie': movie,
+                                                'time': e,
+                                              },
+                                            ),
+                                        child: TimeBookingWidget(time: e)))
+                                    .toList()
+                                : [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Hiện chưa có suất chiếu',
+                                          style: TextStyle(
+                                            color: ColorName.btnText,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                            // children: [
+                            //   GestureDetector(
+                            //     onTap: () => Navigator.pushNamed(
+                            //         context, '/booking-by-movie-detail'),
+                            //     child: TimeBookingWidget(
+                            //       time: '11:20',
+                            //       seat:
+                            //           '25 ${context.l10n.empty.toLowerCase()}',
+                            //     ),
+                            //   ),
+                            //   TimeBookingWidget(
+                            //     time: '14:10',
+                            //     seat: '30 ${context.l10n.empty.toLowerCase()}',
+                            //   ),
+                            //   TimeBookingWidget(
+                            //     time: '21:00',
+                            //     seat: '12 ${context.l10n.empty.toLowerCase()}',
+                            //   ),
+                            // ],
                           ),
                         ),
                       ],

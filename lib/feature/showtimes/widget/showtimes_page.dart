@@ -133,23 +133,23 @@ class ShowtimesPage extends ConsumerWidget {
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/booking-by-movie-detail'),
-                                child: TimeBookingWidget(
-                                  time: '11:20',
-                                  seat:
-                                      '25 ${context.l10n.empty.toLowerCase()}',
-                                ),
-                              ),
-                              TimeBookingWidget(
-                                time: '14:10',
-                                seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              ),
-                              TimeBookingWidget(
-                                time: '21:00',
-                                seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              ),
+                              // GestureDetector(
+                              //   onTap: () => Navigator.pushNamed(
+                              //       context, '/booking-by-movie-detail'),
+                              //   child: TimeBookingWidget(
+                              //     time: '11:20',
+                              //     seat:
+                              //         '25 ${context.l10n.empty.toLowerCase()}',
+                              //   ),
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '14:10',
+                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '21:00',
+                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
+                              // ),
                             ],
                           ),
                         ),
@@ -183,23 +183,23 @@ class ShowtimesPage extends ConsumerWidget {
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/booking-by-movie-detail'),
-                                child: TimeBookingWidget(
-                                  time: '11:20',
-                                  seat:
-                                      '25 ${context.l10n.empty.toLowerCase()}',
-                                ),
-                              ),
-                              TimeBookingWidget(
-                                time: '14:10',
-                                seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              ),
-                              TimeBookingWidget(
-                                time: '21:00',
-                                seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              ),
+                              // GestureDetector(
+                              //   onTap: () => Navigator.pushNamed(
+                              //       context, '/booking-by-movie-detail'),
+                              //   child: TimeBookingWidget(
+                              //     time: '11:20',
+                              //     seat:
+                              //         '25 ${context.l10n.empty.toLowerCase()}',
+                              //   ),
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '14:10',
+                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '21:00',
+                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
+                              // ),
                             ],
                           ),
                         ),
@@ -233,23 +233,23 @@ class ShowtimesPage extends ConsumerWidget {
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/booking-by-movie-detail'),
-                                child: TimeBookingWidget(
-                                  time: '11:20',
-                                  seat:
-                                      '25 ${context.l10n.empty.toLowerCase()}',
-                                ),
-                              ),
-                              TimeBookingWidget(
-                                time: '14:10',
-                                seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              ),
-                              TimeBookingWidget(
-                                time: '21:00',
-                                seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              ),
+                              // GestureDetector(
+                              //   onTap: () => Navigator.pushNamed(
+                              //       context, '/booking-by-movie-detail'),
+                              //   child: TimeBookingWidget(
+                              //     time: '11:20',
+                              //     seat:
+                              //         '25 ${context.l10n.empty.toLowerCase()}',
+                              //   ),
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '14:10',
+                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
+                              // ),
+                              // TimeBookingWidget(
+                              //   time: '21:00',
+                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
+                              // ),
                             ],
                           ),
                         ),
