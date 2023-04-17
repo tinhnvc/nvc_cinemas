@@ -13,6 +13,7 @@ import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/service/date_service.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -198,18 +199,22 @@ class BookingByMovie extends ConsumerWidget {
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             children: timesShowByDay.isNotEmpty
-                                ? timesShowByDay
-                                    .map((e) => GestureDetector(
-                                        onTap: () => Navigator.pushNamed(
-                                              context,
-                                              '/booking-by-movie-detail',
-                                              arguments: {
-                                                'movie': movie,
-                                                'time': e,
-                                              },
-                                            ),
-                                        child: TimeBookingWidget(time: e)))
-                                    .toList()
+                                ? timesShowByDay.map((e) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          InitUtil.initBookingByMovieDetail(
+                                              ref: ref);
+                                          Navigator.pushNamed(
+                                            context,
+                                            '/booking-by-movie-detail',
+                                            arguments: {
+                                              'movie': movie,
+                                              'time': e,
+                                            },
+                                          );
+                                        },
+                                        child: TimeBookingWidget(time: e));
+                                  }).toList()
                                 : [
                                     Row(
                                       mainAxisAlignment:

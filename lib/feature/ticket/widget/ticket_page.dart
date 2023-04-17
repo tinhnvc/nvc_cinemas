@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/widget/ticket_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -21,6 +23,18 @@ class TicketPage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final tickets = ref.watch(ticketsProvider);
+    print(tickets);
+    final ticketByUser = <TicketModel>[];
+
+    if (tickets.isNotEmpty) {
+      for (final item in tickets) {
+        if (item.userId == user.userId) {
+          ticketByUser.add(item);
+        }
+      }
+    }
+    print(ticketByUser);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -47,8 +61,29 @@ class TicketPage extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    TicketItem(isPayed: true),
-                    TicketItem(isPayed: false),
+                    ticketByUser.isEmpty
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Khách hàng hiện chưa có vé nào.\nLựa chọn phim muốn xem và đặt vé nhé!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  overflow: TextOverflow.clip,
+                                  fontSize: 18,
+                                  color: ColorName.textNormal,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: ticketByUser
+                                .map((e) => TicketItem(ticket: e))
+                                .toList(),
+                          )
+                    // TicketItem(isPayed: true),
+                    // TicketItem(isPayed: false),
                   ],
                 ),
               ),

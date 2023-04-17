@@ -1,20 +1,38 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentQrModalSheet extends ConsumerWidget {
-  const PaymentQrModalSheet({Key? key}) : super(key: key);
+  const PaymentQrModalSheet({required this.args, Key? key}) : super(key: key);
+  final Map<String, dynamic> args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final time = args['time'] as TimeModel;
+    final seat = args['seat'] as SeatModel;
+    final ticketId = Uuid().v4();
+    final seatType =
+        ref.read(seatTypesProvider.notifier).getById(seat.seatTypeId!);
+    final today = DateTime.now().weekday;
+    final price =
+        (today == 6 || today == 7) ? seatType.otherPrice! : seatType.price;
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Center(
@@ -121,7 +139,7 @@ class PaymentQrModalSheet extends ConsumerWidget {
                                   content: context.l10n.copyContent,
                                   onPressed: () async {
                                     await FlutterClipboard.copy(
-                                      'tt 4b9217d3-a1fd-4b8e-bc2b-0580e863d1da',
+                                      'tt $ticketId',
                                     );
                                     SnackBarSupport.copied(context: context);
                                   },
@@ -140,10 +158,40 @@ class PaymentQrModalSheet extends ConsumerWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            PrimaryButtonWidget(
-                              content: context.l10n.payOk,
+                            RoundedLoadingButton(
+                              color: ColorName.primary,
+                              borderRadius: 5,
+                              height: 40,
                               width: 250,
-                              onPressed: () {},
+                              animateOnTap: false,
+                              controller: ref
+                                  .watch(ticketFormProvider)
+                                  .buttonController,
+                              onPressed: () {
+                                final ticket = TicketModel(
+                                  id: ticketId,
+                                  userId: ref.watch(userProvider).userId,
+                                  timeId: time.id,
+                                  seatId: seat.id,
+                                  status: 'waitPay',
+                                  discount: 0,
+                                  totalPrice: price,
+                                  createAt:
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  updateAt:
+                                      DateTime.now().millisecondsSinceEpoch,
+                                );
+                                ref
+                                    .read(ticketFormProvider)
+                                    .addTicket(ref, context, ticket);
+                              },
+                              child: Text(
+                                context.l10n.payOk,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               height: 15,

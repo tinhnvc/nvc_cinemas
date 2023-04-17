@@ -221,7 +221,13 @@ class PaymentPage extends ConsumerWidget {
                           animateOnTap: false,
                           controller: ref.watch(authProvider).buttonController,
                           onPressed: () =>
-                              CallModalSheet.showPaymentQrModalSheet(context),
+                              CallModalSheet.showPaymentQrModalSheet(
+                            context,
+                            {
+                              'time': time,
+                              'seat': seat,
+                            },
+                          ),
                           child: Text(
                             context.l10n.pay.toUpperCase(),
                             style: const TextStyle(

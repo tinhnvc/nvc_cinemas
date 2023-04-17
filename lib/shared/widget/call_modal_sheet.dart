@@ -9,13 +9,14 @@ import 'package:nvc_cinemas/feature/user/widget/edit_account_information.dart';
 class CallModalSheet {
   static Future<void> showPaymentQrModalSheet(
     BuildContext context,
+    Map<String, dynamic> args,
   ) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       barrierColor: Colors.black.withOpacity(0.2),
       backgroundColor: Colors.transparent,
-      builder: (context) => PaymentQrModalSheet(),
+      builder: (context) => PaymentQrModalSheet(args: args),
     );
   }
 

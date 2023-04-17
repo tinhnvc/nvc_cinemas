@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
@@ -9,8 +16,8 @@ import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class TicketItem extends ConsumerWidget {
-  const TicketItem({required this.isPayed, Key? key}) : super(key: key);
-  final bool isPayed;
+  const TicketItem({required this.ticket, Key? key}) : super(key: key);
+  final TicketModel ticket;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +28,12 @@ class TicketItem extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
 
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final time = ref.read(timesProvider.notifier).getById(ticket.timeId!);
+    final movie = ref.read(moviesProvider.notifier).getById(time.movieId!);
+    final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
+    final seat = ref.read(seatsProvider.notifier).getById(ticket.seatId!);
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
@@ -28,59 +41,63 @@ class TicketItem extends ConsumerWidget {
       ),
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ColorName.primary.withOpacity(0.1),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         children: [
           rowInformation(
             title: 'Mã vé',
-            content: 'c6f355df-d0e4-4825-a542-bae6330a6f7f',
+            content: ticket.id!,
             width: width,
             isSelectable: true,
           ),
           rowInformation(
             title: context.l10n.film,
-            content: 'Ngôi làng của lá',
+            content: isVietnamese
+                ? movie.movieNameVi ?? context.l10n.notUpdated
+                : movie.movieNameEn ?? context.l10n.notUpdated,
             width: width,
           ),
           rowInformation(
             title: context.l10n.dateShow,
-            content: '13/02/2023',
+            content: '${FormatSupport.toDateTimeNonHour(time.from!)}',
             width: width,
           ),
           rowInformation(
             title: context.l10n.timeShow,
-            content: '11:20',
+            content: '${FormatSupport.toDateTimeNonDate(time.from!)}',
             width: width,
           ),
           rowInformation(
             title: context.l10n.roomShow,
-            content: 'P4',
+            content: '${room.name}',
             width: width,
           ),
           rowInformation(
             title: context.l10n.seat,
-            content: 'D7',
+            content: '${seat.position}',
             width: width,
           ),
           rowInformation(
             title: context.l10n.createAt,
-            content: '10:22 - 12/02/2023',
+            content: '${FormatSupport.toDateTime(ticket.createAt!)}',
             width: width,
           ),
           rowStatusTicket(
             context: context,
-            status: isPayed ? context.l10n.payed : context.l10n.noPay,
+            status: ticket.status == 'waitPay'
+                ? context.l10n.noPay
+                : context.l10n.payed,
             width: width,
           ),
           rowInformation(
             title: context.l10n.pay,
-            content: '60.000đ',
+            content: '${FormatSupport.toMoney(ticket.totalPrice!)}đ',
             width: width,
             isSpecial: true,
           ),
-          if (!isPayed)
+          if (ticket.status == 'waitPay')
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
@@ -89,7 +106,7 @@ class TicketItem extends ConsumerWidget {
                   RoundedButtonWidget(
                     content: context.l10n.pay,
                     onPressed: () =>
-                        CallModalSheet.showPaymentQrModalSheet(context),
+                        CallModalSheet.showPaymentQrModalSheet(context, {}),
                   ),
                   RoundedButtonWidget(
                     content: context.l10n.cancel,

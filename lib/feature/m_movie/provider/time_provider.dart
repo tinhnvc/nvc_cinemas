@@ -42,17 +42,16 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
     return result..sort((a, b) => a.from!.compareTo(b.from!));
   }
 
-//
-// MovieModel getById(String id) {
-//   var movie = const MovieModel();
-//   if (state.isNotEmpty) {
-//     for (final item in state) {
-//       if (item.id == id) {
-//         movie = item;
-//       }
-//     }
-//   }
-//
-//   return movie;
-// }
+  TimeModel getById(String id) {
+    var time = const TimeModel();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.id == id) {
+          time = item;
+        }
+      }
+    }
+
+    return time;
+  }
 }

@@ -107,7 +107,7 @@
     "termOfUse": "Term of use",
     "securePolicy": "Secure policy",
     "cinemasInfo": "NVC Cinemas information",
-    "noPay": "No pay",
+    "noPay": "Wait to pay",
     "film": "Film",
     "seat": "Seat",
     "createAt": "Create at",
@@ -204,5 +204,9 @@
     "revenueDetail": "Revenue detail",
     "notUpdated": "Not updated",
     "noComment": "No comment",
-    "noShowtime": "No showtime"
+    "noShowtime": "No showtime",
+    "cancelTicket": "Cancel ticket",
+    "confirmCancelTicket": "Confirm cancel ticket?",
+    "ticketId": "Ticket ID",
+    "bookTicketSuccess": "Book ticket success!\nCheck ticket's information and status pay at Ticket Page. Thank you!"
 }
