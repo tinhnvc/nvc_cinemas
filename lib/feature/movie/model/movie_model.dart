@@ -27,6 +27,7 @@ class MovieModel with _$MovieModel {
     String? director,
     String? actor,
     String? type,
+    String? dimension,
     @Default(true) bool? active,
     int? startTime,
     int? endTime,

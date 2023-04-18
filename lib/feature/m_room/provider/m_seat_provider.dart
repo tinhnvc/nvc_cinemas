@@ -42,9 +42,24 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
     ];
   }
 
+  void setSoldSeat(List<String> ids) {
+    for (final seatId in ids) {
+      state = [
+        for (final item in state)
+          if (item.id == seatId) item.copyWith(isSold: true) else item,
+      ];
+    }
+  }
+
   void cleanStatus() {
     state = [
       for (final item in state) item.copyWith(isSelected: false),
+    ];
+  }
+
+  void cleanStatusSold() {
+    state = [
+      for (final item in state) item.copyWith(isSold: false),
     ];
   }
 

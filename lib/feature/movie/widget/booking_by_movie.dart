@@ -139,7 +139,7 @@ class BookingByMovie extends ConsumerWidget {
                         ),
                         SizedBox(
                           width: width,
-                          height: 60,
+                          height: 70,
                           child: ListView(
                             physics: AlwaysScrollableScrollPhysics(
                                 parent: BouncingScrollPhysics()),
@@ -178,7 +178,9 @@ class BookingByMovie extends ConsumerWidget {
                           Row(
                             children: [
                               Text(
-                                context.l10n.twoDimensionalSubtitle,
+                                movie.dimension == '2D'
+                                    ? context.l10n.twoDimensionalSubtitle
+                                    : context.l10n.threeDimensionalSubtitle,
                                 style: TextStyle(
                                   color: ColorName.btnText,
                                   fontSize: 17,
@@ -203,7 +205,9 @@ class BookingByMovie extends ConsumerWidget {
                                     return GestureDetector(
                                         onTap: () {
                                           InitUtil.initBookingByMovieDetail(
-                                              ref: ref);
+                                            ref: ref,
+                                            time: e,
+                                          );
                                           Navigator.pushNamed(
                                             context,
                                             '/booking-by-movie-detail',
@@ -221,7 +225,7 @@ class BookingByMovie extends ConsumerWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Hiện chưa có suất chiếu',
+                                          context.l10n.noShowtime,
                                           style: TextStyle(
                                             color: ColorName.btnText,
                                             fontSize: 17,

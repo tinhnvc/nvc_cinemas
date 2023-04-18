@@ -288,6 +288,11 @@ class DrawerWidget extends ConsumerWidget {
         Navigator.pop(context);
         selectItem(context, ref, item);
 
+        if (item == NavigationItem.showtimes) {
+          print('object');
+          InitUtil.initBookingByMovie(ref: ref);
+        }
+
         if (item == NavigationItem.personalAccount) {
           // InitUtil.initSettingProfile(context, ref);
           Navigator.pushNamed(

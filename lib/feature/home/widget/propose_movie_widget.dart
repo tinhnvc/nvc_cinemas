@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
+import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -24,6 +25,7 @@ class ProposeMovieWidget extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final sumRate = ref.read(movieRatingsProvider.notifier).sumRate(movie.id!);
 
     return GestureDetector(
       onTap: () {
@@ -87,7 +89,7 @@ class ProposeMovieWidget extends ConsumerWidget {
                       color: ColorName.textNormal,
                     ),
                     Text(
-                      ' 0',
+                      ' ${sumRate}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

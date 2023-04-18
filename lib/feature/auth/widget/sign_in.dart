@@ -12,6 +12,7 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/users.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
+import 'package:nvc_cinemas/shared/service/file_service.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
@@ -80,7 +81,13 @@ class SignIn extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // if (ratio < 1.95 && height > 450)
-                Assets.images.logoPng.image(width: 250, fit: BoxFit.cover),
+                GestureDetector(
+                    onTap: () async {
+                      final imagePath = await FileService.pickImage();
+                      print(imagePath);
+                    },
+                    child: Assets.images.logoPng
+                        .image(width: 250, fit: BoxFit.cover)),
                 if (ratio < 1.95) const SizedBox(height: 10),
 
                 Text(

@@ -193,8 +193,48 @@ class SnackBarSupport {
     bool? hideAction,
   }) {
     final snackBar = SnackBar(
-      content: Text('Vui lòng lựa chọn ghế muốn đặt'),
+      content: Text(context.l10n.selectSeatYouWant),
       duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void avoidSelectSeat({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text(context.l10n.seatNotAllowBook),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void avoidBooking({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text(context.l10n.maxNoPayTickets),
+      duration: const Duration(seconds: 5),
       backgroundColor: Colors.black.withOpacity(0.7),
       behavior: SnackBarBehavior.floating,
       action: hideAction ?? false

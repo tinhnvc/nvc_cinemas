@@ -30,6 +30,7 @@ mixin _$MovieModel {
   String? get director => throw _privateConstructorUsedError;
   String? get actor => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
+  String? get dimension => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   int? get startTime => throw _privateConstructorUsedError;
   int? get endTime => throw _privateConstructorUsedError;
@@ -59,6 +60,7 @@ abstract class $MovieModelCopyWith<$Res> {
       String? director,
       String? actor,
       String? type,
+      String? dimension,
       bool? active,
       int? startTime,
       int? endTime,
@@ -91,6 +93,7 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
     Object? director = freezed,
     Object? actor = freezed,
     Object? type = freezed,
+    Object? dimension = freezed,
     Object? active = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
@@ -137,6 +140,10 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dimension: freezed == dimension
+          ? _value.dimension
+          : dimension // ignore: cast_nullable_to_non_nullable
               as String?,
       active: freezed == active
           ? _value.active
@@ -193,6 +200,7 @@ abstract class _$$_MovieModelCopyWith<$Res>
       String? director,
       String? actor,
       String? type,
+      String? dimension,
       bool? active,
       int? startTime,
       int? endTime,
@@ -224,6 +232,7 @@ class __$$_MovieModelCopyWithImpl<$Res>
     Object? director = freezed,
     Object? actor = freezed,
     Object? type = freezed,
+    Object? dimension = freezed,
     Object? active = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
@@ -271,6 +280,10 @@ class __$$_MovieModelCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
+      dimension: freezed == dimension
+          ? _value.dimension
+          : dimension // ignore: cast_nullable_to_non_nullable
+              as String?,
       active: freezed == active
           ? _value.active
           : active // ignore: cast_nullable_to_non_nullable
@@ -309,6 +322,7 @@ class _$_MovieModel extends _MovieModel {
       this.director,
       this.actor,
       this.type,
+      this.dimension,
       this.active = true,
       this.startTime,
       this.endTime,
@@ -340,6 +354,8 @@ class _$_MovieModel extends _MovieModel {
   @override
   final String? type;
   @override
+  final String? dimension;
+  @override
   @JsonKey()
   final bool? active;
   @override
@@ -353,7 +369,7 @@ class _$_MovieModel extends _MovieModel {
 
   @override
   String toString() {
-    return 'MovieModel(id: $id, category: $category, movieNameVi: $movieNameVi, movieNameEn: $movieNameEn, image: $image, description: $description, duration: $duration, director: $director, actor: $actor, type: $type, active: $active, startTime: $startTime, endTime: $endTime, createAt: $createAt, updateAt: $updateAt)';
+    return 'MovieModel(id: $id, category: $category, movieNameVi: $movieNameVi, movieNameEn: $movieNameEn, image: $image, description: $description, duration: $duration, director: $director, actor: $actor, type: $type, dimension: $dimension, active: $active, startTime: $startTime, endTime: $endTime, createAt: $createAt, updateAt: $updateAt)';
   }
 
   @override
@@ -377,6 +393,8 @@ class _$_MovieModel extends _MovieModel {
                 other.director == director) &&
             (identical(other.actor, actor) || other.actor == actor) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.dimension, dimension) ||
+                other.dimension == dimension) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
@@ -401,6 +419,7 @@ class _$_MovieModel extends _MovieModel {
       director,
       actor,
       type,
+      dimension,
       active,
       startTime,
       endTime,
@@ -433,6 +452,7 @@ abstract class _MovieModel extends MovieModel {
       final String? director,
       final String? actor,
       final String? type,
+      final String? dimension,
       final bool? active,
       final int? startTime,
       final int? endTime,
@@ -463,6 +483,8 @@ abstract class _MovieModel extends MovieModel {
   String? get actor;
   @override
   String? get type;
+  @override
+  String? get dimension;
   @override
   bool? get active;
   @override

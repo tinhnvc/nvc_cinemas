@@ -4,6 +4,8 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -22,6 +24,22 @@ class MoviePage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final isSelectNowShowing = ref.watch(isSelectNowShowingProvider)! as bool;
+    final movies = ref.watch(moviesProvider);
+    final nowShowingMovies = <MovieModel>[];
+    final comingSoonMovies = <MovieModel>[];
+
+    for (final item in movies) {
+      if (item.startTime! < DateTime.now().millisecondsSinceEpoch) {
+        nowShowingMovies.add(item);
+      }
+    }
+
+    for (final item in movies) {
+      if (item.startTime! > DateTime.now().millisecondsSinceEpoch) {
+        comingSoonMovies.add(item);
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -40,22 +58,35 @@ class MoviePage extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          context.l10n.nowShowing.toUpperCase(),
-                          style: TextStyle(
-                            color: ColorName.btnText,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () => ref
+                              .read(isSelectNowShowingProvider.notifier)
+                              .changed = true,
+                          child: Text(
+                            context.l10n.nowShowing.toUpperCase(),
+                            style: TextStyle(
+                              color: ColorName.btnText,
+                              fontSize: 17,
+                              fontWeight:
+                                  isSelectNowShowing ? FontWeight.bold : null,
+                            ),
                           ),
                         ),
                         const SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          context.l10n.comingSoon.toUpperCase(),
-                          style: TextStyle(
-                            color: ColorName.btnText,
-                            fontSize: 17,
+                        GestureDetector(
+                          onTap: () => ref
+                              .read(isSelectNowShowingProvider.notifier)
+                              .changed = false,
+                          child: Text(
+                            context.l10n.comingSoon.toUpperCase(),
+                            style: TextStyle(
+                              color: ColorName.btnText,
+                              fontSize: 17,
+                              fontWeight:
+                                  !isSelectNowShowing ? FontWeight.bold : null,
+                            ),
                           ),
                         ),
                       ],
@@ -93,24 +124,71 @@ class MoviePage extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          // const SliverGridDelegateWithFixedCrossAxisCount(
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 150.0,
-                        mainAxisExtent: 250,
-                        crossAxisSpacing: 12.0,
-                        mainAxisSpacing: 12.0,
-                      ),
-                      itemCount: 10,
-                      itemBuilder: (context, index) => InkWell(
-                        onTap: () =>
-                            Navigator.pushNamed(context, '/booking-by-movie'),
-                        child: MovieItem(),
-                      ),
-                    )
+                    isSelectNowShowing
+                        ? nowShowingMovies.isNotEmpty
+                            ? GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    // const SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 150.0,
+                                  mainAxisExtent: 250,
+                                  crossAxisSpacing: 12.0,
+                                  mainAxisSpacing: 12.0,
+                                ),
+                                itemCount: nowShowingMovies.length,
+                                itemBuilder: (context, index) => MovieItem(
+                                  movie: nowShowingMovies[index],
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    context.l10n.noNowShowing,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: ColorName.textNormal,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                        : comingSoonMovies.isNotEmpty
+                            ? GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    // const SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 150.0,
+                                  mainAxisExtent: 250,
+                                  crossAxisSpacing: 12.0,
+                                  mainAxisSpacing: 12.0,
+                                ),
+                                itemCount: comingSoonMovies.length,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () => Navigator.pushNamed(
+                                      context, '/booking-by-movie'),
+                                  child: MovieItem(
+                                    movie: comingSoonMovies[index],
+                                  ),
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    context.l10n.noComingSoon,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: ColorName.textNormal,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
                   ],
                 ),
               ),

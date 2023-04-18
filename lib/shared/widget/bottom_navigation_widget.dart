@@ -5,6 +5,7 @@ import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 
 final indexProvider = StateNotifierProvider((ref) => IndexNavigationBar());
 
@@ -56,6 +57,9 @@ class BottomNavigationWidget extends ConsumerWidget {
     }
 
     NavigationItem convertIndex(int index) {
+      if (index == 2) {
+        InitUtil.initBookingByMovie(ref: ref);
+      }
       switch (index) {
         case 0:
           return NavigationItem.home;

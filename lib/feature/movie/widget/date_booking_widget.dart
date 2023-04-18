@@ -15,8 +15,13 @@ class DateBookingWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      margin: const EdgeInsets.only(right: 25),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 700),
+      margin: const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: isSelect ? ColorName.primary.withOpacity(0.5) : null,
+          borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
           Text(

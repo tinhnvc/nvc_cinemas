@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/movie_showtimes_widget.dart';
@@ -23,6 +25,11 @@ class ShowtimesPage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final weekMap = ref.watch(dayOfWeekProvider);
+    final daySelect = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final listMovieOfDay =
+        ref.read(timesProvider.notifier).getMovieByDay(ref, daySelect.day!);
+    print(listMovieOfDay.length);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -64,64 +71,42 @@ class ShowtimesPage extends ConsumerWidget {
                         const SizedBox(height: 20),
                         SizedBox(
                           width: width,
-                          height: 60,
+                          height: 70,
                           child: ListView(
                             physics: AlwaysScrollableScrollPhysics(
                                 parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
-                            children: [
-                              DateBookingWidget(
-                                date: '13',
-                                dayOfWeek: 'Hôm nay',
-                                isSelect: true,
-                              ),
-                              DateBookingWidget(
-                                date: '14',
-                                dayOfWeek: '02 - T3',
-                                isSelect: false,
-                              ),
-                              DateBookingWidget(
-                                date: '15',
-                                dayOfWeek: '02 - T4',
-                                isSelect: false,
-                              ),
-                              DateBookingWidget(
-                                date: '16',
-                                dayOfWeek: '02 - T5',
-                                isSelect: false,
-                              ),
-                              DateBookingWidget(
-                                date: '17',
-                                dayOfWeek: '02 - T6',
-                                isSelect: false,
-                              ),
-                              DateBookingWidget(
-                                date: '18',
-                                dayOfWeek: '02 - T7',
-                                isSelect: false,
-                              ),
-                            ],
+                            children: weekMap
+                                .map(
+                                  (e) => GestureDetector(
+                                    onTap: () {
+                                      ref
+                                          .read(dayOfWeekProvider.notifier)
+                                          .onceSelect(e.id!);
+                                    },
+                                    child: DateBookingWidget(
+                                      date: DateTime.fromMillisecondsSinceEpoch(
+                                              e.day!)
+                                          .day
+                                          .toString(),
+                                      dayOfWeek: DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          e.day!)
+                                                  .day ==
+                                              DateTime.now().day
+                                          ? '${e.dayOfWeek}'
+                                          : '0${DateTime.fromMillisecondsSinceEpoch(e.day!).month.toString()} - ${e.dayOfWeek}',
+                                      isSelect: e.isSelected ?? false,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         MovieShowtimesWidget(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              context.l10n.twoDimensionalSubtitle,
-                              style: TextStyle(
-                                color: ColorName.btnText,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(
                           height: 20,
                         ),

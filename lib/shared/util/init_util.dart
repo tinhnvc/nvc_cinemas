@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 
@@ -53,7 +55,11 @@ class InitUtil {
 
   static void initBookingByMovieDetail({
     required WidgetRef ref,
+    required TimeModel time,
   }) async {
-    ref.read(seatsProvider.notifier).cleanStatus();
+    ref.read(seatsProvider.notifier)..cleanStatus()..cleanStatusSold();
+    final soldSeats =
+        ref.read(ticketsProvider.notifier).getSeatsIdByTimeId(time.id!);
+    ref.read(seatsProvider.notifier).setSoldSeat(soldSeats);
   }
 }

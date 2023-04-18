@@ -106,3 +106,12 @@ class RoomAddShowtimeNotifier extends StateNotifier<String> {
     state = value;
   }
 }
+
+final isSelectNowShowingProvider =
+    StateNotifierProvider((ref) => IsSelectNowShowingNotifier());
+
+class IsSelectNowShowingNotifier extends StateNotifier<bool> {
+  IsSelectNowShowingNotifier() : super(true);
+
+  set changed(bool value) => state = value;
+}

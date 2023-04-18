@@ -146,13 +146,17 @@ class MovieDetail extends ConsumerWidget {
                         ),
                         rowInformation(
                           title: context.l10n.cast,
-                          content: movie.actor ?? context.l10n.notUpdated,
+                          content:
+                              (movie.actor != null && movie.actor!.isNotEmpty)
+                                  ? movie.actor!
+                                  : context.l10n.notUpdated,
                           width: width,
                         ),
                         rowInformation(
                           title: context.l10n.categories,
-                          content: movie.category!.categoryName ??
-                              context.l10n.notUpdated,
+                          content: isVietnamese
+                              ? '${movie.category!.categoryName}'
+                              : '${movie.category!.categoryNameEn}',
                           width: width,
                         ),
                         rowInformation(

@@ -208,5 +208,12 @@
     "cancelTicket": "Cancel ticket",
     "confirmCancelTicket": "Confirm cancel ticket?",
     "ticketId": "Ticket ID",
-    "bookTicketSuccess": "Book ticket success!\nCheck ticket's information and status pay at Ticket Page. Thank you!"
+    "bookTicketSuccess": "Book ticket success!\nCheck ticket's information and status pay at Ticket Page. Thank you!",
+    "waitConfirm": "Wait to confirm",
+    "noTicketInAccount": "You do not have any tickets.\nSelect the movie you want to watch and book tickets!",
+    "noNowShowing": "No movie now showing at cinemas",
+    "noComingSoon": "No movie coming soon at cinemas",
+    "maxNoPayTickets": "The number of unpaid tickets has reached the limit: 3 tickets\nPlease pay to continue.",
+    "seatNotAllowBook": "Seat is already booked, please choose another seat",
+    "selectSeatYouWant": "Please select the seat you want to book"
 }

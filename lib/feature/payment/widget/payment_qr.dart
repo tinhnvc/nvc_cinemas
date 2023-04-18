@@ -97,8 +97,7 @@ class PaymentQrModalSheet extends ConsumerWidget {
                               ],
                             ),
                             SelectableTextCustom(
-                              text:
-                                  '${context.l10n.content}: tt 4b9217d3-a1fd-4b8e-bc2b-0580e863d1da',
+                              text: '${context.l10n.content}: tt $ticketId',
                               style: TextStyle(
                                 color: ColorName.btnText,
                                 fontSize: 18,

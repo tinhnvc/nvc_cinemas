@@ -30,7 +30,9 @@ class _HomeState extends ConsumerState<Home> {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
-    final movies = ref.watch(moviesProvider);
+    final movies = ref
+        .watch(moviesProvider)
+        ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
     final language = ref.watch(languageProvider);
     ref.watch(seatTypesProvider);
 
@@ -52,8 +54,8 @@ class _HomeState extends ConsumerState<Home> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        final imagePath = await FileService.pickImage();
-                        print(imagePath);
+                        // final imagePath = await FileService.pickImage();
+                        // print(imagePath);
                       },
                       child: Text(
                         '${context.l10n.hi}, ${user.fullName}',

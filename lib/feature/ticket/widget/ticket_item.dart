@@ -47,10 +47,15 @@ class TicketItem extends ConsumerWidget {
       child: Column(
         children: [
           rowInformation(
-            title: 'Mã vé',
+            title: context.l10n.ticketId,
             content: ticket.id!,
             width: width,
             isSelectable: true,
+          ),
+          rowInformation(
+            title: context.l10n.cinemas,
+            content: context.l10n.nvcCinemasLocation,
+            width: width,
           ),
           rowInformation(
             title: context.l10n.film,

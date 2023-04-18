@@ -8,6 +8,7 @@ import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
@@ -67,6 +68,8 @@ class BookingByMovieDetail extends ConsumerWidget {
     }
     seats.sort((a, b) => a.position!.compareTo(b.position!));
     final seatSelected = ref.read(seatsProvider.notifier).getSelected();
+    final isAllowBookTicket =
+        ref.read(ticketsProvider.notifier).allowBookTicket(ref, movie.id!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -230,11 +233,19 @@ class BookingByMovieDetail extends ConsumerWidget {
                                 mainAxisSpacing: 5,
                                 children: indexList
                                     .map((e) => GestureDetector(
-                                          onTap: () {
-                                            ref
-                                                .read(seatsProvider.notifier)
-                                                .onceSelect(seats[e].id!);
-                                          },
+                                          onTap: seats[e].isSold!
+                                              ? () {
+                                                  SnackBarSupport
+                                                      .avoidSelectSeat(
+                                                    context: context,
+                                                  );
+                                                }
+                                              : () {
+                                                  ref
+                                                      .read(seatsProvider
+                                                          .notifier)
+                                                      .onceSelect(seats[e].id!);
+                                                },
                                           child: SeatWidget(
                                             seat: seats[e],
                                           ),
@@ -330,23 +341,28 @@ class BookingByMovieDetail extends ConsumerWidget {
                 child: RoundedButtonWidget(
                   content: context.l10n.next,
                   fontSize: 18,
-                  onPressed: seatSelected.id != null
-                      ? () => Navigator.pushNamed(
-                            context,
-                            '/payment',
-                            arguments: {
-                              'movie': movie,
-                              'time': time,
-                              'room': room,
-                              'seat': seatSelected,
-                            },
-                          )
-                      : () {
+                  onPressed: seatSelected.id == null
+                      ? () {
                           SnackBarSupport.requiredSelectSeat(
                             context: context,
                             hideAction: true,
                           );
-                        },
+                        }
+                      : isAllowBookTicket
+                          ? () => Navigator.pushNamed(
+                                context,
+                                '/payment',
+                                arguments: {
+                                  'movie': movie,
+                                  'time': time,
+                                  'room': room,
+                                  'seat': seatSelected,
+                                },
+                              )
+                          : () {
+                              SnackBarSupport.avoidBooking(
+                                  context: context, hideAction: true);
+                            },
                 ),
               ),
             ),

@@ -208,5 +208,12 @@
     "cancelTicket": "Huỷ vé",
     "confirmCancelTicket": "Xác nhận huỷ đặt vé?",
     "ticketId": "Mã vé",
-    "bookTicketSuccess": "Đặt vé thành công!\nKiểm tra thông tin và trạng thái tại mục vé. Xin cảm ơn!"
+    "bookTicketSuccess": "Đặt vé thành công!\nKiểm tra thông tin và trạng thái tại mục vé. Xin cảm ơn!",
+    "waitConfirm": "Chờ xác nhận",
+    "noTicketInAccount": "Khách hàng hiện chưa có vé nào.\nLựa chọn phim muốn xem và đặt vé nhé!",
+    "noNowShowing": "Hiện tại chưa có phim đang chiếu tại rạp",
+    "noComingSoon": "Hiện tại chưa có phim sắp chiếu tại rạp",
+    "maxNoPayTickets": "Số lượng vé chưa thanh toán đã đạt giới hạn: 3 vé\nVui lòng thanh toán để tiếp tục thao tác.",
+    "seatNotAllowBook": "Ghế đã được đặt, vui lòng lựa chọn ghế khác",
+    "selectSeatYouWant": "Vui lòng lựa chọn ghế muốn đặt"
 }
