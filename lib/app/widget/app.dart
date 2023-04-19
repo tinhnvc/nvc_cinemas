@@ -12,6 +12,7 @@ import 'package:nvc_cinemas/feature/m_category/widget/m_category_page.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_movie.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/add_showtimes.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/edit_movie.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/add_promotion.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/edit_promotion.dart';
 import 'package:nvc_cinemas/feature/m_revenue/widget/revenue_detail.dart';
@@ -93,7 +94,8 @@ class App extends ConsumerWidget {
       '/movie-detail': ([Object? arguments]) => MovieDetail(
             movie: arguments! as MovieModel,
           ),
-      '/promotion-detail': ([Object? arguments]) => const PromotionDetail(),
+      '/promotion-detail': ([Object? arguments]) =>
+          PromotionDetail(promotion: arguments! as PromotionModel),
       '/change-password': ([Object? arguments]) => const ChangePassword(),
       '/m-category-page': ([Object? arguments]) => const MCategoryPage(),
       '/add-category': ([Object? arguments]) => const AddCategory(),

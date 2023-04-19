@@ -29,7 +29,6 @@ class ShowtimesPage extends ConsumerWidget {
     final daySelect = ref.read(dayOfWeekProvider.notifier).getSelected();
     final listMovieOfDay =
         ref.read(timesProvider.notifier).getMovieByDay(ref, daySelect.day!);
-    print(listMovieOfDay.length);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -42,6 +41,7 @@ class ShowtimesPage extends ConsumerWidget {
           children: [
             SingleChildScrollView(
               child: Container(
+                height: listMovieOfDay.isEmpty ? height * 0.8 : null,
                 margin: const EdgeInsets.only(left: 20, right: 20),
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
@@ -106,138 +106,20 @@ class ShowtimesPage extends ConsumerWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        MovieShowtimesWidget(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: width,
-                          height: 60,
-                          child: ListView(
-                            physics: AlwaysScrollableScrollPhysics(
-                                parent: BouncingScrollPhysics()),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              // GestureDetector(
-                              //   onTap: () => Navigator.pushNamed(
-                              //       context, '/booking-by-movie-detail'),
-                              //   child: TimeBookingWidget(
-                              //     time: '11:20',
-                              //     seat:
-                              //         '25 ${context.l10n.empty.toLowerCase()}',
-                              //   ),
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '14:10',
-                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '21:00',
-                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        MovieShowtimesWidget(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              context.l10n.twoDimensionalSubtitle,
-                              style: TextStyle(
-                                color: ColorName.btnText,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                        listMovieOfDay.isNotEmpty
+                            ? Column(
+                                children: listMovieOfDay
+                                    .map((e) => MovieShowtimesWidget(movie: e))
+                                    .toList(),
+                              )
+                            : Text(
+                                context.l10n.noMovieToday,
+                                style: TextStyle(
+                                  color: ColorName.btnText,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: width,
-                          height: 60,
-                          child: ListView(
-                            physics: AlwaysScrollableScrollPhysics(
-                                parent: BouncingScrollPhysics()),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              // GestureDetector(
-                              //   onTap: () => Navigator.pushNamed(
-                              //       context, '/booking-by-movie-detail'),
-                              //   child: TimeBookingWidget(
-                              //     time: '11:20',
-                              //     seat:
-                              //         '25 ${context.l10n.empty.toLowerCase()}',
-                              //   ),
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '14:10',
-                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '21:00',
-                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        MovieShowtimesWidget(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              context.l10n.twoDimensionalSubtitle,
-                              style: TextStyle(
-                                color: ColorName.btnText,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: width,
-                          height: 60,
-                          child: ListView(
-                            physics: AlwaysScrollableScrollPhysics(
-                                parent: BouncingScrollPhysics()),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              // GestureDetector(
-                              //   onTap: () => Navigator.pushNamed(
-                              //       context, '/booking-by-movie-detail'),
-                              //   child: TimeBookingWidget(
-                              //     time: '11:20',
-                              //     seat:
-                              //         '25 ${context.l10n.empty.toLowerCase()}',
-                              //   ),
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '14:10',
-                              //   seat: '30 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                              // TimeBookingWidget(
-                              //   time: '21:00',
-                              //   seat: '12 ${context.l10n.empty.toLowerCase()}',
-                              // ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

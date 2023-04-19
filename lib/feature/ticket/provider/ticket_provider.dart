@@ -2,7 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
 import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
+import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
 import 'package:nvc_cinemas/shared/link/tickets.dart';
+import 'package:nvc_cinemas/shared/provider/navigation_provider.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -84,8 +86,10 @@ class TicketFormProvider {
     buttonController.start();
     await Future.delayed(const Duration(milliseconds: 700));
     ref.read(ticketsProvider.notifier).add(ticket);
-    print(ticket);
     FunctionUtil.alertPopUpPayed(onPressedConfirm: () {
+      ref
+          .read(navigationProvider.notifier)
+          .setNavigationItem(NavigationItem.home);
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/home-page',

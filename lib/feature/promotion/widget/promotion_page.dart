@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_widget.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -20,6 +21,10 @@ class PromotionPage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final promotions = ref.watch(promotionsProvider)
+      ..sort(
+        (a, b) => -a.startTime!.compareTo(b.startTime!),
+      );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -66,12 +71,20 @@ class PromotionPage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    PromotionWidget(),
-                    const SizedBox(height: 10),
-                    PromotionWidget(),
-                    const SizedBox(height: 10),
-                    PromotionWidget(),
+                    promotions.isNotEmpty
+                        ? Column(
+                            children: promotions
+                                .map((e) => PromotionWidget(promotion: e))
+                                .toList(),
+                          )
+                        : Text(
+                            'Chưa có chương chình khuyến mãi nào.\nQuý khách vui lòng quay lại sau',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: ColorName.textNormal,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
                   ],
                 ),
               ),

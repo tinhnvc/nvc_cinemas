@@ -21,7 +21,7 @@ MovieModel _$MovieModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MovieModel {
   String? get id => throw _privateConstructorUsedError;
-  CategoryModel? get category => throw _privateConstructorUsedError;
+  String? get category => throw _privateConstructorUsedError;
   String? get movieNameVi => throw _privateConstructorUsedError;
   String? get movieNameEn => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
@@ -51,7 +51,7 @@ abstract class $MovieModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      CategoryModel? category,
+      String? category,
       String? movieNameVi,
       String? movieNameEn,
       String? image,
@@ -66,8 +66,6 @@ abstract class $MovieModelCopyWith<$Res> {
       int? endTime,
       int? createAt,
       int? updateAt});
-
-  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -108,7 +106,7 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
       category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as CategoryModel?,
+              as String?,
       movieNameVi: freezed == movieNameVi
           ? _value.movieNameVi
           : movieNameVi // ignore: cast_nullable_to_non_nullable
@@ -167,18 +165,6 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
               as int?,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $CategoryModelCopyWith<$Res>? get category {
-    if (_value.category == null) {
-      return null;
-    }
-
-    return $CategoryModelCopyWith<$Res>(_value.category!, (value) {
-      return _then(_value.copyWith(category: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -191,7 +177,7 @@ abstract class _$$_MovieModelCopyWith<$Res>
   @useResult
   $Res call(
       {String? id,
-      CategoryModel? category,
+      String? category,
       String? movieNameVi,
       String? movieNameEn,
       String? image,
@@ -206,9 +192,6 @@ abstract class _$$_MovieModelCopyWith<$Res>
       int? endTime,
       int? createAt,
       int? updateAt});
-
-  @override
-  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -247,7 +230,7 @@ class __$$_MovieModelCopyWithImpl<$Res>
       category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as CategoryModel?,
+              as String?,
       movieNameVi: freezed == movieNameVi
           ? _value.movieNameVi
           : movieNameVi // ignore: cast_nullable_to_non_nullable
@@ -336,7 +319,7 @@ class _$_MovieModel extends _MovieModel {
   @override
   final String? id;
   @override
-  final CategoryModel? category;
+  final String? category;
   @override
   final String? movieNameVi;
   @override
@@ -443,7 +426,7 @@ class _$_MovieModel extends _MovieModel {
 abstract class _MovieModel extends MovieModel {
   const factory _MovieModel(
       {final String? id,
-      final CategoryModel? category,
+      final String? category,
       final String? movieNameVi,
       final String? movieNameEn,
       final String? image,
@@ -466,7 +449,7 @@ abstract class _MovieModel extends MovieModel {
   @override
   String? get id;
   @override
-  CategoryModel? get category;
+  String? get category;
   @override
   String? get movieNameVi;
   @override

@@ -215,5 +215,8 @@
     "noComingSoon": "Hiện tại chưa có phim sắp chiếu tại rạp",
     "maxNoPayTickets": "Số lượng vé chưa thanh toán đã đạt giới hạn: 3 vé\nVui lòng thanh toán để tiếp tục thao tác.",
     "seatNotAllowBook": "Ghế đã được đặt, vui lòng lựa chọn ghế khác",
-    "selectSeatYouWant": "Vui lòng lựa chọn ghế muốn đặt"
+    "selectSeatYouWant": "Vui lòng lựa chọn ghế muốn đặt",
+    "noMovieToday": "Không có phim chiếu trong ngày đang chọn",
+    "from": "Từ",
+    "to": "Đến"
 }

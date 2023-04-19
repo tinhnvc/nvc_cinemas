@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
@@ -33,6 +34,8 @@ class PaymentPage extends ConsumerWidget {
     final time = args['time'] as TimeModel;
     final room = args['room'] as RoomModel;
     final seat = args['seat'] as SeatModel;
+    final category =
+        ref.read(categoriesProvider.notifier).getById(movie.category!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -89,10 +92,10 @@ class PaymentPage extends ConsumerWidget {
                           isVietnamese
                               ? '${context.l10n.twoDimensionalSubtitle} | '
                                   '${movie.duration} ${context.l10n.minutes} | '
-                                  '${movie.category!.categoryName}'
+                                  '${category.categoryName}'
                               : '${context.l10n.twoDimensionalSubtitle} | '
                                   '${movie.duration} ${context.l10n.minutes} | '
-                                  '${movie.category!.categoryNameEn}',
+                                  '${category.categoryNameEn}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 15,

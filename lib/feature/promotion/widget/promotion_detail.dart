@@ -1,20 +1,21 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/movie/widget/rate_movie_widget.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
-import 'package:nvc_cinemas/shared/widget/highlight_card.dart';
-import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
 class PromotionDetail extends ConsumerWidget {
-  const PromotionDetail({Key? key}) : super(key: key);
+  const PromotionDetail({required this.promotion, Key? key}) : super(key: key);
+  final PromotionModel promotion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +37,6 @@ class PromotionDetail extends ConsumerWidget {
           children: [
             SingleChildScrollView(
               child: Container(
-                height: height * 0.8,
                 margin: const EdgeInsets.only(left: 20, right: 20),
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
@@ -74,8 +74,16 @@ class PromotionDetail extends ConsumerWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(6)),
                               ),
-                              child: Assets.images.logoPng
-                                  .image(width: 100, fit: BoxFit.contain),
+                              child: promotion.image != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.file(
+                                        File(promotion.image!),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Assets.images.logoPng
+                                      .image(width: 100, fit: BoxFit.contain),
                             ),
                             Expanded(
                               child: Column(
@@ -84,7 +92,7 @@ class PromotionDetail extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Thành viên NVC Cinemas - Đồng giá 45k',
+                                    promotion.name ?? context.l10n.notUpdated,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -97,7 +105,17 @@ class PromotionDetail extends ConsumerWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    '09:22 - 11/01/2023',
+                                    '${context.l10n.from}: ${FormatSupport.toDateTimeNonSecond(promotion.startTime!)}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: ColorName.textNormal,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    '${context.l10n.to}: ${FormatSupport.toDateTimeNonSecond(promotion.endTime!)}',
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: ColorName.textNormal,
@@ -112,7 +130,7 @@ class PromotionDetail extends ConsumerWidget {
                           height: 10,
                         ),
                         Text(
-                          'Thành viên NVC Cinemas trong tháng 1 này nhận ngập tràn ưu đãi. Đồng giá 45k cho toàn bộ vé khi đặt trực truyến trên ứng dụng. Chương trình áp dụng đến hết ngày 31/01/2023.',
+                          promotion.content ?? context.l10n.notUpdated,
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 15,
@@ -122,26 +140,28 @@ class PromotionDetail extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${context.l10n.couponCode}: COU15',
-                              style: TextStyle(
-                                color: ColorName.btnText,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        if (promotion.code != null &&
+                            promotion.code!.isNotEmpty)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${context.l10n.couponCode}: ${promotion.code}',
+                                style: TextStyle(
+                                  color: ColorName.btnText,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            RoundedButtonWidget(
-                              content: context.l10n.copy,
-                              onPressed: () async {
-                                await FlutterClipboard.copy('COU15');
-                                SnackBarSupport.copied(context: context);
-                              },
-                            ),
-                          ],
-                        ),
+                              RoundedButtonWidget(
+                                content: context.l10n.copy,
+                                onPressed: () async {
+                                  await FlutterClipboard.copy(promotion.code!);
+                                  SnackBarSupport.copied(context: context);
+                                },
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),

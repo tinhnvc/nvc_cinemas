@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
@@ -35,6 +36,7 @@ class _HomeState extends ConsumerState<Home> {
         ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
     final language = ref.watch(languageProvider);
     ref.watch(seatTypesProvider);
+    ref.watch(categoriesProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -54,8 +56,8 @@ class _HomeState extends ConsumerState<Home> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // final imagePath = await FileService.pickImage();
-                        // print(imagePath);
+                        final imagePath = await FileService.pickImage();
+                        print(imagePath);
                       },
                       child: Text(
                         '${context.l10n.hi}, ${user.fullName}',

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
@@ -16,7 +17,6 @@ import 'package:nvc_cinemas/shared/service/date_service.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BookingByMovie extends ConsumerWidget {
   const BookingByMovie({required this.movie, Key? key}) : super(key: key);
@@ -32,6 +32,8 @@ class BookingByMovie extends ConsumerWidget {
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
 
+    final category =
+        ref.read(categoriesProvider.notifier).getById(movie.category!);
     final weekMap = ref.watch(dayOfWeekProvider);
     final timesShowByDay =
         ref.read(timesProvider.notifier).getByDay(ref: ref, movieId: movie.id!);
@@ -114,9 +116,9 @@ class BookingByMovie extends ConsumerWidget {
                         ),
                         Text(
                           isVietnamese
-                              ? '${movie.category!.categoryName} | '
+                              ? '${category.categoryName} | '
                                   '${movie.duration} ${context.l10n.minutes}'
-                              : '${movie.category!.categoryNameEn} | '
+                              : '${category.categoryNameEn} | '
                                   '${movie.duration} ${context.l10n.minutes}',
                           style: TextStyle(
                             color: ColorName.btnText,
@@ -235,25 +237,6 @@ class BookingByMovie extends ConsumerWidget {
                                       ],
                                     ),
                                   ],
-                            // children: [
-                            //   GestureDetector(
-                            //     onTap: () => Navigator.pushNamed(
-                            //         context, '/booking-by-movie-detail'),
-                            //     child: TimeBookingWidget(
-                            //       time: '11:20',
-                            //       seat:
-                            //           '25 ${context.l10n.empty.toLowerCase()}',
-                            //     ),
-                            //   ),
-                            //   TimeBookingWidget(
-                            //     time: '14:10',
-                            //     seat: '30 ${context.l10n.empty.toLowerCase()}',
-                            //   ),
-                            //   TimeBookingWidget(
-                            //     time: '21:00',
-                            //     seat: '12 ${context.l10n.empty.toLowerCase()}',
-                            //   ),
-                            // ],
                           ),
                         ),
                       ],

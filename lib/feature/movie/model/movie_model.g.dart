@@ -9,9 +9,7 @@ part of 'movie_model.dart';
 _$_MovieModel _$$_MovieModelFromJson(Map<String, dynamic> json) =>
     _$_MovieModel(
       id: json['id'] as String?,
-      category: json['category'] == null
-          ? null
-          : CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
+      category: json['category'] as String?,
       movieNameVi: json['movieNameVi'] as String?,
       movieNameEn: json['movieNameEn'] as String?,
       image: json['image'] as String?,

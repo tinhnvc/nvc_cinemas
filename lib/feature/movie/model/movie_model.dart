@@ -18,7 +18,7 @@ MovieModel movieFromJson(String str) =>
 class MovieModel with _$MovieModel {
   const factory MovieModel({
     String? id,
-    CategoryModel? category,
+    String? category,
     String? movieNameVi,
     String? movieNameEn,
     String? image,

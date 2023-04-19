@@ -1,16 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
+import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 
 class PromotionWidget extends ConsumerWidget {
-  const PromotionWidget({Key? key}) : super(key: key);
+  const PromotionWidget({required this.promotion, Key? key}) : super(key: key);
+  final PromotionModel promotion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/promotion-detail'),
+      onTap: () => Navigator.pushNamed(context, '/promotion-detail',
+          arguments: promotion),
       child: Container(
+        margin: const EdgeInsets.only(top: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -22,8 +30,16 @@ class PromotionWidget extends ConsumerWidget {
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
-              child:
-                  Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
+              child: promotion.image != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.file(
+                        File(promotion.image!),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Assets.images.logoPng
+                      .image(width: 100, fit: BoxFit.contain),
             ),
             Expanded(
               child: Column(
@@ -32,7 +48,7 @@ class PromotionWidget extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Thành viên NVC Cinemas - Đồng giá 45k',
+                    promotion.name ?? context.l10n.notUpdated,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -45,7 +61,7 @@ class PromotionWidget extends ConsumerWidget {
                     height: 5,
                   ),
                   Text(
-                    '09:22 - 11/01/2023',
+                    FormatSupport.toDateTime(promotion.startTime!),
                     style: TextStyle(
                       fontSize: 15,
                       color: ColorName.textNormal,

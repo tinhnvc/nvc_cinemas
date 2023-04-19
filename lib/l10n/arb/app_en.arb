@@ -215,5 +215,8 @@
     "noComingSoon": "No movie coming soon at cinemas",
     "maxNoPayTickets": "The number of unpaid tickets has reached the limit: 3 tickets\nPlease pay to continue.",
     "seatNotAllowBook": "Seat is already booked, please choose another seat",
-    "selectSeatYouWant": "Please select the seat you want to book"
+    "selectSeatYouWant": "Please select the seat you want to book",
+    "noMovieToday": "No movies showing on the selected date",
+    "from": "From",
+    "to": "To"
 }

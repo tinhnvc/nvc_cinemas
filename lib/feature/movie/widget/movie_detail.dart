@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/movie/widget/rate_movie_widget.dart';
@@ -32,6 +33,8 @@ class MovieDetail extends ConsumerWidget {
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
     ref.watch(movieRatingsProvider);
+    final category =
+    ref.read(categoriesProvider.notifier).getById(movie.category!);
     final comments =
         ref.read(movieRatingsProvider.notifier).getByMovieId(movie.id!);
     final sumRate = ref.read(movieRatingsProvider.notifier).sumRate(movie.id!);
@@ -155,8 +158,8 @@ class MovieDetail extends ConsumerWidget {
                         rowInformation(
                           title: context.l10n.categories,
                           content: isVietnamese
-                              ? '${movie.category!.categoryName}'
-                              : '${movie.category!.categoryNameEn}',
+                              ? '${category.categoryName}'
+                              : '${category.categoryNameEn}',
                           width: width,
                         ),
                         rowInformation(

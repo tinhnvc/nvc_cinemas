@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/shared/link/seats.dart';
 
 final seatsProvider = StateNotifierProvider<SeatsNotifier, List<SeatModel>>(
@@ -101,5 +103,17 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
       ..sort(
         (a, b) => a.position!.compareTo(b.position!),
       );
+  }
+
+  String getSeatEmptyAmount(WidgetRef ref, TimeModel time) {
+    var totalSeats = 0;
+    for (final item in state) {
+      if (item.roomId == time.roomId) {
+        totalSeats += 1;
+      }
+    }
+    final soldSeats =
+        ref.read(ticketsProvider.notifier).getSeatsIdByTimeId(time.id!);
+    return '${totalSeats - soldSeats.length}';
   }
 }

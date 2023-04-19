@@ -40,7 +40,6 @@ class BookingByMovieDetail extends ConsumerWidget {
     final time = args['time'] as TimeModel;
     final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
     final seatTypes = ref.watch(seatTypesProvider);
-    // final seats = ref.read(seatsProvider.notifier).getByRoomId(room.id!);
     final allSeats = ref.watch(seatsProvider);
     final priceNormal = ref.read(seatTypesProvider.notifier).getPriceByIndex(0);
     final priceVip = ref.read(seatTypesProvider.notifier).getPriceByIndex(1);
