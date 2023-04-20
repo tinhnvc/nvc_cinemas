@@ -29,7 +29,10 @@ import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
 import 'package:nvc_cinemas/feature/payment/widget/payment_page.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_detail.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
+import 'package:nvc_cinemas/feature/setting/widget/cinemas_info.dart';
+import 'package:nvc_cinemas/feature/setting/widget/secure_policy.dart';
 import 'package:nvc_cinemas/feature/setting/widget/setting_page.dart';
+import 'package:nvc_cinemas/feature/setting/widget/term_of_use.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
 import 'package:nvc_cinemas/feature/ticket/widget/ticket_page.dart';
 import 'package:nvc_cinemas/feature/user/widget/account_information.dart';
@@ -113,6 +116,9 @@ class App extends ConsumerWidget {
       '/edit-promotion': ([Object? arguments]) => const EditPromotion(),
       '/ticket-detail': ([Object? arguments]) => const TicketDetail(),
       '/revenue-detail': ([Object? arguments]) => const RevenueDetail(),
+      '/term-of-use': ([Object? arguments]) => const TermOfUse(),
+      '/secure-policy': ([Object? arguments]) => const SecurePolicy(),
+      '/cinemas-info': ([Object? arguments]) => const CinemasInfo(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

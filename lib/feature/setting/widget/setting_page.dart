@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provder.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
@@ -169,15 +170,18 @@ class Settings extends ConsumerWidget {
                         ),
                         rowButton(
                           content: context.l10n.termOfUse,
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/term-of-use'),
                         ),
                         rowButton(
                           content: context.l10n.securePolicy,
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/secure-policy'),
                         ),
                         rowButton(
                           content: context.l10n.cinemasInfo,
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/cinemas-info'),
                         ),
                       ],
                     ),
@@ -267,15 +271,17 @@ class Settings extends ConsumerWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.grey[300],
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 17,
-                      color: ColorName.textNormal,
-                    ),
-                  ),
+                  isVersion!
+                      ? SizedBox()
+                      : CircleAvatar(
+                          radius: 15,
+                          backgroundColor: Colors.grey[300],
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 17,
+                            color: ColorName.textNormal,
+                          ),
+                        ),
                 ],
               ),
             )

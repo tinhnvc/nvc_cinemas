@@ -205,12 +205,16 @@ class SignUp extends ConsumerWidget {
                                           overflow: TextOverflow.clip,
                                         ),
                                       ),
-                                      Text(
-                                        context.l10n.termsAndConditions,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.blue,
-                                          overflow: TextOverflow.clip,
+                                      GestureDetector(
+                                        onTap: () => Navigator.pushNamed(
+                                            context, '/term-of-use'),
+                                        child: Text(
+                                          context.l10n.termsAndConditions,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.blue,
+                                            overflow: TextOverflow.clip,
+                                          ),
                                         ),
                                       ),
                                     ],
