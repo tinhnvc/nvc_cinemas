@@ -5,16 +5,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
+import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class PaymentPage extends ConsumerWidget {
@@ -36,6 +40,28 @@ class PaymentPage extends ConsumerWidget {
     final seat = args['seat'] as SeatModel;
     final category =
         ref.read(categoriesProvider.notifier).getById(movie.category!);
+    final price =
+        ref.read(seatTypesProvider.notifier).getPriceById(seat.seatTypeId!);
+    final couponValue = ref.watch(couponCodeProvider);
+    final promotions = ref.watch(promotionsProvider);
+    final current = DateTime.now().millisecondsSinceEpoch;
+    final couponCodeList = <String>['Chọn ưu đãi'];
+    if (promotions.isNotEmpty) {
+      for (final item in promotions) {
+        if (item.startTime! < current &&
+            current < item.endTime! &&
+            item.code!.isNotEmpty) {
+          couponCodeList.add(item.code!);
+        }
+      }
+    }
+
+    var contentCoupon = '';
+    final isCouponSelect =
+        couponValue.isNotEmpty && couponValue != 'Chọn ưu đãi';
+    if (isCouponSelect) {
+      contentCoupon = FunctionUtil.couponCodeToContent(context, couponValue);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -145,6 +171,59 @@ class PaymentPage extends ConsumerWidget {
                         //   content: 'COU15',
                         //   width: width,
                         // ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Divider(
+                              color: ColorName.btnText,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  context.l10n.couponCode,
+                                  style: TextStyle(
+                                    color: ColorName.btnText,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                bottom: 10,
+                                left: 5,
+                                right: width * 0.3,
+                              ),
+                              child: DropdownWidget(
+                                value: couponValue.isNotEmpty
+                                    ? couponValue
+                                    : 'Chọn ưu đãi',
+                                values: couponCodeList,
+                                onChanged: (String value) {
+                                  ref
+                                      .read(couponCodeProvider.notifier)
+                                      .update(value);
+                                },
+                              ),
+                            ),
+                            if (couponValue.isNotEmpty &&
+                                couponValue != 'Chọn ưu đãi')
+                              Text(
+                                contentCoupon,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -156,20 +235,26 @@ class PaymentPage extends ConsumerWidget {
                         ),
                         rowPaymentInformation(
                           title: context.l10n.total,
-                          content: ref
-                              .read(seatTypesProvider.notifier)
-                              .getPriceById(seat.seatTypeId!),
+                          content:
+                              '${FormatSupport.toMoney(int.parse(price))}đ',
                         ),
                         rowPaymentInformation(
                           title: context.l10n.discountPrice,
-                          content: '0đ',
+                          content: isCouponSelect
+                              ? '${FormatSupport.toMoney(int.parse(FunctionUtil.couponCodeToDiscount(context, couponValue, price)))}đ'
+                              : '0đ',
                           isDiscount: true,
                         ),
                         rowPaymentInformation(
                           title: context.l10n.needPay,
-                          content: ref
-                              .read(seatTypesProvider.notifier)
-                              .getPriceById(seat.seatTypeId!),
+                          content: isCouponSelect
+                              ? '${FormatSupport.toMoney(
+                                  int.parse(
+                                    FunctionUtil.couponCodeToTotalPrice(
+                                        context, couponValue, price),
+                                  ),
+                                )}đ'
+                              : '${FormatSupport.toMoney(int.parse(price))}đ',
                         ),
                         const Divider(
                           color: ColorName.btnText,

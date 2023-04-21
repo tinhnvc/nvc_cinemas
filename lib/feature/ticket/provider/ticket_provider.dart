@@ -62,6 +62,20 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
     }
     return count <= 2;
   }
+
+  void waitConfirm(String id) {
+    state = [
+      for (final item in state)
+        if (item.id == id) item.copyWith(status: 'waitConfirm') else item,
+    ];
+  }
+
+  void cancel(String id) {
+    state = [
+      for (final item in state)
+        if (item.id == id) item.copyWith(status: 'canceled') else item,
+    ];
+  }
 }
 
 final ticketFormProvider = Provider<TicketFormProvider>(
@@ -96,6 +110,29 @@ class TicketFormProvider {
         (Route<dynamic> route) => false,
       );
     });
+    buttonController.reset();
+  }
+
+  Future<void> waitConfirmTicket(
+    WidgetRef ref,
+    BuildContext context,
+    TicketModel ticket,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    ref.read(ticketsProvider.notifier).waitConfirm(ticket.id!);
+    buttonController.reset();
+    Navigator.pop(context);
+  }
+
+  Future<void> cancelTicket(
+    WidgetRef ref,
+    BuildContext context,
+    TicketModel ticket,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    ref.read(ticketsProvider.notifier).cancel(ticket.id!);
     buttonController.reset();
   }
 }

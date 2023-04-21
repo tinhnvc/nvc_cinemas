@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
@@ -10,7 +11,8 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class EditCategory extends ConsumerWidget {
-  const EditCategory({Key? key}) : super(key: key);
+  const EditCategory({required this.category, Key? key}) : super(key: key);
+  final CategoryModel category;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,6 +77,26 @@ class EditCategory extends ConsumerWidget {
                                       '${context.l10n.categoryName.toLowerCase()}'),
                             ),
                             Text(
+                              '${context.l10n.categoryName} (English)',
+                              style: const TextStyle(
+                                color: Color(0xFF363E59),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              child: FormTextField(
+                                  isCrudForm: true,
+                                  formControlName: 'categoryNameEn',
+                                  maxLine: 1,
+                                  textInputAction: TextInputAction.next,
+                                  labelText: '${context.l10n.input} '
+                                      '${context.l10n.categoryName.toLowerCase()}'),
+                            ),
+                            Text(
                               context.l10n.description,
                               style: const TextStyle(
                                 color: Color(0xFF363E59),
@@ -90,13 +112,13 @@ class EditCategory extends ConsumerWidget {
                                 isCrudForm: true,
                                 formControlName: 'description',
                                 maxLine: 5,
-                                textInputAction: TextInputAction.newline,
+                                textInputAction: TextInputAction.done,
                                 labelText: context.l10n.descriptionHint,
                               ),
                             ),
                             TimeCrateAndUpdate(
-                              createTime: 1676352825000,
-                              updateTime: 1676539365000,
+                              createTime: category.createAt!,
+                              updateTime: category.updateAt!,
                             ),
                             Container(
                               margin: const EdgeInsets.only(
@@ -132,10 +154,10 @@ class EditCategory extends ConsumerWidget {
                                     onPressed: () {
                                       ref
                                           .read(categoryFormProvider)
-                                          .addCategory(ref, context);
+                                          .editCategory(ref, context, category);
                                     },
                                     child: Text(
-                                      context.l10n.addNew,
+                                      context.l10n.update,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,

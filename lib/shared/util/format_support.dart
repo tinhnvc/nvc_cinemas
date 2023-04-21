@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class FormatSupport {
   static final NumberFormat _oCcy = NumberFormat('#,##0', 'en_US');
   static final DateFormat _dateFormat = DateFormat('dd/MM/yyyy HH:mm:ss');
-  static final DateFormat _dateFormatNonSecond = DateFormat('dd/MM/yyyy HH:mm');
+  static final DateFormat _dateFormatNonSecond = DateFormat('HH:mm dd/MM/yyyy');
   static final DateFormat _dateFormatNonHour = DateFormat('dd/MM/yyyy');
   static final DateFormat _dateFormatMonthYear = DateFormat('MM/yyyy');
   static final DateFormat _dateFormatNonDate = DateFormat('HH:mm');

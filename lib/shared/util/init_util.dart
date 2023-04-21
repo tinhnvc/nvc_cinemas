@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
-
-import '../../feature/movie/provider/day_of_week_provder.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 
 class InitUtil {
   static void initSignUpForm(
@@ -57,9 +58,29 @@ class InitUtil {
     required WidgetRef ref,
     required TimeModel time,
   }) async {
-    ref.read(seatsProvider.notifier)..cleanStatus()..cleanStatusSold();
+    ref.read(seatsProvider.notifier)
+      ..cleanStatus()
+      ..cleanStatusSold();
     final soldSeats =
         ref.read(ticketsProvider.notifier).getSeatsIdByTimeId(time.id!);
     ref.read(seatsProvider.notifier).setSoldSeat(soldSeats);
+  }
+
+  static void initEditCategory({
+    required WidgetRef ref,
+    required CategoryModel category,
+  }) async {
+    final formGroup = ref.read(categoryFormProvider).addCategoryForm;
+    formGroup.control('categoryName').value = category.categoryName;
+    formGroup.control('categoryNameEn').value = category.categoryNameEn;
+    formGroup.control('description').value = category.description;
+    formGroup.control('active').value = category.active.toString();
+  }
+
+  static void initAddCategory({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(categoryFormProvider).addCategoryForm..reset();
+    formGroup.control('active').value = 'true';
   }
 }

@@ -63,6 +63,7 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
       }
     }
 
+    return result;
     return '${FormatSupport.toMoney(int.parse(result))}đ';
   }
 }

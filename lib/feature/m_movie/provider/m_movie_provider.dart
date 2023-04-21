@@ -35,6 +35,18 @@ class MoviesNotifier extends StateNotifier<List<MovieModel>> {
 
     return movie;
   }
+
+  void moveCategoryToOther(String categoryId) {
+    state = [
+      for (final item in state)
+        if (item.category == categoryId)
+          item.copyWith(
+            category: 'd44e5235-566c-46e0-a947-0df21794aafb',
+          )
+        else
+          item,
+    ];
+  }
 }
 
 final movieFormProvider = Provider<MovieFormProvider>(

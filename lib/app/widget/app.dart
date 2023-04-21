@@ -21,6 +21,7 @@ import 'package:nvc_cinemas/feature/m_room/widget/edit_room.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/add_seat.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/edit_seat.dart';
 import 'package:nvc_cinemas/feature/m_ticket/widget/ticket_detail.dart';
+import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
@@ -102,7 +103,8 @@ class App extends ConsumerWidget {
       '/change-password': ([Object? arguments]) => const ChangePassword(),
       '/m-category-page': ([Object? arguments]) => const MCategoryPage(),
       '/add-category': ([Object? arguments]) => const AddCategory(),
-      '/edit-category': ([Object? arguments]) => const EditCategory(),
+      '/edit-category': ([Object? arguments]) =>
+          EditCategory(category: arguments! as CategoryModel),
       '/add-movie': ([Object? arguments]) => const AddMovie(),
       '/edit-movie': ([Object? arguments]) => const EditMovie(),
       '/add-showtimes': ([Object? arguments]) => const AddShowtimes(),

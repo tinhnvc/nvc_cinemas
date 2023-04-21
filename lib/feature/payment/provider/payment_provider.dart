@@ -1,13 +1,13 @@
-//
-// final genderSignUpProvider =
-// StateNotifierProvider<GenderSignUpNotifier, String>(
-//       (ref) => GenderSignUpNotifier(),
-// );
-//
-// class GenderSignUpNotifier extends StateNotifier<String> {
-//   GenderSignUpNotifier() : super('');
-//
-//   void update(String value) {
-//     state = value;
-//   }
-// }
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final couponCodeProvider = StateNotifierProvider<CouponCodeNotifier, String>(
+  (ref) => CouponCodeNotifier(),
+);
+
+class CouponCodeNotifier extends StateNotifier<String> {
+  CouponCodeNotifier() : super('');
+
+  void update(String value) {
+    state = value;
+  }
+}

@@ -329,12 +329,12 @@ class AddRoom extends ConsumerWidget {
                                     width: 110,
                                     animateOnTap: false,
                                     controller: ref
-                                        .watch(categoryFormProvider)
+                                        .watch(roomFormProvider)
                                         .buttonController,
                                     onPressed: () {
                                       ref
-                                          .read(categoryFormProvider)
-                                          .addCategory(ref, context);
+                                          .read(roomFormProvider)
+                                          .addRoom(ref, context);
                                     },
                                     child: Text(
                                       context.l10n.addNew,

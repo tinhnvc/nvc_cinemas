@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
+import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class MMoviePage extends ConsumerWidget {
@@ -19,6 +22,14 @@ class MMoviePage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final categories = [
+      CategoryModel(
+          id: 'all',
+          categoryName: context.l10n.all,
+          categoryNameEn: context.l10n.all),
+      ...ref.watch(categoriesProvider)
+    ];
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -83,21 +94,29 @@ class MMoviePage extends ConsumerWidget {
                           const SizedBox(
                             width: 20,
                           ),
-                          Text(
-                            'Tâm lý',
-                            style: TextStyle(
-                              color: ColorName.btnText,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Võ thuật',
-                            style: TextStyle(
-                              color: ColorName.btnText,
-                              fontSize: 15,
+                          SizedBox(
+                            width: width,
+                            height: 70,
+                            child: ListView(
+                              physics: AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              scrollDirection: Axis.horizontal,
+                              children: categories
+                                  .map(
+                                    (e) => GestureDetector(
+                                      onTap: () {},
+                                      child: Text(
+                                        isVietnamese
+                                            ? '${e.categoryName}'
+                                            : '${e.categoryNameEn}',
+                                        style: TextStyle(
+                                          color: ColorName.btnText,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
                         ],

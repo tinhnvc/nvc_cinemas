@@ -218,5 +218,12 @@
     "selectSeatYouWant": "Vui lòng lựa chọn ghế muốn đặt",
     "noMovieToday": "Không có phim chiếu trong ngày đang chọn",
     "from": "Từ",
-    "to": "Đến"
+    "to": "Đến",
+    "discountTicket": "Giảm giá vé",
+    "dangoTicket": "Đồng giá",
+    "waitPay": "Chờ thanh toán",
+    "waitConfirm": "Chờ xác nhận",
+    "payed": "Đã thanh toán",
+    "canceled": "Đã huỷ"
+
 }

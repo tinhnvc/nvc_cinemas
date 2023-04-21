@@ -210,6 +210,156 @@ class FunctionUtil {
       ],
     ).show();
   }
+
+  static String couponCodeToContent(
+    BuildContext context,
+    String couponCode,
+  ) {
+    final map = {
+      'COU10': '${context.l10n.discountTicket} 10.000đ',
+      'COU15': '${context.l10n.discountTicket} 15.000đ',
+      'COU20': '${context.l10n.discountTicket} 20.000đ',
+      'COU30': '${context.l10n.discountTicket} 30.000đ',
+      'DANGO45': '${context.l10n.dangoTicket} 45.000đ',
+      'DANGO55': '${context.l10n.dangoTicket} 55.000đ',
+      'DANGO65': '${context.l10n.dangoTicket} 65.000đ',
+      'DANGO75': '${context.l10n.dangoTicket} 75.000đ',
+    };
+
+    return map[couponCode] ?? '';
+  }
+
+  static String couponCodeToDiscount(
+    BuildContext context,
+    String couponCode,
+    String currentPrice,
+  ) {
+    final price = int.parse(currentPrice);
+    final map = {
+      'COU10': '10000',
+      'COU15': '15000',
+      'COU20': '20000',
+      'COU30': '30000',
+      'DANGO45': price > 45000 ? '${price - 45000}' : '0',
+      'DANGO55': price > 55000 ? '${price - 55000}' : '0',
+      'DANGO65': price > 65000 ? '${price - 65000}' : '0',
+      'DANGO75': price > 70000 ? '${price - 75000}' : '0',
+    };
+
+    return map[couponCode] ?? '';
+  }
+
+  static String ticketStatusToContent(
+    BuildContext context,
+    String status,
+  ) {
+    final map = {
+      'waitPay': 'Chờ thanh toán',
+      'waitConfirm': 'Chờ xác nhận',
+      'payed': 'Đã thanh toán',
+      'canceled': 'Đã huỷ',
+    };
+
+    return map[status] ?? 'Chờ thanh toán';
+  }
+
+  static String couponCodeToTotalPrice(
+    BuildContext context,
+    String couponCode,
+    String currentPrice,
+  ) {
+    final price = int.parse(currentPrice);
+    final map = {
+      'COU10': '${price - 10000}',
+      'COU15': '${price - 15000}',
+      'COU20': '${price - 20000}',
+      'COU30': '${price - 30000}',
+      'DANGO45': '45000',
+      'DANGO55': '55000',
+      'DANGO65': '65000',
+      'DANGO75': '75000',
+    };
+
+    return map[couponCode] ?? '';
+  }
+
+  static Color ticketStatusToColor(
+    String status,
+  ) {
+    if (status == 'waitPay') {
+      return Colors.red;
+    }
+
+    if (status == 'waitConfirm') {
+      return Colors.orange;
+    }
+
+    if (status == 'payed') {
+      return Colors.green;
+    }
+
+    if (status == 'canceled') {
+      return ColorName.primary;
+    }
+    return Colors.grey;
+  }
+
+  static void alertPopUpConfirmWithContent({
+    required VoidCallback onPressedConfirm,
+    required String content,
+    bool? isConfirm = false,
+  }) {
+    final context = OneContext().context;
+    Alert(
+      context: context!,
+      type: AlertType.warning,
+      title: 'Lưu ý',
+      desc: 'Đồng ý thực hiện đóng $content',
+      style: const AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: ColorName.primary,
+          radius: const BorderRadius.all(Radius.circular(5)),
+          height: 44,
+          onPressed: () {
+            onPressedConfirm();
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'OK',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        if (!isConfirm!)
+          DialogButton(
+            color: const Color(0xFFAAAAAA),
+            radius: const BorderRadius.all(Radius.circular(5)),
+            height: 44,
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              context.l10n.cancel,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+      ],
+    ).show();
+  }
 }
 //
 // class URLUlti {

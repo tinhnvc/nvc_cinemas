@@ -24,6 +24,7 @@ class CategoryModel with _$CategoryModel {
     @Default(true) bool? active,
     int? createAt,
     int? updateAt,
+    @Default(true) bool? isSelected,
   }) = _CategoryModel;
 
   const CategoryModel._();

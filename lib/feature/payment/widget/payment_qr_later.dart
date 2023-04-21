@@ -1,9 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
-import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
-import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
@@ -11,29 +8,19 @@ import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
-import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
-import 'package:nvc_cinemas/shared/widget/primary_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
 import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:uuid/uuid.dart';
 
-class PaymentQrModalSheet extends ConsumerWidget {
-  const PaymentQrModalSheet({required this.args, Key? key}) : super(key: key);
+class PaymentQrLaterModalSheet extends ConsumerWidget {
+  const PaymentQrLaterModalSheet({required this.args, Key? key})
+      : super(key: key);
   final Map<String, dynamic> args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = args['time'] as TimeModel;
-    final seat = args['seat'] as SeatModel;
-    final ticketId = Uuid().v4();
-    final seatType =
-        ref.read(seatTypesProvider.notifier).getById(seat.seatTypeId!);
-    final today = DateTime.now().weekday;
-    final price =
-        (today == 6 || today == 7) ? seatType.otherPrice! : seatType.price;
+    final ticket = args['ticket'] as TicketModel;
 
     final couponValue = ref.watch(couponCodeProvider);
     final isCouponSelect =
@@ -103,7 +90,7 @@ class PaymentQrModalSheet extends ConsumerWidget {
                               ],
                             ),
                             SelectableTextCustom(
-                              text: '${context.l10n.content}: tt $ticketId',
+                              text: '${context.l10n.content}: tt ${ticket.id}',
                               style: TextStyle(
                                 color: ColorName.btnText,
                                 fontSize: 18,
@@ -144,7 +131,7 @@ class PaymentQrModalSheet extends ConsumerWidget {
                                   content: context.l10n.copyContent,
                                   onPressed: () async {
                                     await FlutterClipboard.copy(
-                                      'tt $ticketId',
+                                      'tt ${ticket.id}',
                                     );
                                     SnackBarSupport.copied(context: context);
                                   },
@@ -163,104 +150,27 @@ class PaymentQrModalSheet extends ConsumerWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                RoundedLoadingButton(
-                                  color: ColorName.primary,
-                                  borderRadius: 5,
-                                  height: 40,
-                                  width: 160,
-                                  animateOnTap: false,
-                                  controller: ref
-                                      .watch(ticketFormProvider)
-                                      .buttonController,
-                                  onPressed: () {
-                                    final ticket = TicketModel(
-                                      id: ticketId,
-                                      userId: ref.watch(userProvider).userId,
-                                      timeId: time.id,
-                                      seatId: seat.id,
-                                      status: 'waitConfirm',
-                                      discount: isCouponSelect
-                                          ? int.parse(
-                                              FunctionUtil.couponCodeToDiscount(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : 0,
-                                      totalPrice: isCouponSelect
-                                          ? int.parse(FunctionUtil
-                                              .couponCodeToTotalPrice(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : price,
-                                      createAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                      updateAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                    );
-                                    ref
-                                        .read(ticketFormProvider)
-                                        .addTicket(ref, context, ticket);
-                                  },
-                                  child: Text(
-                                    'Đã thanh toán',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
+                            RoundedLoadingButton(
+                              color: ColorName.primary,
+                              borderRadius: 5,
+                              height: 40,
+                              width: 160,
+                              animateOnTap: false,
+                              controller: ref
+                                  .watch(ticketFormProvider)
+                                  .buttonController,
+                              onPressed: () {
+                                ref
+                                    .read(ticketFormProvider)
+                                    .waitConfirmTicket(ref, context, ticket);
+                              },
+                              child: Text(
+                                'Đã thanh toán',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
-                                RoundedLoadingButton(
-                                  color: ColorName.primary,
-                                  borderRadius: 5,
-                                  height: 40,
-                                  width: 160,
-                                  animateOnTap: false,
-                                  controller: ref
-                                      .watch(ticketFormProvider)
-                                      .buttonController,
-                                  onPressed: () {
-                                    final ticket = TicketModel(
-                                      id: ticketId,
-                                      userId: ref.watch(userProvider).userId,
-                                      timeId: time.id,
-                                      seatId: seat.id,
-                                      status: 'waitPay',
-                                      discount: isCouponSelect
-                                          ? int.parse(
-                                              FunctionUtil.couponCodeToDiscount(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : 0,
-                                      totalPrice: isCouponSelect
-                                          ? int.parse(FunctionUtil
-                                              .couponCodeToTotalPrice(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : price,
-                                      createAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                      updateAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                    );
-                                    ref
-                                        .read(ticketFormProvider)
-                                        .addTicket(ref, context, ticket);
-                                  },
-                                  child: Text(
-                                    'Thanh toán sau',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                             const SizedBox(
                               height: 15,

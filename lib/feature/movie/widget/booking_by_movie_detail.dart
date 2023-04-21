@@ -8,6 +8,7 @@ import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -321,9 +322,7 @@ class BookingByMovieDetail extends ConsumerWidget {
                     ),
                     Text(
                       seatSelected.seatTypeId != null
-                          ? ref
-                              .read(seatTypesProvider.notifier)
-                              .getPriceById(seatSelected.seatTypeId!)
+                          ? '${FormatSupport.toMoney(int.parse(ref.read(seatTypesProvider.notifier).getPriceById(seatSelected.seatTypeId!)))}đ'
                           : '0đ',
                       style: const TextStyle(
                         fontSize: 20,
@@ -348,7 +347,9 @@ class BookingByMovieDetail extends ConsumerWidget {
                           );
                         }
                       : isAllowBookTicket
-                          ? () => Navigator.pushNamed(
+                          ? () {
+                              ref.refresh(couponCodeProvider);
+                              Navigator.pushNamed(
                                 context,
                                 '/payment',
                                 arguments: {
@@ -357,7 +358,8 @@ class BookingByMovieDetail extends ConsumerWidget {
                                   'room': room,
                                   'seat': seatSelected,
                                 },
-                              )
+                              );
+                            }
                           : () {
                               SnackBarSupport.avoidBooking(
                                   context: context, hideAction: true);

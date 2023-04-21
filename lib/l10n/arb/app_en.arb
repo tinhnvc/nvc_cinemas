@@ -218,5 +218,11 @@
     "selectSeatYouWant": "Please select the seat you want to book",
     "noMovieToday": "No movies showing on the selected date",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "discountTicket": "Discount ticket price",
+    "dangoTicket": "Same price",
+    "waitPay": "Wait pay",
+    "waitConfirm": "Wait confirm",
+    "payed": "Payed",
+    "canceled": "Canceled"
 }

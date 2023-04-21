@@ -15,6 +15,7 @@ _$_CategoryModel _$$_CategoryModelFromJson(Map<String, dynamic> json) =>
       active: json['active'] as bool? ?? true,
       createAt: json['createAt'] as int?,
       updateAt: json['updateAt'] as int?,
+      isSelected: json['isSelected'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$_CategoryModelToJson(_$_CategoryModel instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$_CategoryModelToJson(_$_CategoryModel instance) =>
       'active': instance.active,
       'createAt': instance.createAt,
       'updateAt': instance.updateAt,
+      'isSelected': instance.isSelected,
     };

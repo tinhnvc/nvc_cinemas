@@ -73,6 +73,26 @@ class AddCategory extends ConsumerWidget {
                                       '${context.l10n.categoryName.toLowerCase()}'),
                             ),
                             Text(
+                              '${context.l10n.categoryName} (English)',
+                              style: const TextStyle(
+                                color: Color(0xFF363E59),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              child: FormTextField(
+                                  isCrudForm: true,
+                                  formControlName: 'categoryNameEn',
+                                  maxLine: 1,
+                                  textInputAction: TextInputAction.next,
+                                  labelText: '${context.l10n.input} '
+                                      '${context.l10n.categoryName.toLowerCase()}'),
+                            ),
+                            Text(
                               context.l10n.description,
                               style: const TextStyle(
                                 color: Color(0xFF363E59),

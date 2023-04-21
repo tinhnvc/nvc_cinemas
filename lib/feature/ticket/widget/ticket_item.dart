@@ -5,6 +5,7 @@ import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
@@ -41,7 +42,7 @@ class TicketItem extends ConsumerWidget {
       ),
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: ColorName.primary.withOpacity(0.1),
+        color: ColorName.primary.withOpacity(0.2),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -91,9 +92,7 @@ class TicketItem extends ConsumerWidget {
           ),
           rowStatusTicket(
             context: context,
-            status: ticket.status == 'waitPay'
-                ? context.l10n.noPay
-                : context.l10n.payed,
+            status: ticket.status!,
             width: width,
           ),
           rowInformation(
@@ -111,13 +110,19 @@ class TicketItem extends ConsumerWidget {
                   RoundedButtonWidget(
                     content: context.l10n.pay,
                     onPressed: () =>
-                        CallModalSheet.showPaymentQrModalSheet(context, {}),
+                        CallModalSheet.showPaymentQrLaterModalSheet(context, {
+                      'ticket': ticket,
+                    }),
                   ),
                   RoundedButtonWidget(
                     content: context.l10n.cancel,
                     onPressed: () {
                       FunctionUtil.alertPopUpConfirm(
-                        onPressedConfirm: () {},
+                        onPressedConfirm: () {
+                          ref
+                              .read(ticketFormProvider)
+                              .cancelTicket(ref, context, ticket);
+                        },
                         type: AlertType.warning,
                         title: 'Huỷ vé',
                         desc: 'Xác nhận huỷ đặt vé?',
@@ -187,6 +192,8 @@ class TicketItem extends ConsumerWidget {
     required String status,
     required double width,
   }) {
+    final ticketStatus =
+        FunctionUtil.ticketStatusToContent(context, ticket.status ?? 'waitPay');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
@@ -206,14 +213,14 @@ class TicketItem extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: status == context.l10n.payed ? Colors.green : Colors.red,
+              color: FunctionUtil.ticketStatusToColor(status),
               borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(15),
                 right: Radius.circular(15),
               ),
             ),
             child: Text(
-              status,
+              ticketStatus,
               style: TextStyle(
                 overflow: TextOverflow.clip,
                 fontSize: 12,

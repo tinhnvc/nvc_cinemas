@@ -27,6 +27,7 @@ mixin _$CategoryModel {
   bool? get active => throw _privateConstructorUsedError;
   int? get createAt => throw _privateConstructorUsedError;
   int? get updateAt => throw _privateConstructorUsedError;
+  bool? get isSelected => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $CategoryModelCopyWith<$Res> {
       String? description,
       bool? active,
       int? createAt,
-      int? updateAt});
+      int? updateAt,
+      bool? isSelected});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
     Object? active = freezed,
     Object? createAt = freezed,
     Object? updateAt = freezed,
+    Object? isSelected = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -100,6 +103,10 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
           ? _value.updateAt
           : updateAt // ignore: cast_nullable_to_non_nullable
               as int?,
+      isSelected: freezed == isSelected
+          ? _value.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -119,7 +126,8 @@ abstract class _$$_CategoryModelCopyWith<$Res>
       String? description,
       bool? active,
       int? createAt,
-      int? updateAt});
+      int? updateAt,
+      bool? isSelected});
 }
 
 /// @nodoc
@@ -140,6 +148,7 @@ class __$$_CategoryModelCopyWithImpl<$Res>
     Object? active = freezed,
     Object? createAt = freezed,
     Object? updateAt = freezed,
+    Object? isSelected = freezed,
   }) {
     return _then(_$_CategoryModel(
       id: freezed == id
@@ -170,6 +179,10 @@ class __$$_CategoryModelCopyWithImpl<$Res>
           ? _value.updateAt
           : updateAt // ignore: cast_nullable_to_non_nullable
               as int?,
+      isSelected: freezed == isSelected
+          ? _value.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -184,7 +197,8 @@ class _$_CategoryModel extends _CategoryModel {
       this.description,
       this.active = true,
       this.createAt,
-      this.updateAt})
+      this.updateAt,
+      this.isSelected = true})
       : super._();
 
   factory _$_CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -205,10 +219,13 @@ class _$_CategoryModel extends _CategoryModel {
   final int? createAt;
   @override
   final int? updateAt;
+  @override
+  @JsonKey()
+  final bool? isSelected;
 
   @override
   String toString() {
-    return 'CategoryModel(id: $id, categoryName: $categoryName, categoryNameEn: $categoryNameEn, description: $description, active: $active, createAt: $createAt, updateAt: $updateAt)';
+    return 'CategoryModel(id: $id, categoryName: $categoryName, categoryNameEn: $categoryNameEn, description: $description, active: $active, createAt: $createAt, updateAt: $updateAt, isSelected: $isSelected)';
   }
 
   @override
@@ -227,13 +244,15 @@ class _$_CategoryModel extends _CategoryModel {
             (identical(other.createAt, createAt) ||
                 other.createAt == createAt) &&
             (identical(other.updateAt, updateAt) ||
-                other.updateAt == updateAt));
+                other.updateAt == updateAt) &&
+            (identical(other.isSelected, isSelected) ||
+                other.isSelected == isSelected));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, categoryName, categoryNameEn,
-      description, active, createAt, updateAt);
+      description, active, createAt, updateAt, isSelected);
 
   @JsonKey(ignore: true)
   @override
@@ -257,7 +276,8 @@ abstract class _CategoryModel extends CategoryModel {
       final String? description,
       final bool? active,
       final int? createAt,
-      final int? updateAt}) = _$_CategoryModel;
+      final int? updateAt,
+      final bool? isSelected}) = _$_CategoryModel;
   const _CategoryModel._() : super._();
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
@@ -277,6 +297,8 @@ abstract class _CategoryModel extends CategoryModel {
   int? get createAt;
   @override
   int? get updateAt;
+  @override
+  bool? get isSelected;
   @override
   @JsonKey(ignore: true)
   _$$_CategoryModelCopyWith<_$_CategoryModel> get copyWith =>
