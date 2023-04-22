@@ -22,7 +22,7 @@ class SeatTypeModel with _$SeatTypeModel {
     int? price,
     int? otherPrice,
     @Default(true) bool? active,
-    @Default(true) bool? isDefault,
+    @Default(false) bool? isDefault,
     int? createAt,
     int? updateAt,
   }) = _SeatTypeModel;

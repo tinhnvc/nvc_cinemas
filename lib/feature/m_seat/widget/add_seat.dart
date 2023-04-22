@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
-import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -25,6 +19,7 @@ class AddSeat extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final formGroup = ref.read(seatTypeFormProvider).addSeatTypeForm;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -54,7 +49,8 @@ class AddSeat extends ConsumerWidget {
                         vertical: 15,
                       ),
                       child: ReactiveForm(
-                        formGroup: ref.read(seatFormProvider).addSeatForm,
+                        formGroup:
+                            ref.read(seatTypeFormProvider).addSeatTypeForm,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -145,12 +141,13 @@ class AddSeat extends ConsumerWidget {
                                     width: 110,
                                     animateOnTap: false,
                                     controller: ref
-                                        .watch(seatFormProvider)
+                                        .watch(seatTypeFormProvider)
                                         .buttonController,
                                     onPressed: () {
                                       ref
-                                          .read(seatFormProvider)
+                                          .read(seatTypeFormProvider)
                                           .addSeat(ref, context);
+                                      print(formGroup.value);
                                     },
                                     child: Text(
                                       context.l10n.addNew,

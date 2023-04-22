@@ -18,6 +18,7 @@ import 'package:nvc_cinemas/feature/m_promotion/widget/edit_promotion.dart';
 import 'package:nvc_cinemas/feature/m_revenue/widget/revenue_detail.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/add_room.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/edit_room.dart';
+import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/add_seat.dart';
 import 'package:nvc_cinemas/feature/m_seat/widget/edit_seat.dart';
 import 'package:nvc_cinemas/feature/m_ticket/widget/ticket_detail.dart';
@@ -113,9 +114,12 @@ class App extends ConsumerWidget {
       '/add-account': ([Object? arguments]) => const AddAccount(),
       '/edit-account': ([Object? arguments]) => const EditAccount(),
       '/add-seat': ([Object? arguments]) => const AddSeat(),
-      '/edit-seat': ([Object? arguments]) => const EditSeat(),
+      '/edit-seat': ([Object? arguments]) => EditSeat(
+            seatType: arguments! as SeatTypeModel,
+          ),
       '/add-promotion': ([Object? arguments]) => const AddPromotion(),
-      '/edit-promotion': ([Object? arguments]) => const EditPromotion(),
+      '/edit-promotion': ([Object? arguments]) =>
+          EditPromotion(promotion: arguments! as PromotionModel),
       '/ticket-detail': ([Object? arguments]) => const TicketDetail(),
       '/revenue-detail': ([Object? arguments]) => const RevenueDetail(),
       '/term-of-use': ([Object? arguments]) => const TermOfUse(),

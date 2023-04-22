@@ -196,7 +196,7 @@ class _$_SeatTypeModel extends _SeatTypeModel {
       this.price,
       this.otherPrice,
       this.active = true,
-      this.isDefault = true,
+      this.isDefault = false,
       this.createAt,
       this.updateAt})
       : super._();

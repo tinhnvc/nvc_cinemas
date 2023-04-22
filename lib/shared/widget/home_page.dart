@@ -176,7 +176,7 @@ class _HomePageState extends ConsumerState<HomePage>
       NavigationItem.mMovie: const MMoviePage(),
       NavigationItem.mRoom: const MRoomPage(),
       NavigationItem.mAccount: const MAccountPage(),
-      NavigationItem.mSeat: const MSeatPage(),
+      NavigationItem.mSeat: const MSeatTypePage(),
       NavigationItem.mPromotion: const MPromotionPage(),
       NavigationItem.mTicket: const MTicketPage(),
       NavigationItem.mRevenue: const MRevenuePage(),

@@ -13,7 +13,7 @@ _$_SeatTypeModel _$$_SeatTypeModelFromJson(Map<String, dynamic> json) =>
       price: json['price'] as int?,
       otherPrice: json['otherPrice'] as int?,
       active: json['active'] as bool? ?? true,
-      isDefault: json['isDefault'] as bool? ?? true,
+      isDefault: json['isDefault'] as bool? ?? false,
       createAt: json['createAt'] as int?,
       updateAt: json['updateAt'] as int?,
     );

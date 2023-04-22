@@ -224,5 +224,7 @@
     "waitPay": "Wait pay",
     "waitConfirm": "Wait confirm",
     "payed": "Payed",
-    "canceled": "Canceled"
+    "canceled": "Canceled",
+    "chooseStartDate": "From date",
+    "chooseToDate": "To date"
 }

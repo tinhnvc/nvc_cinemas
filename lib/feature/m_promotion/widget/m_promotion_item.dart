@@ -1,12 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
+import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 
 class MPromotionItem extends ConsumerWidget {
-  const MPromotionItem({Key? key}) : super(key: key);
+  const MPromotionItem({required this.promotion, Key? key}) : super(key: key);
+  final PromotionModel promotion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +43,15 @@ class MPromotionItem extends ConsumerWidget {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
-            child: Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
+            child: promotion.image != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.file(
+                      File(promotion.image!),
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
           ),
           Expanded(
             child: Column(
@@ -49,7 +65,7 @@ class MPromotionItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.4,
                       child: Text(
-                        'Thành viên NVC Cinemas - Đồng giá 45k',
+                        promotion.name ?? context.l10n.notUpdated,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -63,8 +79,12 @@ class MPromotionItem extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/edit-promotion'),
+                          onTap: () {
+                            InitUtil.initEditPromotion(
+                                ref: ref, promotion: promotion);
+                            Navigator.pushNamed(context, '/edit-promotion',
+                                arguments: promotion);
+                          },
                           child: Icon(
                             Icons.edit_note,
                             size: 25,
@@ -75,8 +95,22 @@ class MPromotionItem extends ConsumerWidget {
                           scale: 0.7,
                           alignment: Alignment.topCenter,
                           child: CupertinoSwitch(
-                            value: true,
-                            onChanged: (bool value) {},
+                            value: promotion.active ?? false,
+                            onChanged: (bool value) {
+                              if (!value) {
+                                FunctionUtil.alertPopUpConfirmWithContent(
+                                    onPressedConfirm: () {
+                                      ref
+                                          .read(promotionsProvider.notifier)
+                                          .switchActive(promotion.id!, value);
+                                    },
+                                    content: 'Ưu đãi');
+                              } else {
+                                ref
+                                    .read(promotionsProvider.notifier)
+                                    .switchActive(promotion.id!, value);
+                              }
+                            },
                             activeColor: ColorName.primary,
                           ),
                         ),
@@ -88,7 +122,7 @@ class MPromotionItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.createAt}: 11:02 - 13/02/2023',
+                  '${context.l10n.createAt}: ${FormatSupport.toDateTimeNonSecond(promotion.createAt!)}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,

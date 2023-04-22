@@ -2,7 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
+import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
+import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
+import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
@@ -82,5 +86,58 @@ class InitUtil {
   }) async {
     final formGroup = ref.read(categoryFormProvider).addCategoryForm..reset();
     formGroup.control('active').value = 'true';
+  }
+
+  static void initAddPromotion({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(promotionFormProvider).addPromotionForm..reset();
+    formGroup.control('active').value = 'true';
+    formGroup.control('code').value = '';
+    ref
+      ..refresh(startTimeAddPromotionProvider)
+      ..refresh(endTimeAddPromotionProvider)
+      ..refresh(codeAddPromotionProvider)
+      ..refresh(imageAddPromotionProvider);
+  }
+
+  static void initEditPromotion({
+    required WidgetRef ref,
+    required PromotionModel promotion,
+  }) async {
+    final formGroup = ref.read(promotionFormProvider).addPromotionForm;
+    formGroup.control('name').value = promotion.name;
+    formGroup.control('content').value = promotion.content;
+    formGroup.control('image').value = promotion.image;
+    formGroup.control('code').value = promotion.code;
+    formGroup.control('startTime').value = promotion.startTime.toString();
+    formGroup.control('endTime').value = promotion.endTime.toString();
+    formGroup.control('active').value = promotion.active.toString();
+
+    ref
+        .read(startTimeAddPromotionProvider.notifier)
+        .update('${promotion.startTime}');
+    ref
+        .read(endTimeAddPromotionProvider.notifier)
+        .update('${promotion.endTime}');
+    ref.read(imageAddPromotionProvider.notifier).update('${promotion.image}');
+    ref.read(codeAddPromotionProvider.notifier).update('${promotion.code}');
+  }
+
+  static void initAddSeatType({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(seatTypeFormProvider).addSeatTypeForm..reset();
+  }
+
+  static void initEditSeatType({
+    required WidgetRef ref,
+    required SeatTypeModel seatType,
+  }) async {
+    final formGroup = ref.read(seatTypeFormProvider).addSeatTypeForm;
+    formGroup.control('typeName').value = seatType.typeName;
+    formGroup.control('price').value = seatType.price.toString();
+    formGroup.control('otherPrice').value = seatType.otherPrice.toString();
+    formGroup.control('active').value = seatType.active.toString();
   }
 }

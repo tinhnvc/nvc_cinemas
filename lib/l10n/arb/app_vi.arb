@@ -224,6 +224,8 @@
     "waitPay": "Chờ thanh toán",
     "waitConfirm": "Chờ xác nhận",
     "payed": "Đã thanh toán",
-    "canceled": "Đã huỷ"
+    "canceled": "Đã huỷ",
+    "chooseStartDate": "Từ ngày",
+    "chooseToDate": "Đến ngày"
 
 }

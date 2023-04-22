@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
-import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
 import 'package:nvc_cinemas/shared/widget/time_create_and_update.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class EditSeat extends ConsumerWidget {
-  const EditSeat({Key? key}) : super(key: key);
+  const EditSeat({required this.seatType, Key? key}) : super(key: key);
+  final SeatTypeModel seatType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +51,8 @@ class EditSeat extends ConsumerWidget {
                         vertical: 15,
                       ),
                       child: ReactiveForm(
-                        formGroup: ref.read(seatFormProvider).addSeatForm,
+                        formGroup:
+                            ref.read(seatTypeFormProvider).addSeatTypeForm,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -122,8 +119,8 @@ class EditSeat extends ConsumerWidget {
                                       '${context.l10n.otherPrice.toLowerCase()}'),
                             ),
                             TimeCrateAndUpdate(
-                              createTime: 1676352825000,
-                              updateTime: 1676539365000,
+                              createTime: seatType.createAt!,
+                              updateTime: seatType.updateAt!,
                             ),
                             Container(
                               child: Row(
@@ -150,12 +147,16 @@ class EditSeat extends ConsumerWidget {
                                     width: 110,
                                     animateOnTap: false,
                                     controller: ref
-                                        .watch(seatFormProvider)
+                                        .watch(seatTypeFormProvider)
                                         .buttonController,
                                     onPressed: () {
+                                      final formGroup = ref
+                                          .read(seatTypeFormProvider)
+                                          .addSeatTypeForm;
+                                      print(formGroup.value);
                                       ref
-                                          .read(seatFormProvider)
-                                          .editSeat(ref, context);
+                                          .read(seatTypeFormProvider)
+                                          .editSeat(ref, context, seatType);
                                     },
                                     child: Text(
                                       context.l10n.update,

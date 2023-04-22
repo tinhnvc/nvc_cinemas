@@ -83,17 +83,6 @@ class MMoviePage extends ConsumerWidget {
                             parent: BouncingScrollPhysics()),
                         scrollDirection: Axis.horizontal,
                         children: [
-                          Text(
-                            context.l10n.all,
-                            style: TextStyle(
-                              color: ColorName.btnText,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
                           SizedBox(
                             width: width,
                             height: 70,
@@ -105,13 +94,19 @@ class MMoviePage extends ConsumerWidget {
                                   .map(
                                     (e) => GestureDetector(
                                       onTap: () {},
-                                      child: Text(
-                                        isVietnamese
-                                            ? '${e.categoryName}'
-                                            : '${e.categoryNameEn}',
-                                        style: TextStyle(
-                                          color: ColorName.btnText,
-                                          fontSize: 15,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                          left: 15,
+                                          right: 5,
+                                        ),
+                                        child: Text(
+                                          isVietnamese
+                                              ? '${e.categoryName}'
+                                              : '${e.categoryNameEn}',
+                                          style: TextStyle(
+                                            color: ColorName.btnText,
+                                            fontSize: 15,
+                                          ),
                                         ),
                                       ),
                                     ),

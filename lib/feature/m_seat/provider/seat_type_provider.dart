@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
 import 'package:nvc_cinemas/shared/link/seat_types.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:uuid/uuid.dart';
 
 final seatTypesProvider =
     StateNotifierProvider<SeatTypesNotifier, List<SeatTypeModel>>(
@@ -23,6 +25,36 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
 
   void add(SeatTypeModel seatType) {
     state = [...state, seatType];
+  }
+
+  void editSeatType(SeatTypeModel seatType) {
+    state = [
+      for (final item in state)
+        if (item.id == seatType.id)
+          item.copyWith(
+            typeName: seatType.typeName,
+            price: seatType.price,
+            otherPrice: seatType.otherPrice,
+            active: seatType.active,
+            isDefault: seatType.isDefault,
+            createAt: seatType.createAt,
+            updateAt: seatType.updateAt,
+          )
+        else
+          item,
+    ];
+  }
+
+  void switchActive(String id, bool value) {
+    state = [
+      for (final item in state)
+        if (item.id == id)
+          item.copyWith(
+            active: value,
+          )
+        else
+          item,
+    ];
   }
 
   String getPriceByIndex(int index) {
@@ -64,28 +96,74 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
     }
 
     return result;
-    return '${FormatSupport.toMoney(int.parse(result))}đ';
   }
 }
 
-final seatFormProvider = Provider<SeatFormProvider>(
-  (ref) => SeatFormProvider(),
+final seatTypeFormProvider = Provider<SeatTypeFormProvider>(
+  (ref) => SeatTypeFormProvider(),
 );
 
-class SeatFormProvider {
-  SeatFormProvider();
+class SeatTypeFormProvider {
+  SeatTypeFormProvider();
 
-  final addSeatForm = FormGroup({
+  final addSeatTypeForm = FormGroup({
     'typeName': FormControl<String>(),
     'price': FormControl<String>(),
     'otherPrice': FormControl<String>(),
+    'active': FormControl<String>(),
   });
 
   final buttonController = RoundedLoadingButtonController();
 
-  Future<void> addSeat(WidgetRef ref, BuildContext context) async {}
+  Future<void> addSeat(WidgetRef ref, BuildContext context) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final typeName = addSeatTypeForm.control('typeName').value;
+    final price = addSeatTypeForm.control('price').value;
+    final otherPrice = addSeatTypeForm.control('otherPrice').value;
+    final seatType = SeatTypeModel(
+      id: Uuid().v4(),
+      typeName: typeName,
+      price: int.parse(price),
+      otherPrice: int.parse(otherPrice),
+      active: true,
+      isDefault: false,
+      createAt: DateTime.now().millisecondsSinceEpoch,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(seatTypesProvider.notifier).add(seatType);
+    FunctionUtil.alertPopUpCreated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
 
-  Future<void> editSeat(WidgetRef ref, BuildContext context) async {}
+  Future<void> editSeat(
+    WidgetRef ref,
+    BuildContext context,
+    SeatTypeModel seatTypeModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final typeName = addSeatTypeForm.control('typeName').value;
+    final price = addSeatTypeForm.control('price').value;
+    final otherPrice = addSeatTypeForm.control('otherPrice').value;
+    final active = addSeatTypeForm.control('active').value;
+    final seatType = SeatTypeModel(
+      id: seatTypeModel.id,
+      typeName: typeName,
+      price: int.parse(price),
+      otherPrice: int.parse(otherPrice),
+      active: active == 'true' ? true : false,
+      createAt: seatTypeModel.createAt,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(seatTypesProvider.notifier).editSeatType(seatType);
+    FunctionUtil.alertPopUpUpdated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
 
   Future<void> changeStatus(WidgetRef ref, BuildContext context) async {}
 }

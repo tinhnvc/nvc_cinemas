@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/service/file_service.dart';
+import 'package:nvc_cinemas/shared/util/date_time_picker.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
@@ -14,7 +20,8 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class EditPromotion extends ConsumerWidget {
-  const EditPromotion({Key? key}) : super(key: key);
+  const EditPromotion({required this.promotion, Key? key}) : super(key: key);
+  final PromotionModel promotion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,6 +33,7 @@ class EditPromotion extends ConsumerWidget {
     final ratio = height / size.width;
 
     final promotionCodeList = [
+      'Chọn mã',
       'COU10',
       'COU15',
       'COU20',
@@ -36,6 +44,10 @@ class EditPromotion extends ConsumerWidget {
       'DANGO75',
     ];
     final codeValue = ref.watch(codeAddPromotionProvider);
+    final formGroup = ref.read(promotionFormProvider).addPromotionForm;
+    final pathValue = ref.watch(imageAddPromotionProvider);
+    var timeFrom = ref.watch(startTimeAddPromotionProvider);
+    var timeTo = ref.watch(endTimeAddPromotionProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -78,23 +90,44 @@ class EditPromotion extends ConsumerWidget {
                                 fontSize: 15,
                               ),
                             ),
-                            Container(
-                              width: 120,
-                              height: 150,
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                  color: ColorName.primary,
+                            GestureDetector(
+                              onTap: () async {
+                                final imagePath = await FileService.pickImage();
+                                if (imagePath.isNotEmpty) {
+                                  ref
+                                      .read(imageAddPromotionProvider.notifier)
+                                      .update(imagePath);
+                                  formGroup.control('image').value = imagePath;
+                                }
+                              },
+                              child: Container(
+                                width: 120,
+                                height: 150,
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: ColorName.primary,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.add_photo_alternate_outlined,
-                                  size: 30,
-                                  color: ColorName.primary,
-                                ),
+                                child: pathValue.isNotEmpty
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Image.file(
+                                          File(pathValue),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Center(
+                                        child: Icon(
+                                          Icons.add_photo_alternate_outlined,
+                                          size: 30,
+                                          color: ColorName.primary,
+                                        ),
+                                      ),
                               ),
                             ),
                             Text(
@@ -133,7 +166,7 @@ class EditPromotion extends ConsumerWidget {
                                   isCrudForm: true,
                                   formControlName: 'content',
                                   maxLine: 3,
-                                  textInputAction: TextInputAction.next,
+                                  textInputAction: TextInputAction.done,
                                   labelText: '${context.l10n.input} '
                                       '${context.l10n.content.toLowerCase()}'),
                             ),
@@ -159,8 +192,47 @@ class EditPromotion extends ConsumerWidget {
                                             height: 5,
                                           ),
                                           InformationCard(
-                                            content: '12/02/2023',
-                                            onPressed: () {},
+                                            content: timeFrom != '0'
+                                                ? FormatSupport
+                                                    .toDateTimeNonHour(
+                                                    int.parse(timeFrom),
+                                                  )
+                                                : context.l10n.chooseStartDate,
+                                            onPressed: () async {
+                                              final dateRange =
+                                                  await DateTimePicker
+                                                      .pickDateRange(
+                                                context: context,
+                                                start: int.parse(timeFrom),
+                                                end: int.parse(timeTo),
+                                              );
+                                              timeFrom = dateRange
+                                                  .start.millisecondsSinceEpoch
+                                                  .toString();
+                                              ref
+                                                  .read(
+                                                      startTimeAddPromotionProvider
+                                                          .notifier)
+                                                  .update(timeFrom);
+                                              formGroup
+                                                  .control('startTime')
+                                                  .value = timeFrom;
+
+                                              timeTo = (dateRange.end
+                                                          .add(const Duration(
+                                                              days: 1))
+                                                          .millisecondsSinceEpoch -
+                                                      1)
+                                                  .toString();
+                                              ref
+                                                  .read(
+                                                      endTimeAddPromotionProvider
+                                                          .notifier)
+                                                  .update(timeTo);
+                                              formGroup
+                                                  .control('endTime')
+                                                  .value = timeTo;
+                                            },
                                           ),
                                         ],
                                       ),
@@ -195,8 +267,47 @@ class EditPromotion extends ConsumerWidget {
                                             height: 5,
                                           ),
                                           InformationCard(
-                                            content: '22/02/2023',
-                                            onPressed: () {},
+                                            content: timeFrom != '0'
+                                                ? FormatSupport
+                                                    .toDateTimeNonHour(
+                                                    int.parse(timeTo),
+                                                  )
+                                                : context.l10n.chooseToDate,
+                                            onPressed: () async {
+                                              final dateRange =
+                                                  await DateTimePicker
+                                                      .pickDateRange(
+                                                context: context,
+                                                start: int.parse(timeFrom),
+                                                end: int.parse(timeTo),
+                                              );
+                                              timeFrom = dateRange
+                                                  .start.millisecondsSinceEpoch
+                                                  .toString();
+                                              ref
+                                                  .read(
+                                                      startTimeAddPromotionProvider
+                                                          .notifier)
+                                                  .update(timeFrom);
+                                              formGroup
+                                                  .control('startTime')
+                                                  .value = timeFrom;
+
+                                              timeTo = (dateRange.end
+                                                          .add(const Duration(
+                                                              days: 1))
+                                                          .millisecondsSinceEpoch -
+                                                      1)
+                                                  .toString();
+                                              ref
+                                                  .read(
+                                                      endTimeAddPromotionProvider
+                                                          .notifier)
+                                                  .update(timeTo);
+                                              formGroup
+                                                  .control('endTime')
+                                                  .value = timeTo;
+                                            },
                                           ),
                                         ],
                                       ),
@@ -231,19 +342,21 @@ class EditPromotion extends ConsumerWidget {
                                 right: width * 0.3,
                               ),
                               child: DropdownWidget(
-                                value:
-                                    codeValue.isNotEmpty ? codeValue : 'COU15',
+                                value: codeValue.isNotEmpty
+                                    ? codeValue
+                                    : 'Chọn mã',
                                 values: promotionCodeList,
                                 onChanged: (String value) {
                                   ref
                                       .read(codeAddPromotionProvider.notifier)
                                       .update(value);
+                                  formGroup.control('code').value = value;
                                 },
                               ),
                             ),
                             TimeCrateAndUpdate(
-                              createTime: 1676352825000,
-                              updateTime: 1676539365000,
+                              createTime: promotion.createAt!,
+                              updateTime: promotion.updateAt!,
                             ),
                             Container(
                               child: Row(
@@ -273,9 +386,11 @@ class EditPromotion extends ConsumerWidget {
                                         .watch(promotionFormProvider)
                                         .buttonController,
                                     onPressed: () {
+                                      print(formGroup.value);
                                       ref
-                                          .read(movieFormProvider)
-                                          .addMovie(ref, context);
+                                          .read(promotionFormProvider)
+                                          .editPromotion(
+                                              ref, context, promotion);
                                     },
                                     child: Text(
                                       context.l10n.update,
