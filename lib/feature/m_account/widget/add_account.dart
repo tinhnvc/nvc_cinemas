@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
+import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -9,7 +9,6 @@ import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
 import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -31,12 +30,7 @@ class AddAccount extends ConsumerWidget {
       context.l10n.female,
     ];
     final genderValue = ref.watch(genderAddAccountProvider);
-
-    final roleList = [
-      context.l10n.customer,
-      context.l10n.manager,
-    ];
-
+    final roleList = ['Khách hàng', 'Nhân viên'];
     final categoryValue = ref.watch(categoryAddMovieProvider);
     final roleValue = ref.watch(roleAddAccountProvider);
 
@@ -132,6 +126,27 @@ class AddAccount extends ConsumerWidget {
                                       '${context.l10n.fullName}'),
                             ),
                             Text(
+                              context.l10n.phoneNumber,
+                              style: const TextStyle(
+                                color: Color(0xFF363E59),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              child: FormTextField(
+                                  isCrudForm: true,
+                                  formControlName: 'phoneNumber',
+                                  maxLine: 1,
+                                  textInputType: TextInputType.phone,
+                                  textInputAction: TextInputAction.next,
+                                  labelText: '${context.l10n.input} '
+                                      '${context.l10n.fullName}'),
+                            ),
+                            Text(
                               context.l10n.gender,
                               style: const TextStyle(
                                 color: Color(0xFF363E59),
@@ -184,12 +199,20 @@ class AddAccount extends ConsumerWidget {
                               child: DropdownWidget(
                                 value: roleValue.isNotEmpty
                                     ? roleValue
-                                    : context.l10n.customer,
+                                    : 'Khách hàng',
                                 values: roleList,
                                 onChanged: (String value) {
                                   ref
                                       .read(roleAddAccountProvider.notifier)
                                       .update(value);
+                                  final customRole = ref
+                                      .read(rolesProvider.notifier)
+                                      .getByName(value);
+                                  ref
+                                      .read(
+                                          roleModelAddAccountProvider.notifier)
+                                      .fetchUser(customRole);
+                                  print(ref.watch(roleModelAddAccountProvider));
                                 },
                               ),
                             ),
@@ -242,6 +265,10 @@ class AddAccount extends ConsumerWidget {
                                         .watch(userFormProvider)
                                         .buttonController,
                                     onPressed: () {
+                                      final formGroup = ref
+                                          .read(userFormProvider)
+                                          .addAccountForm;
+                                      print(formGroup.value);
                                       ref
                                           .read(userFormProvider)
                                           .addAccount(ref, context);

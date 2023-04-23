@@ -107,6 +107,36 @@ class UsersNotifier extends StateNotifier<List<User>> {
 
     return userById;
   }
+
+  void editUser(User user) {
+    state = [
+      for (final item in state)
+        if (item.userId == user.userId)
+          item.copyWith(
+            password: user.password,
+            fullName: user.fullName,
+            phoneNumber: user.phoneNumber,
+            gender: user.gender,
+            yob: user.yob,
+            createAt: user.createAt,
+            updateAt: user.updateAt,
+          )
+        else
+          item,
+    ];
+  }
+
+  void switchActive(String id, bool value) {
+    state = [
+      for (final item in state)
+        if (item.userId == id)
+          item.copyWith(
+            active: value,
+          )
+        else
+          item,
+    ];
+  }
 }
 
 final sortTypeFilterInternalContactProvider =

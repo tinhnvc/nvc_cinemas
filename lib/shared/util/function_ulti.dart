@@ -304,6 +304,24 @@ class FunctionUtil {
     return Colors.grey;
   }
 
+  static Color roleTitleToColor(
+    String roleTitle,
+  ) {
+    if (roleTitle == 'Quản trị viên') {
+      return Colors.green;
+    }
+
+    if (roleTitle == 'Nhân viên') {
+      return Colors.blue.withOpacity(0.5);
+    }
+
+    if (roleTitle == 'Khách hàng') {
+      return ColorName.primary;
+    }
+
+    return ColorName.primary;
+  }
+
   static void alertPopUpConfirmWithContent({
     required VoidCallback onPressedConfirm,
     required String content,

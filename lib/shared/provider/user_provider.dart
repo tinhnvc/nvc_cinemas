@@ -1,4 +1,6 @@
+import 'package:nvc_cinemas/feature/auth/model/role.dart';
 import 'package:nvc_cinemas/feature/auth/model/user.dart';
+import 'package:nvc_cinemas/feature/auth/provider/users_provider.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/model/profile.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
@@ -11,6 +13,7 @@ import 'package:one_context/one_context.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:uuid/uuid.dart';
 
 final userProvider = StateNotifierProvider<UserNotifier, User>(
   (ref) => UserNotifier(),
@@ -91,7 +94,64 @@ class UserFormProvider {
 
   Future<void> updateProfile(WidgetRef ref, BuildContext context) async {}
 
-  Future<void> addAccount(WidgetRef ref, BuildContext context) async {}
+  Future<void> addAccount(WidgetRef ref, BuildContext context) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final email = addAccountForm.control('email').value;
+    final password = addAccountForm.control('password').value;
+    final fullName = addAccountForm.control('fullName').value;
+    final phoneNumber = addAccountForm.control('phoneNumber').value;
+    final gender = addAccountForm.control('gender').value;
+    final yob = addAccountForm.control('yob').value;
+    final role = ref.watch(roleModelAddAccountProvider);
+    final user = User(
+      userId: Uuid().v4(),
+      email: email,
+      password: password,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      yob: yob,
+      role: role,
+      active: true,
+      createAt: DateTime.now().millisecondsSinceEpoch,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(usersProvider.notifier).add(user);
+    FunctionUtil.alertPopUpCreated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
+
+  Future<void> editAccount(
+    WidgetRef ref,
+    BuildContext context,
+    User userModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final password = addAccountForm.control('password').value;
+    final fullName = addAccountForm.control('fullName').value;
+    final phoneNumber = addAccountForm.control('phoneNumber').value;
+    final gender = addAccountForm.control('gender').value;
+    final yob = addAccountForm.control('yob').value;
+    final user = User(
+      userId: userModel.userId,
+      password: password,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      yob: yob,
+      createAt: userModel.createAt,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(usersProvider.notifier).editUser(user);
+    FunctionUtil.alertPopUpUpdated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
 
   Future<void> updatePassword(WidgetRef ref, BuildContext context) async {
     buttonController.start();
@@ -165,5 +225,19 @@ class RoleAddAccountNotifier extends StateNotifier<String> {
 
   void update(String value) {
     state = value;
+  }
+}
+
+final roleModelAddAccountProvider = StateNotifierProvider<RoleAddAccount, Role>(
+  (ref) => RoleAddAccount(),
+);
+
+class RoleAddAccount extends StateNotifier<Role> {
+  RoleAddAccount() : super(const Role()) {
+    fetchUser(Role());
+  }
+
+  Future<void> fetchUser(Role role) async {
+    state = role;
   }
 }

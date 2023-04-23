@@ -1,4 +1,5 @@
 import 'package:nvc_cinemas/app/widget/app_init.dart';
+import 'package:nvc_cinemas/feature/auth/model/user.dart';
 import 'package:nvc_cinemas/feature/auth/widget/forgot_password.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_in.dart';
 import 'package:nvc_cinemas/feature/auth/widget/sign_up.dart';
@@ -112,7 +113,9 @@ class App extends ConsumerWidget {
       '/add-room': ([Object? arguments]) => const AddRoom(),
       '/edit-room': ([Object? arguments]) => const EditRoom(),
       '/add-account': ([Object? arguments]) => const AddAccount(),
-      '/edit-account': ([Object? arguments]) => const EditAccount(),
+      '/edit-account': ([Object? arguments]) => EditAccount(
+            account: arguments! as User,
+          ),
       '/add-seat': ([Object? arguments]) => const AddSeat(),
       '/edit-seat': ([Object? arguments]) => EditSeat(
             seatType: arguments! as SeatTypeModel,

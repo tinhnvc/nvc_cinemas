@@ -41,4 +41,17 @@ class RolesNotifier extends StateNotifier<List<Role>> {
 
     return role;
   }
+
+  Role getByName(String roleTitle) {
+    var role = const Role();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.title == roleTitle) {
+          role = item;
+        }
+      }
+    }
+
+    return role;
+  }
 }

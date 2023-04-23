@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/auth/model/user.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
@@ -10,6 +13,8 @@ import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
+import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
@@ -139,5 +144,31 @@ class InitUtil {
     formGroup.control('price').value = seatType.price.toString();
     formGroup.control('otherPrice').value = seatType.otherPrice.toString();
     formGroup.control('active').value = seatType.active.toString();
+  }
+
+  static void initAddAccount({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(userFormProvider).addAccountForm..reset();
+    final customRole = ref.read(rolesProvider.notifier).getByName('Khách hàng');
+    ref.read(roleAddAccountProvider.notifier).update('Khách hàng');
+    ref.read(roleModelAddAccountProvider.notifier).fetchUser(customRole);
+  }
+
+  static void initEditAccount({
+    required WidgetRef ref,
+    required BuildContext context,
+    required User user,
+  }) async {
+    final formGroup = ref.read(userFormProvider).addAccountForm;
+    formGroup.control('email').value = user.email;
+    formGroup.control('password').value = user.password;
+    formGroup.control('phoneNumber').value = user.phoneNumber;
+    formGroup.control('fullName').value = user.fullName;
+    formGroup.control('gender').value = user.gender;
+    formGroup.control('yob').value = user.yob;
+    ref.read(genderAddAccountProvider.notifier).update(
+        user.gender! == 'male' ? context.l10n.male : context.l10n.female);
+    formGroup.control('email').markAsEnabled();
   }
 }

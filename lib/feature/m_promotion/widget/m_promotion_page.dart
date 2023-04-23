@@ -78,7 +78,24 @@ class MPromotionPage extends ConsumerWidget {
                                     promotion: e,
                                   ))
                               .toList()
-                          : [],
+                          : [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 50,
+                                  ),
+                                  Text(
+                                    'Không tìm thấy kết quả nào',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                     ),
                   ],
                 ),
