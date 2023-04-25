@@ -35,6 +35,19 @@ class CategoriesNotifier extends StateNotifier<List<CategoryModel>> {
     return cat;
   }
 
+  CategoryModel getByName(String categoryName) {
+    var role = const CategoryModel();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.categoryName == categoryName) {
+          role = item;
+        }
+      }
+    }
+
+    return role;
+  }
+
   void add(CategoryModel cat) {
     state = [...state, cat];
   }

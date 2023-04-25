@@ -5,12 +5,14 @@ import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/movie_rating_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
@@ -170,5 +172,52 @@ class InitUtil {
     ref.read(genderAddAccountProvider.notifier).update(
         user.gender! == 'male' ? context.l10n.male : context.l10n.female);
     formGroup.control('email').markAsEnabled();
+  }
+
+  static void initAddMovie({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(movieFormProvider).addMovieForm..reset();
+    formGroup.control('category').value =
+        'd44e5235-566c-46e0-a947-0df21794aafb';
+    formGroup.control('type').value = 'P-';
+    formGroup.control('dimension').value = '2D';
+    ref
+      ..refresh(categoryAddMovieProvider)
+      ..refresh(ageTypeAddMovieProvider)
+      ..refresh(dimensionTypeAddMovieProvider)
+      ..refresh(startTimeAddMovieProvider)
+      ..refresh(endTimeAddMovieProvider)
+      ..refresh(imageAddMovieProvider);
+  }
+
+  static void initEditMovie({
+    required WidgetRef ref,
+    required BuildContext context,
+    required MovieModel movie,
+  }) async {
+    final formGroup = ref.read(movieFormProvider).addMovieForm..reset();
+    formGroup.control('category').value = movie.category;
+    formGroup.control('movieNameVi').value = movie.movieNameVi;
+    formGroup.control('movieNameEn').value = movie.movieNameEn;
+    formGroup.control('image').value = movie.image;
+    formGroup.control('description').value = movie.description;
+    formGroup.control('duration').value = movie.duration;
+    formGroup.control('director').value = movie.director;
+    formGroup.control('actor').value = movie.actor;
+    formGroup.control('type').value = movie.type;
+    formGroup.control('dimension').value = movie.dimension;
+    formGroup.control('startTime').value = movie.startTime.toString();
+    formGroup.control('endTime').value = movie.endTime.toString();
+    final category =
+        ref.read(categoriesProvider.notifier).getById(movie.category!);
+    ref.read(categoryAddMovieProvider.notifier).update(category.categoryName!);
+    ref.read(ageTypeAddMovieProvider.notifier).update(movie.type!);
+    ref.read(dimensionTypeAddMovieProvider.notifier).update(movie.dimension!);
+    ref
+        .read(startTimeAddMovieProvider.notifier)
+        .update(movie.startTime.toString());
+    ref.read(endTimeAddMovieProvider.notifier).update(movie.endTime.toString());
+    ref.read(imageAddMovieProvider.notifier).update(movie.image!);
   }
 }

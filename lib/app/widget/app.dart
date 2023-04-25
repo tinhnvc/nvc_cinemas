@@ -108,7 +108,9 @@ class App extends ConsumerWidget {
       '/edit-category': ([Object? arguments]) =>
           EditCategory(category: arguments! as CategoryModel),
       '/add-movie': ([Object? arguments]) => const AddMovie(),
-      '/edit-movie': ([Object? arguments]) => const EditMovie(),
+      '/edit-movie': ([Object? arguments]) => EditMovie(
+            movie: arguments! as MovieModel,
+          ),
       '/add-showtimes': ([Object? arguments]) => const AddShowtimes(),
       '/add-room': ([Object? arguments]) => const AddRoom(),
       '/edit-room': ([Object? arguments]) => const EditRoom(),

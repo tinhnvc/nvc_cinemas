@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class MMoviePage extends ConsumerWidget {
@@ -30,13 +32,20 @@ class MMoviePage extends ConsumerWidget {
           categoryNameEn: context.l10n.all),
       ...ref.watch(categoriesProvider)
     ];
+    final movies = ref.watch(moviesProvider)
+      ..sort(
+        (a, b) => a.startTime!.compareTo(b.startTime!),
+      );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ColorName.pageBackground,
       // endDrawer: const EndDrawerWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/add-movie'),
+        onPressed: () {
+          InitUtil.initAddMovie(ref: ref);
+          Navigator.pushNamed(context, '/add-movie');
+        },
         child: Icon(
           Icons.add,
           size: 25,
@@ -120,11 +129,32 @@ class MMoviePage extends ConsumerWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    MMovieItem(),
-                    MMovieItem(),
-                    MMovieItem(),
-                    MMovieItem(),
-                    MMovieItem(),
+                    Column(
+                      children: movies.isNotEmpty
+                          ? movies
+                              .map((e) => MMovieItem(
+                                    movie: e,
+                                  ))
+                              .toList()
+                          : [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 50,
+                                  ),
+                                  Text(
+                                    'Không tìm thấy kết quả nào',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                    ),
                   ],
                 ),
               ),

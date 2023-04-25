@@ -1,12 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 
 class MMovieItem extends ConsumerWidget {
-  const MMovieItem({Key? key}) : super(key: key);
+  const MMovieItem({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,6 +26,9 @@ class MMovieItem extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final category =
+        ref.read(categoriesProvider.notifier).getById(movie.category!);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -35,7 +48,15 @@ class MMovieItem extends ConsumerWidget {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
-            child: Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
+            child: movie.image != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.file(
+                      File(movie.image!),
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
           ),
           Expanded(
             child: Column(
@@ -49,7 +70,9 @@ class MMovieItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.3,
                       child: Text(
-                        'Ngôi làng của lá và sự trở lại của Mask mark mark mark',
+                        isVietnamese
+                            ? movie.movieNameVi ?? context.l10n.notUpdated
+                            : movie.movieNameEn ?? context.l10n.notUpdated,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -75,8 +98,18 @@ class MMovieItem extends ConsumerWidget {
                           width: 10,
                         ),
                         GestureDetector(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/edit-movie'),
+                          onTap: () {
+                            InitUtil.initEditMovie(
+                              ref: ref,
+                              context: context,
+                              movie: movie,
+                            );
+                            Navigator.pushNamed(
+                              context,
+                              '/edit-movie',
+                              arguments: movie,
+                            );
+                          },
                           child: Icon(
                             Icons.edit_note,
                             size: 25,
@@ -87,8 +120,23 @@ class MMovieItem extends ConsumerWidget {
                           scale: 0.7,
                           alignment: Alignment.topCenter,
                           child: CupertinoSwitch(
-                            value: true,
-                            onChanged: (bool value) {},
+                            value: movie.active ?? false,
+                            onChanged: (bool value) {
+                              if (!value) {
+                                FunctionUtil.alertPopUpConfirmWithContent(
+                                    onPressedConfirm: () {
+                                      ref
+                                          .read(moviesProvider.notifier)
+                                          .switchActive(movie.id!, value);
+                                    },
+                                    content:
+                                        'Phim\nPhim sau khi đóng sẽ không xuất hiện trên danh sách phim, khách hàng không thể đặt vé');
+                              } else {
+                                ref
+                                    .read(moviesProvider.notifier)
+                                    .switchActive(movie.id!, value);
+                              }
+                            },
                             activeColor: ColorName.primary,
                           ),
                         ),
@@ -100,7 +148,11 @@ class MMovieItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  'Tâm lý, hành động | 95 phút',
+                  isVietnamese
+                      ? '${category.categoryName} | '
+                          '${movie.duration} ${context.l10n.minutes}'
+                      : '${category.categoryNameEn} | '
+                          '${movie.duration} ${context.l10n.minutes}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
@@ -110,7 +162,7 @@ class MMovieItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.releaseShow}: 14/03/2023',
+                  '${context.l10n.releaseShow}: ${FormatSupport.toDateTimeNonHour(movie.startTime!)}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
@@ -120,7 +172,7 @@ class MMovieItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.createAt}: 11:02 - 13/02/2023',
+                  '${context.l10n.createAt}: ${FormatSupport.toDateTimeNonSecond(movie.createAt!)}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
