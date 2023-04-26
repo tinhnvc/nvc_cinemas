@@ -34,7 +34,7 @@ class TicketPage extends ConsumerWidget {
         }
       }
     }
-    print(ticketByUser);
+    ticketByUser..sort((a, b) => a.createAt!.compareTo(b.createAt!));
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

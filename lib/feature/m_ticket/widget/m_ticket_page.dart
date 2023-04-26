@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
 import 'package:nvc_cinemas/feature/m_ticket/widget/m_ticket_item.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
@@ -21,6 +22,11 @@ class MTicketPage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+
+    final tickets = ref.watch(ticketsProvider)
+      ..sort(
+        (a, b) => -a.createAt!.compareTo(b.createAt!),
+      );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -107,9 +113,32 @@ class MTicketPage extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    MTicketItem(),
-                    MTicketItem(),
-                    MTicketItem(),
+                    Column(
+                      children: tickets.isNotEmpty
+                          ? tickets
+                              .map((e) => MTicketItem(
+                                    ticket: e,
+                                  ))
+                              .toList()
+                          : [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 50,
+                                  ),
+                                  Text(
+                                    'Không tìm thấy kết quả nào',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                    ),
                   ],
                 ),
               ),

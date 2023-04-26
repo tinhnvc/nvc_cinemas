@@ -37,6 +37,7 @@ import 'package:nvc_cinemas/feature/setting/widget/secure_policy.dart';
 import 'package:nvc_cinemas/feature/setting/widget/setting_page.dart';
 import 'package:nvc_cinemas/feature/setting/widget/term_of_use.dart';
 import 'package:nvc_cinemas/feature/showtimes/widget/showtimes_page.dart';
+import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
 import 'package:nvc_cinemas/feature/ticket/widget/ticket_page.dart';
 import 'package:nvc_cinemas/feature/user/widget/account_information.dart';
 import 'package:nvc_cinemas/feature/user/widget/change_password.dart';
@@ -125,7 +126,8 @@ class App extends ConsumerWidget {
       '/add-promotion': ([Object? arguments]) => const AddPromotion(),
       '/edit-promotion': ([Object? arguments]) =>
           EditPromotion(promotion: arguments! as PromotionModel),
-      '/ticket-detail': ([Object? arguments]) => const TicketDetail(),
+      '/ticket-detail': ([Object? arguments]) =>
+          TicketDetail(ticket: arguments! as TicketModel),
       '/revenue-detail': ([Object? arguments]) => const RevenueDetail(),
       '/term-of-use': ([Object? arguments]) => const TermOfUse(),
       '/secure-policy': ([Object? arguments]) => const SecurePolicy(),

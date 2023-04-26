@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
+import 'package:nvc_cinemas/feature/auth/provider/users_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
-import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
-import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
-import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
-import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class TicketDetail extends ConsumerWidget {
-  const TicketDetail({Key? key}) : super(key: key);
+  const TicketDetail({required this.ticket, Key? key}) : super(key: key);
+  final TicketModel ticket;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +28,12 @@ class TicketDetail extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
-    final isPayed = false;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final time = ref.read(timesProvider.notifier).getById(ticket.timeId!);
+    final movie = ref.read(moviesProvider.notifier).getById(time.movieId!);
+    final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
+    final seat = ref.read(seatsProvider.notifier).getById(ticket.seatId!);
+    final user = ref.read(usersProvider.notifier).getById(ticket.userId!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -69,44 +74,66 @@ class TicketDetail extends ConsumerWidget {
                         child: Column(
                           children: [
                             rowInformation(
-                              title: 'Mã vé',
-                              content: 'c6f355df-d0e4-4825-a542-bae6330a6f7f',
+                              title: context.l10n.ticketId,
+                              content: '${ticket.id}',
                               width: width,
                               isSelectable: true,
                             ),
                             rowInformation(
+                              title: context.l10n.account,
+                              content: '${user.email}',
+                              width: width,
+                            ),
+                            rowInformation(
+                              title: context.l10n.fullName,
+                              content: '${user.fullName}',
+                              width: width,
+                            ),
+                            rowInformation(
                               title: context.l10n.film,
-                              content: 'Ngôi làng của lá',
+                              content: isVietnamese
+                                  ? movie.movieNameVi ?? context.l10n.notUpdated
+                                  : movie.movieNameEn ??
+                                      context.l10n.notUpdated,
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.dateShow,
-                              content: '13/02/2023',
+                              content:
+                                  '${FormatSupport.toDateTimeNonHour(time.from!)}',
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.timeShow,
-                              content: '11:20',
+                              content:
+                                  '${FormatSupport.toDateTimeNonDate(time.from!)}',
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.roomShow,
-                              content: 'P4',
+                              content: '${room.name}',
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.seat,
-                              content: 'D7',
+                              content: '${seat.position}',
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.createAt,
-                              content: '10:22 - 12/02/2023',
+                              content:
+                                  '${FormatSupport.toDateTimeNonSecond(ticket.createAt!)}',
+                              width: width,
+                            ),
+                            rowInformation(
+                              title: context.l10n.updateAt,
+                              content:
+                                  '${FormatSupport.toDateTimeNonSecond(ticket.updateAt!)}',
                               width: width,
                             ),
                             rowStatusTicket(
                               context: context,
-                              status: isPayed
+                              status: true
                                   ? context.l10n.payed
                                   : context.l10n.noPay,
                               width: width,
@@ -117,7 +144,7 @@ class TicketDetail extends ConsumerWidget {
                               width: width,
                               isSpecial: true,
                             ),
-                            if (!isPayed)
+                            if (!true)
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),

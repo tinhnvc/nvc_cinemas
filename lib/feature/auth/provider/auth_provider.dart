@@ -239,7 +239,7 @@ class AuthProvider {
 
     print(user);
 
-    final url = Uri.parse(urlForgotPassword);
+    final url = Uri.parse(urlSendEmail);
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
