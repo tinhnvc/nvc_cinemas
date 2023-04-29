@@ -6,6 +6,7 @@ import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
@@ -34,6 +35,8 @@ class TicketDetail extends ConsumerWidget {
     final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
     final seat = ref.read(seatsProvider.notifier).getById(ticket.seatId!);
     final user = ref.read(usersProvider.notifier).getById(ticket.userId!);
+    final isNoPay =
+        (ticket.status == 'waitPay' || ticket.status == 'waitConfirm');
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -133,18 +136,18 @@ class TicketDetail extends ConsumerWidget {
                             ),
                             rowStatusTicket(
                               context: context,
-                              status: true
-                                  ? context.l10n.payed
-                                  : context.l10n.noPay,
+                              status: FunctionUtil.ticketStatusToContent(
+                                  context, ticket.status ?? 'waitPay'),
                               width: width,
                             ),
                             rowInformation(
                               title: context.l10n.pay,
-                              content: '60.000đ',
+                              content:
+                                  '${FormatSupport.toMoney(ticket.totalPrice ?? 45000)}đ',
                               width: width,
                               isSpecial: true,
                             ),
-                            if (!true)
+                            if (isNoPay)
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
@@ -154,16 +157,42 @@ class TicketDetail extends ConsumerWidget {
                                   children: [
                                     RoundedButtonWidget(
                                       content: context.l10n.payed,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        FunctionUtil.alertPopUpConfirm(
+                                          onPressedConfirm: () {
+                                            ref
+                                                .read(ticketFormProvider)
+                                                .confirmTicket(
+                                                    ref, context, ticket);
+                                            ref
+                                                .read(ticketFormProvider)
+                                                .sendEmailBookTicketSuccess(
+                                                  ref: ref,
+                                                  ticket: ticket,
+                                                );
+                                            Navigator.pop(context);
+                                          },
+                                          type: AlertType.warning,
+                                          title: 'Xác nhận đã thanh toán',
+                                          desc:
+                                              'Khách hàng đã thanh toán cho vé này?',
+                                        );
+                                      },
                                     ),
                                     RoundedButtonWidget(
                                       content: context.l10n.cancel,
                                       onPressed: () {
                                         FunctionUtil.alertPopUpConfirm(
-                                          onPressedConfirm: () {},
+                                          onPressedConfirm: () {
+                                            ref
+                                                .read(ticketFormProvider)
+                                                .cancelTicket(
+                                                    ref, context, ticket);
+                                            Navigator.pop(context);
+                                          },
                                           type: AlertType.warning,
                                           title: 'Huỷ vé',
-                                          desc: 'Xác nhận huỷ vé?',
+                                          desc: 'Xác nhận huỷ đặt vé?',
                                         );
                                       },
                                     )
@@ -258,7 +287,8 @@ class TicketDetail extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: status == context.l10n.payed ? Colors.green : Colors.red,
+              color:
+                  FunctionUtil.ticketStatusToColor(ticket.status ?? 'waitPay'),
               borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(15),
                 right: Radius.circular(15),

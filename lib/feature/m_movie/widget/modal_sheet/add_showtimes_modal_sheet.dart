@@ -1,15 +1,13 @@
-import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
+import 'package:nvc_cinemas/shared/util/date_time_picker.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
-import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/widget/information_card.dart';
-import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class AddShowtimesModalSheet extends ConsumerWidget {
@@ -23,6 +21,9 @@ class AddShowtimesModalSheet extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    var timeFrom = ref.watch(startTimeAddShowtimeProvider);
+    var timeTo = ref.watch(endTimeAddShowtimeProvider);
+    final formGroup = ref.read(timeFormProvider).addShowtimeForm;
 
     final roomsDropdownList = [
       'P01',
@@ -130,8 +131,37 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                       height: 5,
                                     ),
                                     InformationCard(
-                                      content: '12:20 - 12/02/2023',
-                                      onPressed: () {},
+                                      content: timeFrom != '0'
+                                          ? FormatSupport.toDateTimeNonSecond(
+                                              int.parse(timeFrom),
+                                            )
+                                          : context.l10n.chooseStartDate,
+                                      onPressed: () async {
+                                        final timePicker = await DateTimePicker
+                                            .pickDateTimeInit(
+                                                context: context,
+                                                initDate: DateTime.now()
+                                                    .millisecondsSinceEpoch);
+                                        timeFrom = timePicker
+                                            .millisecondsSinceEpoch
+                                            .toString();
+                                        ref
+                                            .read(startTimeAddShowtimeProvider
+                                                .notifier)
+                                            .update(timeFrom);
+                                        formGroup.control('from').value =
+                                            timeFrom;
+
+                                        timeTo = timePicker
+                                            .add(Duration(minutes: 90))
+                                            .millisecondsSinceEpoch
+                                            .toString();
+                                        ref
+                                            .read(endTimeAddShowtimeProvider
+                                                .notifier)
+                                            .update(timeTo);
+                                        formGroup.control('to').value = timeTo;
+                                      },
                                     ),
                                   ],
                                 ),
@@ -144,6 +174,20 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                   color: ColorName.primary,
                                 ),
                               ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              '${context.l10n.endShow}: '
+                              '${timeTo != '0' ? FormatSupport.toDateTimeNonSecond(
+                                  int.parse(timeTo),
+                                ) : context.l10n.notUpdated}',
+                              style: const TextStyle(
+                                color: Color(0xFF363E59),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
                             ),
                             const SizedBox(
                               height: 10,

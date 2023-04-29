@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
-import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_showtimes_item.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
-import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class AddShowtimes extends ConsumerWidget {
-  const AddShowtimes({Key? key}) : super(key: key);
+  const AddShowtimes({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,6 +25,10 @@ class AddShowtimes extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final weekMap = ref.watch(dayOfWeekProvider);
+    final timesShowByDay =
+        ref.read(timesProvider.notifier).getByDay(ref: ref, movieId: movie.id!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -52,17 +56,21 @@ class AddShowtimes extends ConsumerWidget {
                     ),
                     rowInformation(
                       title: context.l10n.movie,
-                      content: 'Ngôi làng của lá và sự trở lại của Max',
+                      content: isVietnamese
+                          ? movie.movieNameVi ?? context.l10n.notUpdated
+                          : movie.movieNameEn ?? context.l10n.notUpdated,
                       width: width,
                     ),
                     rowInformation(
                       title: context.l10n.runTime,
-                      content: '105 ${context.l10n.minutes.toLowerCase()}',
+                      content:
+                          '${movie.duration} ${context.l10n.minutes.toLowerCase()}',
                       width: width,
                     ),
                     rowInformation(
                       title: context.l10n.releaseShow,
-                      content: '12/03/2023',
+                      content:
+                          '${FormatSupport.toDateTimeNonHour(movie.startTime!)}',
                       width: width,
                     ),
                     const SizedBox(
@@ -70,43 +78,36 @@ class AddShowtimes extends ConsumerWidget {
                     ),
                     SizedBox(
                       width: width,
-                      height: 60,
+                      height: 70,
                       child: ListView(
                         physics: AlwaysScrollableScrollPhysics(
                             parent: BouncingScrollPhysics()),
                         scrollDirection: Axis.horizontal,
-                        children: [
-                          DateBookingWidget(
-                            date: '13',
-                            dayOfWeek: 'Hôm nay',
-                            isSelect: true,
-                          ),
-                          DateBookingWidget(
-                            date: '14',
-                            dayOfWeek: '02 - T3',
-                            isSelect: false,
-                          ),
-                          DateBookingWidget(
-                            date: '15',
-                            dayOfWeek: '02 - T4',
-                            isSelect: false,
-                          ),
-                          DateBookingWidget(
-                            date: '16',
-                            dayOfWeek: '02 - T5',
-                            isSelect: false,
-                          ),
-                          DateBookingWidget(
-                            date: '17',
-                            dayOfWeek: '02 - T6',
-                            isSelect: false,
-                          ),
-                          DateBookingWidget(
-                            date: '18',
-                            dayOfWeek: '02 - T7',
-                            isSelect: false,
-                          ),
-                        ],
+                        children: weekMap
+                            .map(
+                              (e) => GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(dayOfWeekProvider.notifier)
+                                      .onceSelect(e.id!);
+                                },
+                                child: DateBookingWidget(
+                                  date: DateTime.fromMillisecondsSinceEpoch(
+                                          e.day!)
+                                      .day
+                                      .toString(),
+                                  dayOfWeek: DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                      e.day!)
+                                              .day ==
+                                          DateTime.now().day
+                                      ? '${e.dayOfWeek}'
+                                      : '0${DateTime.fromMillisecondsSinceEpoch(e.day!).month.toString()} - ${e.dayOfWeek}',
+                                  isSelect: e.isSelected ?? false,
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                     const SizedBox(
@@ -123,11 +124,43 @@ class AddShowtimes extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    MShowtimesItem(),
-                    MShowtimesItem(),
-                    MShowtimesItem(),
+                    SizedBox(
+                      width: width,
+                      height: 250,
+                      child: ListView(
+                        physics: AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
+                        scrollDirection: Axis.vertical,
+                        children: timesShowByDay.isNotEmpty
+                            ? timesShowByDay.map((e) {
+                                return GestureDetector(
+                                    onTap: () {},
+                                    child: MShowtimesItem(
+                                      time: e,
+                                    ));
+                              }).toList()
+                            : [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      context.l10n.noShowtime,
+                                      style: TextStyle(
+                                        color: ColorName.btnText,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                      ),
+                    ),
                     GestureDetector(
-                      onTap: () => CallModalSheet.addShowtimes(context),
+                      onTap: () {
+                        InitUtil.initAddShowtime(ref: ref);
+                        CallModalSheet.addShowtimes(context);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -178,7 +211,6 @@ class AddShowtimes extends ConsumerWidget {
                 overflow: TextOverflow.clip,
                 fontSize: 15,
                 color: ColorName.textNormal,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -190,6 +222,7 @@ class AddShowtimes extends ConsumerWidget {
                 overflow: TextOverflow.clip,
                 fontSize: 15,
                 color: ColorName.textNormal,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

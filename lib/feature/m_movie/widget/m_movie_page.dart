@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
-import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';

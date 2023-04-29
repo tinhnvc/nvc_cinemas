@@ -123,25 +123,27 @@ class MTicketItem extends ConsumerWidget {
                               ),
                             ),
                           const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              FunctionUtil.alertPopUpConfirm(
-                                onPressedConfirm: () {
-                                  ref
-                                      .read(ticketFormProvider)
-                                      .cancelTicket(ref, context, ticket);
-                                },
-                                type: AlertType.warning,
-                                title: 'Huỷ vé',
-                                desc: 'Xác nhận huỷ đặt vé?',
-                              );
-                            },
-                            child: Icon(
-                              Icons.cancel_outlined,
-                              size: 25,
-                              color: ColorName.primary,
+                          if (ticket.status == 'waitPay' ||
+                              ticket.status == 'waitConfirm')
+                            GestureDetector(
+                              onTap: () {
+                                FunctionUtil.alertPopUpConfirm(
+                                  onPressedConfirm: () {
+                                    ref
+                                        .read(ticketFormProvider)
+                                        .cancelTicket(ref, context, ticket);
+                                  },
+                                  type: AlertType.warning,
+                                  title: 'Huỷ vé',
+                                  desc: 'Xác nhận huỷ đặt vé?',
+                                );
+                              },
+                              child: Icon(
+                                Icons.cancel_outlined,
+                                size: 25,
+                                color: ColorName.primary,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ],

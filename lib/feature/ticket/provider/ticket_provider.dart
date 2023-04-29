@@ -60,7 +60,7 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
   List<String> getSeatsIdByTimeId(String timeId) {
     var result = <String>[];
     for (final item in state) {
-      if (item.timeId == timeId) {
+      if (item.timeId == timeId && item.status != 'canceled') {
         result.add(item.seatId!);
       }
     }
@@ -153,7 +153,6 @@ class TicketFormProvider {
     TicketModel ticket,
   ) async {
     buttonController.start();
-    await Future.delayed(const Duration(milliseconds: 700));
     ref.read(ticketsProvider.notifier).confirm(ticket.id!);
     buttonController.reset();
   }
@@ -164,7 +163,6 @@ class TicketFormProvider {
     TicketModel ticket,
   ) async {
     buttonController.start();
-    await Future.delayed(const Duration(milliseconds: 700));
     ref.read(ticketsProvider.notifier).cancel(ticket.id!);
     buttonController.reset();
   }
@@ -242,5 +240,31 @@ class TicketFormProvider {
         ],
       ).show();
     }
+  }
+}
+
+final startTimeFilterMovieProvider =
+    StateNotifierProvider<StartTimeFilterMovieNotifier, String>(
+  (ref) => StartTimeFilterMovieNotifier(),
+);
+
+class StartTimeFilterMovieNotifier extends StateNotifier<String> {
+  StartTimeFilterMovieNotifier() : super('0');
+
+  void update(String value) {
+    state = value;
+  }
+}
+
+final endTimeFilterMovieProvider =
+    StateNotifierProvider<EndTimeFilterMovieNotifier, String>(
+  (ref) => EndTimeFilterMovieNotifier(),
+);
+
+class EndTimeFilterMovieNotifier extends StateNotifier<String> {
+  EndTimeFilterMovieNotifier() : super('0');
+
+  void update(String value) {
+    state = value;
   }
 }

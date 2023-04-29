@@ -1,9 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/shared/link/times.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 final timesProvider = StateNotifierProvider<MoviesNotifier, List<TimeModel>>(
   (ref) => MoviesNotifier(),
@@ -78,5 +83,64 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
     }
 
     return time;
+  }
+}
+
+final timeFormProvider = Provider<TimeFormProvider>(
+  (ref) => TimeFormProvider(),
+);
+
+class TimeFormProvider {
+  TimeFormProvider();
+
+  final addShowtimeForm = FormGroup({
+    'movieId': FormControl<String>(),
+    'roomId': FormControl<String>(),
+    'from': FormControl<String>(),
+    'to': FormControl<String>(),
+  });
+
+  final buttonController = RoundedLoadingButtonController();
+
+  Future<void> addShowtime(
+    WidgetRef ref,
+    BuildContext context,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    FunctionUtil.alertPopUpConfirm(
+        onPressedConfirm: () {
+          Navigator.pop(context);
+        },
+        type: AlertType.success,
+        title: 'Thành công',
+        desc: 'Thêm lịch chiếu thành công');
+    buttonController.reset();
+  }
+}
+
+final startTimeAddShowtimeProvider =
+    StateNotifierProvider<StartTimeAddShowtimeNotifier, String>(
+  (ref) => StartTimeAddShowtimeNotifier(),
+);
+
+class StartTimeAddShowtimeNotifier extends StateNotifier<String> {
+  StartTimeAddShowtimeNotifier() : super('0');
+
+  void update(String value) {
+    state = value;
+  }
+}
+
+final endTimeAddShowtimeProvider =
+    StateNotifierProvider<EndTimeAddShowtimeNotifier, String>(
+  (ref) => EndTimeAddShowtimeNotifier(),
+);
+
+class EndTimeAddShowtimeNotifier extends StateNotifier<String> {
+  EndTimeAddShowtimeNotifier() : super('0');
+
+  void update(String value) {
+    state = value;
   }
 }

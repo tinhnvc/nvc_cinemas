@@ -6,6 +6,7 @@ import 'package:nvc_cinemas/feature/auth/provider/roles_provider.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
@@ -220,4 +221,24 @@ class InitUtil {
     ref.read(endTimeAddMovieProvider.notifier).update(movie.endTime.toString());
     ref.read(imageAddMovieProvider.notifier).update(movie.image!);
   }
+
+  static void initMTicketPage({
+    required WidgetRef ref,
+  }) async {
+    ref
+      ..refresh(startTimeFilterMovieProvider)
+      ..refresh(endTimeFilterMovieProvider);
+  }
+
+
+  static void initAddShowtime({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(timeFormProvider).addShowtimeForm..reset();
+    ref
+      ..refresh(startTimeAddShowtimeProvider)
+      ..refresh(endTimeAddShowtimeProvider);
+  }
+
+
 }

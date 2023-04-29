@@ -86,8 +86,12 @@ class MMovieItem extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/add-showtimes'),
+                          onTap: () {
+                            InitUtil.initBookingByMovie(ref: ref);
+                            Navigator.pushNamed(
+                              context, '/add-showtimes',
+                              arguments: movie);
+                          },
                           child: Icon(
                             Icons.date_range_rounded,
                             size: 25,
