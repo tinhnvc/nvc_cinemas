@@ -1,5 +1,8 @@
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/util/date_time_picker.dart';
@@ -11,7 +14,11 @@ import 'package:nvc_cinemas/shared/widget/information_card.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class AddShowtimesModalSheet extends ConsumerWidget {
-  const AddShowtimesModalSheet({Key? key}) : super(key: key);
+  const AddShowtimesModalSheet({
+    required this.movie,
+    Key? key,
+  }) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,13 +31,27 @@ class AddShowtimesModalSheet extends ConsumerWidget {
     var timeFrom = ref.watch(startTimeAddShowtimeProvider);
     var timeTo = ref.watch(endTimeAddShowtimeProvider);
     final formGroup = ref.read(timeFormProvider).addShowtimeForm;
+    final dow = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final rooms = ref.watch(roomsProvider);
+    final duration = int.parse(movie.duration ?? '95');
+    final mod = duration % 10;
+    final diffDuration = duration + (10 - mod) + 10;
+    final isShowtimeAvailable = ref.watch(isShowtimeAvailableProvider)! as bool;
+    final timesShow = ref.watch(timesProvider);
+    final timesShowByDay = ref.read(timesProvider.notifier).getByDayFromSource(
+          ref: ref,
+          movieId: movie.id!,
+          times: timesShow,
+        );
 
-    final roomsDropdownList = [
-      'P01',
-      'P03',
-      'P04',
-      'P05',
-    ];
+    final roomsDropdownList = <String>[];
+    if (rooms.isNotEmpty) {
+      for (final item in rooms) {
+        if (item.active!) {
+          roomsDropdownList.add(item.name ?? 'P01');
+        }
+      }
+    }
     final roomValue = ref.watch(roomAddShowtimeProvider);
 
     return Padding(
@@ -110,6 +131,11 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                   ref
                                       .read(roomAddShowtimeProvider.notifier)
                                       .update(value);
+                                  final roomSelected = ref
+                                      .read(roomsProvider.notifier)
+                                      .getByName(value);
+                                  formGroup.control('roomId').value =
+                                      roomSelected.id!;
                                 },
                               ),
                             ),
@@ -140,8 +166,10 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                         final timePicker = await DateTimePicker
                                             .pickDateTimeInit(
                                                 context: context,
-                                                initDate: DateTime.now()
-                                                    .millisecondsSinceEpoch);
+                                                initDate: dow.id != null
+                                                    ? dow.day!
+                                                    : DateTime.now()
+                                                        .millisecondsSinceEpoch);
                                         timeFrom = timePicker
                                             .millisecondsSinceEpoch
                                             .toString();
@@ -153,7 +181,8 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                             timeFrom;
 
                                         timeTo = timePicker
-                                            .add(Duration(minutes: 90))
+                                            .add(
+                                                Duration(minutes: diffDuration))
                                             .millisecondsSinceEpoch
                                             .toString();
                                         ref
@@ -161,6 +190,17 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                                 .notifier)
                                             .update(timeTo);
                                         formGroup.control('to').value = timeTo;
+                                        final checkShowtime = ref
+                                            .read(timesProvider.notifier)
+                                            .checkShowtime(
+                                              ref.watch(timesProvider),
+                                              int.parse(timeFrom),
+                                              int.parse(timeTo),
+                                            );
+                                        ref
+                                            .read(isShowtimeAvailableProvider
+                                                .notifier)
+                                            .changed = checkShowtime;
                                       },
                                     ),
                                   ],
@@ -206,9 +246,13 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                   width: 10,
                                 ),
                                 Text(
-                                  context.l10n.empty,
-                                  style: const TextStyle(
-                                    color: Colors.green,
+                                  isShowtimeAvailable
+                                      ? context.l10n.empty
+                                      : 'Chưa có sẵn',
+                                  style: TextStyle(
+                                    color: isShowtimeAvailable
+                                        ? Colors.green
+                                        : Colors.red,
                                     fontSize: 15,
                                   ),
                                 ),
@@ -246,8 +290,17 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                               width: 110,
                               animateOnTap: false,
                               controller:
-                                  ref.watch(movieFormProvider).buttonController,
-                              onPressed: () {},
+                                  ref.watch(timeFormProvider).buttonController,
+                              onPressed: isShowtimeAvailable
+                                  ? () {
+                                      ref.read(timeFormProvider).addShowtime(
+                                            ref,
+                                            context,
+                                            movie,
+                                          );
+                                      print(formGroup.value);
+                                    }
+                                  : null,
                               child: Text(
                                 context.l10n.addNew,
                                 style: const TextStyle(

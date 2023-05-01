@@ -140,6 +140,13 @@ class TicketDetail extends ConsumerWidget {
                                   context, ticket.status ?? 'waitPay'),
                               width: width,
                             ),
+                            if (ticket.discount != 0)
+                              rowInformation(
+                                title: context.l10n.discount,
+                                content:
+                                    '${FormatSupport.toMoney(ticket.discount ?? 20000)}đ',
+                                width: width,
+                              ),
                             rowInformation(
                               title: context.l10n.pay,
                               content:
@@ -244,7 +251,9 @@ class TicketDetail extends ConsumerWidget {
                     style: TextStyle(
                       overflow: TextOverflow.clip,
                       fontSize: 15,
-                      color: ColorName.textNormal,
+                      color: isSpecial ?? false
+                          ? Colors.green
+                          : ColorName.textNormal,
                       fontWeight: FontWeight.w600,
                     ),
                   )
@@ -253,7 +262,9 @@ class TicketDetail extends ConsumerWidget {
                     style: TextStyle(
                       overflow: TextOverflow.clip,
                       fontSize: 15,
-                      color: ColorName.textNormal,
+                      color: isSpecial ?? false
+                          ? Colors.green
+                          : ColorName.textNormal,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

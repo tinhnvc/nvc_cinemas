@@ -33,7 +33,7 @@ class DropdownWidget extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: width * 0.5,
+                    width: width * 0.45,
                     child: Text(
                       e,
                       maxLines: 2,

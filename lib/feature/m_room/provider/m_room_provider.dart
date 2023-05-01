@@ -32,6 +32,28 @@ class RoomsNotifier extends StateNotifier<List<RoomModel>> {
     return room;
   }
 
+  RoomModel getByName(String roomName) {
+    var room = const RoomModel();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.name == roomName) {
+          room = item;
+        }
+      }
+    }
+
+    return room;
+  }
+
+  bool isActiveRoom() {
+    for (final item in state) {
+      if (item.active!) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void add(RoomModel room) {
     state = [...state, room];
   }
@@ -59,17 +81,4 @@ class RoomFormProvider {
   Future<void> editRoom(WidgetRef ref, BuildContext context) async {}
 
   Future<void> changeStatus(WidgetRef ref, BuildContext context) async {}
-}
-
-final roomAddShowtimeProvider =
-    StateNotifierProvider<RoomAddShowtimeNotifier, String>(
-  (ref) => RoomAddShowtimeNotifier(),
-);
-
-class RoomAddShowtimeNotifier extends StateNotifier<String> {
-  RoomAddShowtimeNotifier() : super('');
-
-  void update(String value) {
-    state = value;
-  }
 }

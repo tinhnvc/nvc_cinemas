@@ -121,4 +121,11 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
         ref.read(ticketsProvider.notifier).getSeatsIdByTimeId(time.id!);
     return '${totalSeats - soldSeats.length}';
   }
+
+  bool allowDeleteShowtime(WidgetRef ref, TimeModel time) {
+    final soldSeats =
+        ref.read(ticketsProvider.notifier).getSeatsIdByTimeId(time.id!);
+    print(soldSeats);
+    return soldSeats.length == 0;
+  }
 }

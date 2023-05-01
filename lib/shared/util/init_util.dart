@@ -9,6 +9,8 @@ import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
+import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
@@ -230,15 +232,42 @@ class InitUtil {
       ..refresh(endTimeFilterMovieProvider);
   }
 
-
   static void initAddShowtime({
     required WidgetRef ref,
   }) async {
     final formGroup = ref.read(timeFormProvider).addShowtimeForm..reset();
     ref
+      ..refresh(roomAddShowtimeProvider)
       ..refresh(startTimeAddShowtimeProvider)
-      ..refresh(endTimeAddShowtimeProvider);
+      ..refresh(endTimeAddShowtimeProvider)
+      ..refresh(isShowtimeAvailableProvider);
+    final rooms = ref.watch(roomsProvider);
+    final roomsDropdownList = <RoomModel>[];
+    if (rooms.isNotEmpty) {
+      for (final item in rooms) {
+        if (item.active!) {
+          roomsDropdownList.add(item);
+        }
+      }
+    }
+    formGroup.control('roomId').value =
+        roomsDropdownList[0].id ?? 'c61c9214-91fa-4f6d-b775-7a59fc587ba4';
   }
 
-
+  static void initEditShowtime({
+    required WidgetRef ref,
+    required TimeModel time,
+  }) async {
+    final formGroup = ref.read(timeFormProvider).addShowtimeForm..reset();
+    final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
+    ref.read(roomAddShowtimeProvider.notifier).update(room.name ?? 'P01');
+    ref
+        .read(startTimeAddShowtimeProvider.notifier)
+        .update(time.from.toString());
+    ref.read(endTimeAddShowtimeProvider.notifier).update(time.to.toString());
+    ref.read(isShowtimeAvailableProvider.notifier).changed = true;
+    formGroup.control('roomId').value = room.id;
+    formGroup.control('from').value = time.from.toString();
+    formGroup.control('to').value = time.to.toString();
+  }
 }

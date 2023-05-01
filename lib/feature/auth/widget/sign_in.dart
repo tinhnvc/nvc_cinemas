@@ -83,8 +83,8 @@ class SignIn extends ConsumerWidget {
                 // if (ratio < 1.95 && height > 450)
                 GestureDetector(
                     onTap: () async {
-                      final imagePath = await FileService.pickImage();
-                      print(imagePath);
+                      // final imagePath = await FileService.pickImage();
+                      // print(imagePath);
                     },
                     child: Assets.images.logoPng
                         .image(width: 250, fit: BoxFit.cover)),

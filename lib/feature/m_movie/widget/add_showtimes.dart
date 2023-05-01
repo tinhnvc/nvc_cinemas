@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_showtimes_item.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/feature/movie/widget/date_booking_widget.dart';
@@ -12,6 +13,7 @@ import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
+import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
 class AddShowtimes extends ConsumerWidget {
   const AddShowtimes({required this.movie, Key? key}) : super(key: key);
@@ -27,8 +29,13 @@ class AddShowtimes extends ConsumerWidget {
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
     final weekMap = ref.watch(dayOfWeekProvider);
-    final timesShowByDay =
-        ref.read(timesProvider.notifier).getByDay(ref: ref, movieId: movie.id!);
+    final timesShow = ref.watch(timesProvider);
+    final timesShowByDay = ref.read(timesProvider.notifier).getByDayFromSource(
+          ref: ref,
+          movieId: movie.id!,
+          times: timesShow,
+        );
+    final isActiveRoom = ref.read(roomsProvider.notifier).isActiveRoom();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -157,10 +164,15 @@ class AddShowtimes extends ConsumerWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        InitUtil.initAddShowtime(ref: ref);
-                        CallModalSheet.addShowtimes(context);
-                      },
+                      onTap: isActiveRoom
+                          ? () {
+                              InitUtil.initAddShowtime(ref: ref);
+                              CallModalSheet.addShowtimes(context, movie);
+                            }
+                          : () {
+                              SnackBarSupport.noRoomToAddShowtime(
+                                  context: context);
+                            },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [

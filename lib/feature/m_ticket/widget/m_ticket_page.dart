@@ -37,7 +37,6 @@ class MTicketPage extends ConsumerWidget {
     // );
     var tickets = <TicketModel>[];
 
-    print(timeFrom);
     if (timeFrom != '0') {
       for (final item in allTickets) {
         final time = ref.read(timesProvider.notifier).getById(item.timeId!);
@@ -45,11 +44,13 @@ class MTicketPage extends ConsumerWidget {
           tickets.add(item);
         }
       }
+      tickets.sort((a, b) => -a.createAt!.compareTo(b.createAt!));
     } else {
-      tickets = allTickets;
+      tickets = allTickets
+        ..sort(
+          (a, b) => -a.createAt!.compareTo(b.createAt!),
+        );
     }
-
-    print(tickets.length);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

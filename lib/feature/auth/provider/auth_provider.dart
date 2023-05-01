@@ -64,10 +64,15 @@ class AuthProvider {
       for (final item in users) {
         if (item.email == email && item.password == password) {
           ref.read(userProvider.notifier).fetchUser(item);
-          if (item.role!.roleName == 'admin') {
+          if (item.role!.roleName == 'admin' ||
+              item.role!.roleName == 'manager') {
             ref
                 .read(navigationProvider.notifier)
                 .setNavigationItem(NavigationItem.mCategory);
+          } else {
+            ref
+                .read(navigationProvider.notifier)
+                .setNavigationItem(NavigationItem.home);
           }
           response = true;
         }

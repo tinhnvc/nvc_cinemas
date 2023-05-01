@@ -9,6 +9,7 @@ import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:uuid/uuid.dart';
 
 final timesProvider = StateNotifierProvider<MoviesNotifier, List<TimeModel>>(
   (ref) => MoviesNotifier(),
@@ -24,6 +25,31 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
     state = timesFetch;
   }
 
+  void add(TimeModel time) {
+    state = [...state, time];
+  }
+
+  void remove(String timeId) {
+    state = [
+      for (final item in state)
+        if (item.id != timeId) item,
+    ];
+  }
+
+  void editTime(TimeModel time) {
+    state = [
+      for (final item in state)
+        if (item.id == time.id)
+          item.copyWith(
+            roomId: time.roomId,
+            from: time.from,
+            to: time.to,
+          )
+        else
+          item,
+    ];
+  }
+
   List<TimeModel> getByDay({
     required WidgetRef ref,
     required String movieId,
@@ -37,6 +63,31 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
           .add(const Duration(days: 1))
           .millisecondsSinceEpoch;
       for (final item in state) {
+        if (item.movieId == movieId &&
+            item.from! > startTime! &&
+            item.to! < endTime &&
+            item.from! > DateTime.now().millisecondsSinceEpoch) {
+          result.add(item);
+        }
+      }
+    }
+    return result..sort((a, b) => a.from!.compareTo(b.from!));
+  }
+
+  List<TimeModel> getByDayFromSource({
+    required WidgetRef ref,
+    required String movieId,
+    required List<TimeModel> times,
+  }) {
+    var result = <TimeModel>[];
+    final dow = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final movie = ref.read(moviesProvider.notifier).getById(movieId);
+    if (dow.id != null) {
+      final startTime = dow.day;
+      final endTime = DateTime.fromMillisecondsSinceEpoch(dow.day!)
+          .add(const Duration(days: 1))
+          .millisecondsSinceEpoch;
+      for (final item in times) {
         if (item.movieId == movieId &&
             item.from! > startTime! &&
             item.to! < endTime &&
@@ -84,6 +135,29 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
 
     return time;
   }
+
+  bool checkShowtime(List<TimeModel> times, int from, int to) {
+    var result = true;
+    if (times.isNotEmpty) {
+      for (final item in times) {
+        if (from > item.from! && from < item.to!) {
+          return false;
+        }
+
+        if (from < item.from! && to > item.from!) {
+          return false;
+        }
+
+        if (from < item.from! && to > item.to!) {
+          return false;
+        }
+      }
+    } else {
+      return true;
+    }
+
+    return result;
+  }
 }
 
 final timeFormProvider = Provider<TimeFormProvider>(
@@ -105,17 +179,74 @@ class TimeFormProvider {
   Future<void> addShowtime(
     WidgetRef ref,
     BuildContext context,
+    MovieModel movie,
   ) async {
     buttonController.start();
     await Future.delayed(const Duration(milliseconds: 700));
+    final roomId = addShowtimeForm.control('roomId').value;
+    final from = addShowtimeForm.control('from').value;
+    final to = addShowtimeForm.control('to').value;
+    final time = TimeModel(
+      id: Uuid().v4(),
+      movieId: movie.id,
+      roomId: roomId,
+      from: int.parse(from),
+      to: int.parse(to),
+    );
+    ref.read(timesProvider.notifier).add(time);
     FunctionUtil.alertPopUpConfirm(
         onPressedConfirm: () {
           Navigator.pop(context);
         },
+        isConfirm: true,
         type: AlertType.success,
         title: 'Thành công',
         desc: 'Thêm lịch chiếu thành công');
     buttonController.reset();
+  }
+
+  Future<void> editShowtime(
+    WidgetRef ref,
+    BuildContext context,
+    MovieModel movie,
+    TimeModel timeModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final roomId = addShowtimeForm.control('roomId').value;
+    final from = addShowtimeForm.control('from').value;
+    final to = addShowtimeForm.control('to').value;
+    final time = TimeModel(
+      id: timeModel.id!,
+      movieId: movie.id,
+      roomId: roomId,
+      from: int.parse(from),
+      to: int.parse(to),
+    );
+    ref.read(timesProvider.notifier).editTime(time);
+    FunctionUtil.alertPopUpConfirm(
+        onPressedConfirm: () {
+          Navigator.pop(context);
+        },
+        isConfirm: true,
+        type: AlertType.success,
+        title: 'Thành công',
+        desc: 'Cập nhật lịch chiếu thành công');
+    buttonController.reset();
+  }
+
+  Future<void> deleteShowtime(
+    WidgetRef ref,
+    BuildContext context,
+    TimeModel timeModel,
+  ) async {
+    ref.read(timesProvider.notifier).remove(timeModel.id!);
+    // FunctionUtil.alertPopUpConfirm(
+    //     onPressedConfirm: () {},
+    //     isConfirm: true,
+    //     type: AlertType.success,
+    //     title: 'Thành công',
+    //     desc: 'Gỡ bỏ lịch chiếu thành công');
   }
 }
 
@@ -143,4 +274,13 @@ class EndTimeAddShowtimeNotifier extends StateNotifier<String> {
   void update(String value) {
     state = value;
   }
+}
+
+final isShowtimeAvailableProvider =
+    StateNotifierProvider((ref) => IsShowtimeAvailableNotifier());
+
+class IsShowtimeAvailableNotifier extends StateNotifier<bool> {
+  IsShowtimeAvailableNotifier() : super(false);
+
+  set changed(bool value) => state = value;
 }
