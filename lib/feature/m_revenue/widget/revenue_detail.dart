@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
-import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
-import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
-import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
-import 'package:nvc_cinemas/shared/widget/dropdown_widget.dart';
-import 'package:nvc_cinemas/shared/widget/form_text_field.dart';
-import 'package:nvc_cinemas/shared/widget/information_card.dart';
-import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
 import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class RevenueDetail extends ConsumerWidget {
-  const RevenueDetail({Key? key}) : super(key: key);
+  const RevenueDetail({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +22,14 @@ class RevenueDetail extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
-    final isPayed = false;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final ticketAmount = ref
+        .read(ticketsProvider.notifier)
+        .ticketAmountByMovieId(ref, movie.id!);
+    final total =
+        ref.read(ticketsProvider.notifier).totalByMovieId(ref, movie.id!);
+    final data =
+        ref.read(ticketsProvider.notifier).revenueByMovie(ref, movie.id!);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -55,7 +56,8 @@ class RevenueDetail extends ConsumerWidget {
                       height: 10,
                     ),
                     Text(
-                      '${context.l10n.film}: Ngôi làng của lá',
+                      '${context.l10n.film}: '
+                      '${isVietnamese ? movie.movieNameVi ?? context.l10n.notUpdated : movie.movieNameEn ?? context.l10n.notUpdated}',
                       style: TextStyle(
                         overflow: TextOverflow.clip,
                         fontSize: 16,
@@ -67,7 +69,7 @@ class RevenueDetail extends ConsumerWidget {
                       height: 5,
                     ),
                     Text(
-                      '${context.l10n.ticketAmount}: 35',
+                      '${context.l10n.ticketAmount}: $ticketAmount',
                       style: TextStyle(
                         overflow: TextOverflow.clip,
                         fontSize: 16,
@@ -75,20 +77,34 @@ class RevenueDetail extends ConsumerWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Container(
-                      height: 200,
-                      color: Colors.orangeAccent,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+                    SfCartesianChart(
+                      primaryXAxis: CategoryAxis(),
+                      title: ChartTitle(
+                          text:
+                              '${context.l10n.revenue} ${isVietnamese ? movie.movieNameVi ?? context.l10n.notUpdated : movie.movieNameEn ?? context.l10n.notUpdated}'),
+                      legend:
+                          Legend(isVisible: true, position: LegendPosition.top),
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                      series: [
+                        LineSeries(
+                          dataSource: data,
+                          name: context.l10n.revenue,
+                          xValueMapper: (datum, index) => data[index].month,
+                          yValueMapper: (datum, index) => data[index].revenue,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
+                        )
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '${context.l10n.totalRevenue}: 9.365.000đ',
+                          '${context.l10n.totalRevenue}: ${FormatSupport.toMoney(total)}đ',
                           style: TextStyle(
                             overflow: TextOverflow.clip,
-                            fontSize: 20,
-                            color: ColorName.textNormal,
+                            fontSize: 17,
+                            color: Colors.green,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
+import 'package:nvc_cinemas/feature/m_revenue/provider/revenue_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -289,8 +290,11 @@ class DrawerWidget extends ConsumerWidget {
         selectItem(context, ref, item);
 
         if (item == NavigationItem.showtimes) {
-          print('object');
           InitUtil.initBookingByMovie(ref: ref);
+        }
+
+        if (item == NavigationItem.mRevenue) {
+          ref.refresh(isSelectRevenueMovieProvider);
         }
 
         if (item == NavigationItem.personalAccount) {

@@ -81,7 +81,7 @@ class EditRoom extends ConsumerWidget {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         context.l10n.sizeW,
@@ -100,7 +100,7 @@ class EditRoom extends ConsumerWidget {
                                             formControlName: 'sizeW',
                                             maxLine: 1,
                                             textInputAction:
-                                            TextInputAction.next,
+                                                TextInputAction.next,
                                             labelText: '${context.l10n.input} '
                                                 '${context.l10n.sizeW.toLowerCase()}'),
                                       ),
@@ -113,7 +113,7 @@ class EditRoom extends ConsumerWidget {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         context.l10n.sizeH,
@@ -132,7 +132,7 @@ class EditRoom extends ConsumerWidget {
                                             formControlName: 'sizeH',
                                             maxLine: 1,
                                             textInputAction:
-                                            TextInputAction.next,
+                                                TextInputAction.next,
                                             labelText: '${context.l10n.input} '
                                                 '${context.l10n.sizeH.toLowerCase()}'),
                                       ),
@@ -169,138 +169,6 @@ class EditRoom extends ConsumerWidget {
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: true,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                                SeatWidgetAddRoom(
-                                  color: Colors.grey,
-                                  isNormal: false,
-                                ),
-                              ],
                             ),
                             TimeCrateAndUpdate(
                               createTime: 1676352825000,

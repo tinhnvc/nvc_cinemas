@@ -130,7 +130,9 @@ class App extends ConsumerWidget {
           EditPromotion(promotion: arguments! as PromotionModel),
       '/ticket-detail': ([Object? arguments]) =>
           TicketDetail(ticket: arguments! as TicketModel),
-      '/revenue-detail': ([Object? arguments]) => const RevenueDetail(),
+      '/revenue-detail': ([Object? arguments]) => RevenueDetail(
+            movie: arguments! as MovieModel,
+          ),
       '/term-of-use': ([Object? arguments]) => const TermOfUse(),
       '/secure-policy': ([Object? arguments]) => const SecurePolicy(),
       '/cinemas-info': ([Object? arguments]) => const CinemasInfo(),

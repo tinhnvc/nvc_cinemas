@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/util_provider.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
 
 class RevenueItem extends ConsumerWidget {
-  const RevenueItem({Key? key}) : super(key: key);
+  const RevenueItem({required this.movie, Key? key}) : super(key: key);
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,9 +22,19 @@ class RevenueItem extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
+    final isVietnamese = ref.watch(languageProvider) == 'vi';
+    final ticketAmount = ref
+        .read(ticketsProvider.notifier)
+        .ticketAmountByMovieId(ref, movie.id!);
+    final total =
+        ref.read(ticketsProvider.notifier).totalByMovieId(ref, movie.id!);
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/revenue-detail'),
+      onTap: () => Navigator.pushNamed(
+        context,
+        '/revenue-detail',
+        arguments: movie,
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         margin: const EdgeInsets.only(bottom: 10),
@@ -36,8 +53,16 @@ class RevenueItem extends ConsumerWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
-              child:
-                  Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
+              child: movie.image != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.file(
+                        File(movie.image!),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Assets.images.logoPng
+                      .image(width: 100, fit: BoxFit.contain),
             ),
             Expanded(
               child: Column(
@@ -51,7 +76,9 @@ class RevenueItem extends ConsumerWidget {
                       SizedBox(
                         width: width * 0.5,
                         child: Text(
-                          'Báo thù 2',
+                          isVietnamese
+                              ? movie.movieNameVi ?? context.l10n.notUpdated
+                              : movie.movieNameEn ?? context.l10n.notUpdated,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -67,7 +94,7 @@ class RevenueItem extends ConsumerWidget {
                     height: 5,
                   ),
                   Text(
-                    '${context.l10n.ticketAmount}: 32',
+                    '${context.l10n.ticketAmount}: $ticketAmount',
                     style: TextStyle(
                       fontSize: 15,
                       color: ColorName.textNormal,
@@ -87,7 +114,9 @@ class RevenueItem extends ConsumerWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '9.365.000đ',
+                        total != 0
+                            ? '${FormatSupport.toMoney(total)}đ'
+                            : 'Chưa có doanh thu',
                         style: TextStyle(
                           fontSize: 15,
                           color: ColorName.textNormal,

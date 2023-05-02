@@ -73,6 +73,9 @@ dependencies:
   image_picker: ^0.8.3+1
   # star rating
   flutter_rating_bar: ^4.0.1
+  #chart
+  syncfusion_flutter_charts: ^19.2.4
+
 
   cupertino_icons: ^1.0.2
 

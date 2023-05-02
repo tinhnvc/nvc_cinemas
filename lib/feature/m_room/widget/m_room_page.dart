@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/m_category/widget/category_item.dart';
-import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/m_room_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
-import 'package:nvc_cinemas/shared/widget/search_widget.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 
 class MRoomPage extends ConsumerWidget {
   const MRoomPage({Key? key}) : super(key: key);
@@ -20,13 +19,17 @@ class MRoomPage extends ConsumerWidget {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
+    final rooms = ref.watch(roomsProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ColorName.pageBackground,
       // endDrawer: const EndDrawerWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/add-room'),
+        onPressed: () {
+          InitUtil.initAddRoom(ref: ref);
+          Navigator.pushNamed(context, '/add-room');
+        },
         child: Icon(
           Icons.add,
           size: 25,
@@ -61,13 +64,32 @@ class MRoomPage extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    SearchWidget(searchHint: 'P3'),
-                    const SizedBox(
-                      height: 10,
+                    Column(
+                      children: rooms.isNotEmpty
+                          ? rooms
+                              .map((e) => MRoomItem(
+                                    room: e,
+                                  ))
+                              .toList()
+                          : [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 50,
+                                  ),
+                                  Text(
+                                    'Không tìm thấy kết quả nào',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                     ),
-                    MRoomItem(),
-                    MRoomItem(),
-                    MRoomItem(),
                   ],
                 ),
               ),

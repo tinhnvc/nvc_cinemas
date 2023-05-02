@@ -135,7 +135,7 @@ class MMovieItem extends ConsumerWidget {
                                           .switchActive(movie.id!, value);
                                     },
                                     content:
-                                        'Phim\nPhim sau khi đóng sẽ không xuất hiện trên danh sách phim, khách hàng không thể đặt vé');
+                                        'Phim?\nPhim sau khi đóng sẽ không xuất hiện trên danh sách phim, khách hàng không thể đặt vé');
                               } else {
                                 ref
                                     .read(moviesProvider.notifier)

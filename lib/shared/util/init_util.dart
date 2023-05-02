@@ -23,6 +23,7 @@ import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/repository/language_repository.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class InitUtil {
   static void initSignUpForm(
@@ -269,5 +270,18 @@ class InitUtil {
     formGroup.control('roomId').value = room.id;
     formGroup.control('from').value = time.from.toString();
     formGroup.control('to').value = time.to.toString();
+  }
+
+  static void initAddRoom({
+    required WidgetRef ref,
+  }) async {
+    final formGroup = ref.read(roomFormProvider).addRoomForm..reset();
+    formGroup.control('size').value = '3 x 4';
+    formGroup.control('seatAmount').value = '12';
+    ref
+      ..refresh(widthAddRoomProvider)
+      ..refresh(heightAddRoomProvider);
+    ref.read(roomIdProvider.notifier).update(Uuid().v4());
+    ref.read(seatsAddRoomProvider.notifier).fetchRooms(ref, 3, 4);
   }
 }

@@ -128,4 +128,6 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
     print(soldSeats);
     return soldSeats.length == 0;
   }
+
+
 }

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:nvc_cinemas/feature/m_revenue/provider/revenue_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -140,11 +141,15 @@ class SeeMoreScreen extends ConsumerWidget {
                                     SeeMoreItem(
                                       icon: Icons.bar_chart,
                                       content: context.l10n.revenue,
-                                      onPressed: () => ref
-                                          .read(navigationProvider.notifier)
-                                          .setNavigationItem(
-                                            NavigationItem.mRevenue,
-                                          ),
+                                      onPressed: () {
+                                        ref.refresh(
+                                            isSelectRevenueMovieProvider);
+                                        ref
+                                            .read(navigationProvider.notifier)
+                                            .setNavigationItem(
+                                              NavigationItem.mRevenue,
+                                            );
+                                      },
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.settings,

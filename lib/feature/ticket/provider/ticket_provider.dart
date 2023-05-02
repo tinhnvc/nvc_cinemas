@@ -98,6 +98,96 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
         if (item.id == id) item.copyWith(status: 'canceled') else item,
     ];
   }
+
+  int ticketAmountByMovieId(WidgetRef ref, String movieId) {
+    var count = 0;
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        final time = ref.read(timesProvider.notifier).getById(item.timeId!);
+        if (time.movieId == movieId && item.status == 'payed') {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+
+  int totalByMovieId(WidgetRef ref, String movieId) {
+    var total = 0;
+
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        final time = ref.read(timesProvider.notifier).getById(item.timeId!);
+        if (time.movieId == movieId && item.status == 'payed') {
+          total += item.totalPrice ?? 45000;
+        }
+      }
+    }
+    return total;
+  }
+
+  List<RevenueData> revenueByMovie(WidgetRef ref, String movieId) {
+    var result = <RevenueData>[];
+    final month = [1, 2, 3, 4, 5];
+    for (final item in month) {
+      var revenueInMonth = 0;
+      for (final ticket in state) {
+        final time = ref.read(timesProvider.notifier).getById(ticket.timeId!);
+        if (DateTime.fromMillisecondsSinceEpoch(time.from!).month == item &&
+            time.movieId == movieId &&
+            ticket.status == 'payed') {
+          revenueInMonth += ticket.totalPrice ?? 45000;
+        }
+      }
+      result.add(RevenueData('Tháng $item', revenueInMonth.toDouble()));
+    }
+
+    return result;
+  }
+
+  List<RevenueData> revenuePromotion(WidgetRef ref) {
+    var result = <RevenueData>[];
+    final month = [1, 2, 3, 4, 5];
+    for (final item in month) {
+      var revenueInMonth = 0;
+      for (final ticket in state) {
+        final time = ref.read(timesProvider.notifier).getById(ticket.timeId!);
+        if (DateTime.fromMillisecondsSinceEpoch(time.from!).month == item &&
+            ticket.status == 'payed') {
+          revenueInMonth += ticket.discount ?? 15000;
+        }
+      }
+      result.add(RevenueData('Tháng $item', revenueInMonth.toDouble()));
+    }
+
+    return result;
+  }
+
+  int totalRevenue(WidgetRef ref) {
+    var total = 0;
+
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.status == 'payed') {
+          total += item.totalPrice ?? 45000;
+        }
+      }
+    }
+    return total;
+  }
+
+  int totalPromotion(WidgetRef ref) {
+    var total = 0;
+
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.status == 'payed') {
+          total += item.discount ?? 15000;
+        }
+      }
+    }
+    return total;
+  }
 }
 
 final ticketFormProvider = Provider<TicketFormProvider>(
@@ -267,4 +357,11 @@ class EndTimeFilterMovieNotifier extends StateNotifier<String> {
   void update(String value) {
     state = value;
   }
+}
+
+class RevenueData {
+  RevenueData(this.month, this.revenue);
+
+  final String month;
+  final double revenue;
 }

@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 
 class MRoomItem extends ConsumerWidget {
-  const MRoomItem({Key? key}) : super(key: key);
+  const MRoomItem({required this.room, Key? key}) : super(key: key);
+  final RoomModel room;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +43,7 @@ class MRoomItem extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.4,
                       child: Text(
-                        'P12',
+                        room.name ?? context.l10n.notUpdated,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -64,8 +69,23 @@ class MRoomItem extends ConsumerWidget {
                           scale: 0.7,
                           alignment: Alignment.topCenter,
                           child: CupertinoSwitch(
-                            value: true,
-                            onChanged: (bool value) {},
+                            value: room.active ?? false,
+                            onChanged: (bool value) {
+                              if (!value) {
+                                FunctionUtil.alertPopUpConfirmWithContent(
+                                    onPressedConfirm: () {
+                                      ref
+                                          .read(roomsProvider.notifier)
+                                          .switchActive(room.id!, value);
+                                    },
+                                    content:
+                                        'Phòng?\nPhòng sau khi đóng sẽ không thể chọn để book lịch chiếu');
+                              } else {
+                                ref
+                                    .read(roomsProvider.notifier)
+                                    .switchActive(room.id!, value);
+                              }
+                            },
                             activeColor: ColorName.primary,
                           ),
                         ),
@@ -77,7 +97,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.seatAmount}: 30 ${context.l10n.seat}',
+                  '${context.l10n.seatAmount}: ${room.seatAmount} ${context.l10n.seat.toLowerCase()}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
@@ -87,7 +107,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.size}: 5 x 6',
+                  '${context.l10n.size}: ${room.size}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
@@ -97,7 +117,7 @@ class MRoomItem extends ConsumerWidget {
                   height: 5,
                 ),
                 Text(
-                  '${context.l10n.createAt}: 11:02 - 13/02/2023',
+                  '${context.l10n.createAt}: ${FormatSupport.toDateTimeNonSecond(room.createAt!)}',
                   style: TextStyle(
                     fontSize: 15,
                     color: ColorName.textNormal,
