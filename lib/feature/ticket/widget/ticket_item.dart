@@ -131,7 +131,14 @@ class TicketItem extends ConsumerWidget {
                   )
                 ],
               ),
-            )
+            ),
+          if (ticket.status == 'payed')
+            RoundedButtonWidget(
+              content: 'Lấy mã QR',
+              onPressed: () {
+                CallModalSheet.showTicketQr(context, ticket.id!);
+              },
+            ),
         ],
       ),
     );

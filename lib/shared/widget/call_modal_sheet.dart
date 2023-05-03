@@ -6,6 +6,7 @@ import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/comment_widget.dart';
 import 'package:nvc_cinemas/feature/payment/widget/payment_qr.dart';
 import 'package:nvc_cinemas/feature/payment/widget/payment_qr_later.dart';
+import 'package:nvc_cinemas/feature/payment/widget/ticket_qr.dart';
 import 'package:nvc_cinemas/feature/user/widget/edit_account_information.dart';
 
 class CallModalSheet {
@@ -32,6 +33,19 @@ class CallModalSheet {
       barrierColor: Colors.black.withOpacity(0.2),
       backgroundColor: Colors.transparent,
       builder: (context) => PaymentQrLaterModalSheet(args: args),
+    );
+  }
+
+  static Future<void> showTicketQr(
+    BuildContext context,
+    String ticketId,
+  ) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      barrierColor: Colors.black.withOpacity(0.2),
+      backgroundColor: Colors.transparent,
+      builder: (context) => TicketQrModalSheet(ticketId: ticketId),
     );
   }
 

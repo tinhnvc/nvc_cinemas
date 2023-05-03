@@ -137,6 +137,9 @@ class RoomFormProvider {
     ref.read(roomsProvider.notifier).add(room);
     final seatsInit = ref.watch(seatsAddRoomProvider);
     ref.read(seatsProvider.notifier).addList(seatsInit);
+    for (final item in seatsInit) {
+      print(item);
+    }
     FunctionUtil.alertPopUpCreated(onPressedConfirm: () {
       Navigator.pop(context);
     });

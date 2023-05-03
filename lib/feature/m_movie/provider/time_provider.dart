@@ -193,6 +193,7 @@ class TimeFormProvider {
       from: int.parse(from),
       to: int.parse(to),
     );
+    print('Add Showtime: $time');
     ref.read(timesProvider.notifier).add(time);
     FunctionUtil.alertPopUpConfirm(
         onPressedConfirm: () {

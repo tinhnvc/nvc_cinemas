@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/shared/link/seat_types.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
@@ -64,11 +65,13 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
     ];
   }
 
-  String getPriceByIndex(int index) {
+  String getPriceByIndex(WidgetRef ref, int index) {
     var result = '45000';
     final today = DateTime.now().weekday;
+    final dayChoose = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final day = DateTime.fromMillisecondsSinceEpoch(dayChoose.day!).weekday;
     if (state.isNotEmpty) {
-      if (today == 6 || today == 7) {
+      if (day == 6 || day == 7) {
         result = state[index].otherPrice.toString();
       } else {
         result = state[index].price.toString();

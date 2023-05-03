@@ -42,8 +42,10 @@ class BookingByMovieDetail extends ConsumerWidget {
     final room = ref.read(roomsProvider.notifier).getById(time.roomId!);
     final seatTypes = ref.watch(seatTypesProvider);
     final allSeats = ref.watch(seatsProvider);
-    final priceNormal = ref.read(seatTypesProvider.notifier).getPriceByIndex(0);
-    final priceVip = ref.read(seatTypesProvider.notifier).getPriceByIndex(1);
+    final priceNormal =
+        ref.read(seatTypesProvider.notifier).getPriceByIndex(ref, 0);
+    final priceVip =
+        ref.read(seatTypesProvider.notifier).getPriceByIndex(ref, 1);
     final row = int.parse(room.size!.split(' x ')[0]);
     final col = int.parse(room.size!.split(' x ')[1]);
     var rowList = [];
