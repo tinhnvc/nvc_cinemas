@@ -27,90 +27,108 @@ class CategoryItem extends ConsumerWidget {
     final ratio = height / size.width;
     final isVietnamese = ref.watch(languageProvider) == 'vi';
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: ColorName.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: width * 0.6,
-            child: Text(
-              isVietnamese
-                  ? '${category.categoryName}'
-                  : '${category.categoryNameEn}',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: ColorName.btnText,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: category.categoryNameEn == 'Other'
-                    ? () {
-                        SnackBarSupport.avoidFunction(
-                          context: context,
-                          hideAction: true,
-                        );
-                      }
-                    : () {
-                        InitUtil.initEditCategory(ref: ref, category: category);
-                        Navigator.pushNamed(context, '/edit-category',
-                            arguments: category);
-                      },
-                child: Icon(
-                  Icons.edit_note,
-                  size: 25,
+    return GestureDetector(
+      onLongPress: !category.active!
+          ? () {
+              FunctionUtil.confirmDelete(
+                  onPressedConfirm: () {
+                    ref.read(categoriesProvider.notifier).remove(category.id!);
+                  },
+                  content: 'Danh mục?');
+            }
+          : () {
+              SnackBarSupport.avoidFunction(
+                context: context,
+                hideAction: true,
+              );
+            },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: ColorName.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: width * 0.6,
+              child: Text(
+                isVietnamese
+                    ? '${category.categoryName}'
+                    : '${category.categoryNameEn}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
                   color: ColorName.btnText,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Transform.scale(
-                scale: 0.7,
-                child: CupertinoSwitch(
-                  value: category.active ?? false,
-                  onChanged: category.categoryNameEn == 'Other'
-                      ? (bool value) {
+            ),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: category.categoryNameEn == 'Other'
+                      ? () {
                           SnackBarSupport.avoidFunction(
                             context: context,
                             hideAction: true,
                           );
                         }
-                      : (bool value) {
-                          if (!value) {
-                            FunctionUtil.alertPopUpConfirmWithContent(
-                                onPressedConfirm: () {
-                                  ref
-                                      .read(categoriesProvider.notifier)
-                                      .switchActive(category.id!, value);
-                                  ref
-                                      .read(moviesProvider.notifier)
-                                      .moveCategoryToOther(category.id!);
-                                },
-                                content: 'Danh mục');
-                          } else {
-                            ref
-                                .read(categoriesProvider.notifier)
-                                .switchActive(category.id!, value);
-                          }
+                      : () {
+                          InitUtil.initEditCategory(
+                              ref: ref, category: category);
+                          Navigator.pushNamed(context, '/edit-category',
+                              arguments: category);
                         },
-                  activeColor: category.categoryNameEn == 'Other'
-                      ? ColorName.primary.withOpacity(0.2)
-                      : ColorName.primary,
+                  child: Icon(
+                    Icons.edit_note,
+                    size: 25,
+                    color: ColorName.btnText,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Transform.scale(
+                  scale: 0.7,
+                  child: CupertinoSwitch(
+                    value: category.active ?? false,
+                    onChanged: category.categoryNameEn == 'Other'
+                        ? (bool value) {
+                            SnackBarSupport.avoidFunction(
+                              context: context,
+                              hideAction: true,
+                            );
+                          }
+                        : (bool value) {
+                            if (!value) {
+                              FunctionUtil.alertPopUpConfirmWithContent(
+                                  onPressedConfirm: () {
+                                    ref
+                                        .read(categoriesProvider.notifier)
+                                        .switchActive(category.id!, value);
+                                    ref
+                                        .read(moviesProvider.notifier)
+                                        .moveCategoryToOther(category.id!);
+                                  },
+                                  content:
+                                      'Danh mục?\nCác phim thuộc danh mục này sẽ chuyển sang danh mục Khác');
+                            } else {
+                              ref
+                                  .read(categoriesProvider.notifier)
+                                  .switchActive(category.id!, value);
+                            }
+                          },
+                    activeColor: category.categoryNameEn == 'Other'
+                        ? ColorName.primary.withOpacity(0.2)
+                        : ColorName.primary,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

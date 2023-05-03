@@ -17,6 +17,7 @@ import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/add_promotion.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/edit_promotion.dart';
 import 'package:nvc_cinemas/feature/m_revenue/widget/revenue_detail.dart';
+import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/add_room.dart';
 import 'package:nvc_cinemas/feature/m_room/widget/edit_room.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
@@ -29,6 +30,7 @@ import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie.dart';
 import 'package:nvc_cinemas/feature/movie/widget/booking_by_movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_detail.dart';
 import 'package:nvc_cinemas/feature/movie/widget/movie_page.dart';
+import 'package:nvc_cinemas/feature/movie/widget/search_page.dart';
 import 'package:nvc_cinemas/feature/payment/widget/payment_page.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_detail.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_page.dart';
@@ -116,7 +118,9 @@ class App extends ConsumerWidget {
             movie: arguments! as MovieModel,
           ),
       '/add-room': ([Object? arguments]) => const AddRoom(),
-      '/edit-room': ([Object? arguments]) => const EditRoom(),
+      '/edit-room': ([Object? arguments]) => EditRoom(
+            room: arguments! as RoomModel,
+          ),
       '/add-account': ([Object? arguments]) => const AddAccount(),
       '/edit-account': ([Object? arguments]) => EditAccount(
             account: arguments! as User,
@@ -136,6 +140,7 @@ class App extends ConsumerWidget {
       '/term-of-use': ([Object? arguments]) => const TermOfUse(),
       '/secure-policy': ([Object? arguments]) => const SecurePolicy(),
       '/cinemas-info': ([Object? arguments]) => const CinemasInfo(),
+      '/search-page': ([Object? arguments]) => const SearchPage(),
     };
 
     Route<dynamic>? onGenerateRoute(RouteSettings settings) {

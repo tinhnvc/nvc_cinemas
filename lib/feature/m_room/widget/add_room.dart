@@ -22,9 +22,8 @@ class AddRoom extends ConsumerWidget {
     final height = size.height - (padding.top + padding.bottom + inset.bottom);
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
-
-    final heightDropdownList = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
-    final widthDropdownList = ['2', '3', '4', '5', '6',];
+    final heightDropdownList = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+    final widthDropdownList = ['2', '3', '4', '5', '6'];
     final heightValue = ref.watch(heightAddRoomProvider);
     final widthValue = ref.watch(widthAddRoomProvider);
     final formGroup = ref.read(roomFormProvider).addRoomForm;
@@ -206,138 +205,6 @@ class AddRoom extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //   ],
-                            // ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: true,
-                            //     ),
-                            //   ],
-                            // ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //   ],
-                            // ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //     SeatWidgetAddRoom(
-                            //       color: Colors.grey,
-                            //       isNormal: false,
-                            //     ),
-                            //   ],
-                            // ),
                             Container(
                               margin: const EdgeInsets.only(
                                 bottom: 25,
@@ -369,9 +236,9 @@ class AddRoom extends ConsumerWidget {
                                         .watch(roomFormProvider)
                                         .buttonController,
                                     onPressed: () {
-                                      // ref
-                                      //     .read(roomFormProvider)
-                                      //     .addRoom(ref, context);
+                                      ref
+                                          .read(roomFormProvider)
+                                          .addRoom(ref, context);
                                       print(ref
                                           .watch(seatsAddRoomProvider)
                                           .length);

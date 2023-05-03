@@ -27,6 +27,13 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
     state = [...state, seatType];
   }
 
+  void remove(String seatTypeId) {
+    state = [
+      for (final item in state)
+        if (item.id != seatTypeId) item,
+    ];
+  }
+
   void editSeatType(SeatTypeModel seatType) {
     state = [
       for (final item in state)
@@ -76,6 +83,18 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
     if (state.isNotEmpty) {
       for (final item in state) {
         if (item.id == id) {
+          seatType = item;
+        }
+      }
+    }
+    return seatType;
+  }
+
+  SeatTypeModel getByName(String name) {
+    var seatType = const SeatTypeModel();
+    if (state.isNotEmpty) {
+      for (final item in state) {
+        if (item.typeName == name) {
           seatType = item;
         }
       }

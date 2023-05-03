@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/shared/link/movies.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
@@ -294,6 +295,39 @@ final imageAddMovieProvider =
 
 class ImageAddMovieNotifier extends StateNotifier<String> {
   ImageAddMovieNotifier() : super('');
+
+  void update(String value) {
+    state = value;
+  }
+}
+
+final categoriesFilterProvider =
+    StateNotifierProvider<CategoriesFilterNotifier, List<String>>(
+  (ref) => CategoriesFilterNotifier(),
+);
+
+class CategoriesFilterNotifier extends StateNotifier<List<String>> {
+  CategoriesFilterNotifier() : super(['Tất cả']) {}
+
+  Future<void> fetchCategoriesFilter(WidgetRef ref) async {
+    final result = <String>['Tất cả'];
+    final categories = ref.watch(categoriesProvider);
+    for (final item in categories) {
+      if (item.active ?? false) {
+        result.add(item.categoryName!);
+      }
+    }
+    state = result;
+  }
+}
+
+final categorySelectFilterProvider =
+    StateNotifierProvider<CategorySelectFilterNotifier, String>(
+  (ref) => CategorySelectFilterNotifier(),
+);
+
+class CategorySelectFilterNotifier extends StateNotifier<String> {
+  CategorySelectFilterNotifier() : super('Tất cả');
 
   void update(String value) {
     state = value;

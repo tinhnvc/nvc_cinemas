@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
-import 'package:nvc_cinemas/l10n/l10n.dart';
 
 class SeatWidgetAddRoom extends ConsumerWidget {
   const SeatWidgetAddRoom({
@@ -28,7 +28,11 @@ class SeatWidgetAddRoom extends ConsumerWidget {
         return buildPopupMenuItem(
           title: e,
           isChose: false,
-          onPressed: () {},
+          onPressed: () {
+            ref
+                .read(seatsAddRoomProvider.notifier)
+                .changeSeatType(ref: ref, seatId: seat.id!, seatTypeName: e);
+          },
         );
       }).toList(),
       child: Container(

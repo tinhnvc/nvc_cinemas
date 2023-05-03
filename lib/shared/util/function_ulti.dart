@@ -378,6 +378,63 @@ class FunctionUtil {
       ],
     ).show();
   }
+
+  static void confirmDelete({
+    required VoidCallback onPressedConfirm,
+    required String content,
+    bool? isConfirm = false,
+  }) {
+    final context = OneContext().context;
+    Alert(
+      context: context!,
+      type: AlertType.warning,
+      title: 'Lưu ý',
+      desc: 'Đồng ý thực hiện xoá $content',
+      style: const AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: ColorName.primary,
+          radius: const BorderRadius.all(Radius.circular(5)),
+          height: 44,
+          onPressed: () {
+            onPressedConfirm();
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'OK',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        if (!isConfirm!)
+          DialogButton(
+            color: const Color(0xFFAAAAAA),
+            radius: const BorderRadius.all(Radius.circular(5)),
+            height: 44,
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              context.l10n.cancel,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+      ],
+    ).show();
+  }
 }
 //
 // class URLUlti {

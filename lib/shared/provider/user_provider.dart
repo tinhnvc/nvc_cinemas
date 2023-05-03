@@ -28,6 +28,18 @@ class UserNotifier extends StateNotifier<User> {
     state = user;
   }
 
+  void editUser(User user) {
+    state = state.copyWith(
+      password: user.password,
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber,
+      gender: user.gender,
+      yob: user.yob,
+      createAt: user.createAt,
+      updateAt: user.updateAt,
+    );
+  }
+
   String? getNameCharacter() {
     final words = state.fullName?.split(' ');
 
@@ -153,6 +165,76 @@ class UserFormProvider {
     buttonController.reset();
   }
 
+  Future<void> editCustomerInfo(
+    WidgetRef ref,
+    BuildContext context,
+    User userModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final password = editProfileForm.control('password').value;
+    final fullName = editProfileForm.control('fullName').value;
+    final phoneNumber = editProfileForm.control('phoneNumber').value;
+    final gender = editProfileForm.control('gender').value;
+    final yob = editProfileForm.control('yob').value;
+    final user = User(
+      userId: userModel.userId,
+      password: password,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      yob: yob,
+      createAt: userModel.createAt,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(usersProvider.notifier).editUser(user);
+    ref.read(userProvider.notifier).editUser(user);
+    FunctionUtil.alertPopUpUpdated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
+
+  Future<void> changePassword(
+    WidgetRef ref,
+    BuildContext context,
+    User userModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final oldPassword = editPasswordForm.control('oldPassword').value;
+    final password = editPasswordForm.control('password').value;
+    final fullName = editProfileForm.control('fullName').value;
+    final phoneNumber = editProfileForm.control('phoneNumber').value;
+    final gender = editProfileForm.control('gender').value;
+    final yob = editProfileForm.control('yob').value;
+    if (userModel.password != oldPassword) {
+      editPasswordForm
+          .control('oldPassword')
+          .setErrors({'Mật khẩu cũ không đúng': true});
+
+      buttonController.reset();
+      return;
+    }
+
+    final user = User(
+      userId: userModel.userId,
+      password: password,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      yob: yob,
+      createAt: userModel.createAt,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(usersProvider.notifier).editUser(user);
+    ref.read(userProvider.notifier).editUser(user);
+    FunctionUtil.alertPopUpUpdated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
+
   Future<void> updatePassword(WidgetRef ref, BuildContext context) async {
     buttonController.start();
     FunctionUtil.alertPopUpConfirm(
@@ -239,5 +321,18 @@ class RoleAddAccount extends StateNotifier<Role> {
 
   Future<void> fetchUser(Role role) async {
     state = role;
+  }
+}
+
+final genderEditProfileProvider =
+    StateNotifierProvider<GenderEditProfileNotifier, String>(
+  (ref) => GenderEditProfileNotifier(),
+);
+
+class GenderEditProfileNotifier extends StateNotifier<String> {
+  GenderEditProfileNotifier() : super('');
+
+  void update(String value) {
+    state = value;
   }
 }

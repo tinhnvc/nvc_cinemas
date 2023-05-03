@@ -1,3 +1,4 @@
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -75,6 +76,10 @@ class BottomNavigationWidget extends ConsumerWidget {
     }
 
     NavigationItem convertIndexAdmin(int index) {
+      if (index == 1) {
+        ref.read(categoriesFilterProvider.notifier).fetchCategoriesFilter(ref);
+        ref.refresh(categorySelectFilterProvider);
+      }
       switch (index) {
         case 0:
           return NavigationItem.mCategory;

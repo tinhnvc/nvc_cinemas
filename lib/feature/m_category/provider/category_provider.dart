@@ -52,6 +52,13 @@ class CategoriesNotifier extends StateNotifier<List<CategoryModel>> {
     state = [...state, cat];
   }
 
+  void remove(String categoryId) {
+    state = [
+      for (final item in state)
+        if (item.id != categoryId) item,
+    ];
+  }
+
   void editCategory(CategoryModel category) {
     state = [
       for (final item in state)

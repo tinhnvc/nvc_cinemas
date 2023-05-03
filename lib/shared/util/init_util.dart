@@ -284,4 +284,43 @@ class InitUtil {
     ref.read(roomIdProvider.notifier).update(Uuid().v4());
     ref.read(seatsAddRoomProvider.notifier).fetchRooms(ref, 3, 4);
   }
+
+  static void initEditRoom({
+    required WidgetRef ref,
+    required BuildContext context,
+    required RoomModel room,
+  }) async {
+    final formGroup = ref.read(roomFormProvider).addRoomForm..reset();
+    formGroup.control('roomName').value = room.name;
+    formGroup.control('size').value = room.size;
+    formGroup.control('seatAmount').value = room.seatAmount.toString();
+    final height = room.size!.split(' x ')[0];
+    final width = room.size!.split(' x ')[1];
+    ref.read(heightAddRoomProvider.notifier).update(height);
+    ref.read(widthAddRoomProvider.notifier).update(width);
+    final oldSeats = ref.read(seatsProvider.notifier).getByRoomId(room.id!);
+    ref.read(seatsAddRoomProvider.notifier).fetchOldList(oldSeats);
+  }
+
+  static void initEditCustomerInfor({
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    final user = ref.watch(userProvider);
+    final formGroup = ref.read(userFormProvider).editProfileForm..reset();
+    formGroup.control('password').value = user.password;
+    formGroup.control('fullName').value = user.fullName;
+    formGroup.control('phoneNumber').value = user.phoneNumber;
+    formGroup.control('gender').value = user.gender;
+    formGroup.control('yob').value = user.yob;
+    ref.read(genderEditProfileProvider.notifier).update(
+        user.gender! == 'male' ? context.l10n.male : context.l10n.female);
+  }
+
+  static void initChangePassword({
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    final formGroup = ref.read(userFormProvider).editPasswordForm..reset();
+  }
 }

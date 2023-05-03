@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_room/model/room_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/model/seat_type_model.dart';
+import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/shared/link/rooms.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -62,7 +64,14 @@ class RoomsNotifier extends StateNotifier<List<RoomModel>> {
     state = [...state, room];
   }
 
-  void editMovie(RoomModel room) {
+  void remove(String roomId) {
+    state = [
+      for (final item in state)
+        if (item.id != roomId) item,
+    ];
+  }
+
+  void editRoom(RoomModel room) {
     state = [
       for (final item in state)
         if (item.id == room.id)
@@ -112,8 +121,8 @@ class RoomFormProvider {
     await Future.delayed(const Duration(milliseconds: 700));
     final height = ref.watch(heightAddRoomProvider);
     final width = ref.watch(widthAddRoomProvider);
-    final roomName = addRoomForm.control('roomName').value;
     final size = '$height x $width';
+    final roomName = addRoomForm.control('roomName').value;
     final seatAmount = addRoomForm.control('seatAmount').value;
     final room = RoomModel(
       id: ref.watch(roomIdProvider),
@@ -126,15 +135,43 @@ class RoomFormProvider {
       updateAt: DateTime.now().millisecondsSinceEpoch,
     );
     ref.read(roomsProvider.notifier).add(room);
+    final seatsInit = ref.watch(seatsAddRoomProvider);
+    ref.read(seatsProvider.notifier).addList(seatsInit);
     FunctionUtil.alertPopUpCreated(onPressedConfirm: () {
       Navigator.pop(context);
     });
     buttonController.reset();
   }
 
-  Future<void> editRoom(WidgetRef ref, BuildContext context) async {}
-
-  Future<void> changeStatus(WidgetRef ref, BuildContext context) async {}
+  Future<void> editRoom(
+    WidgetRef ref,
+    BuildContext context,
+    RoomModel roomModel,
+  ) async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    final roomName = addRoomForm.control('roomName').value;
+    final height = ref.watch(heightAddRoomProvider);
+    final width = ref.watch(widthAddRoomProvider);
+    final size = '$height x $width';
+    final seatAmount = addRoomForm.control('seatAmount').value;
+    final room = RoomModel(
+      id: roomModel.id,
+      name: roomName,
+      size: size,
+      seatAmount: int.parse(seatAmount),
+      createAt: roomModel.createAt,
+      updateAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    ref.read(roomsProvider.notifier).editRoom(room);
+    ref.read(seatsProvider.notifier).removeOldSeat(roomModel.id!);
+    final seatsInit = ref.watch(seatsAddRoomProvider);
+    ref.read(seatsProvider.notifier).addList(seatsInit);
+    FunctionUtil.alertPopUpUpdated(onPressedConfirm: () {
+      Navigator.pop(context);
+    });
+    buttonController.reset();
+  }
 }
 
 final widthAddRoomProvider =
@@ -216,6 +253,10 @@ class SeatsAddRoomNotifier extends StateNotifier<List<SeatModel>> {
     state = seatsInit;
   }
 
+  void fetchOldList(List<SeatModel> seats) {
+    state = seats;
+  }
+
   SeatModel getById(String id) {
     var seat = const SeatModel();
     if (state.isNotEmpty) {
@@ -231,6 +272,24 @@ class SeatsAddRoomNotifier extends StateNotifier<List<SeatModel>> {
 
   void add(SeatModel seat) {
     state = [...state, seat];
+  }
+
+  void changeSeatType({
+    required WidgetRef ref,
+    required String seatId,
+    required String seatTypeName,
+  }) {
+    final seatType =
+        ref.read(seatTypesProvider.notifier).getByName(seatTypeName);
+    state = [
+      for (final item in state)
+        if (item.id == seatId)
+          item.copyWith(
+            seatTypeId: seatType.id ?? '212c58aa-c7c1-4de8-b3c9-75103eca4a7e',
+          )
+        else
+          item,
+    ];
   }
 
   String rowSeatName(int row) {
@@ -255,6 +314,16 @@ class SeatsAddRoomNotifier extends StateNotifier<List<SeatModel>> {
         return 'I';
       case 10:
         return 'J';
+      case 11:
+        return 'K';
+      case 12:
+        return 'L';
+      case 13:
+        return 'M';
+      case 14:
+        return 'N';
+      case 15:
+        return 'O';
       default:
         return 'A';
     }

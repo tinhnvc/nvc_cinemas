@@ -1,16 +1,13 @@
 import 'dart:ui';
 
-import 'package:intl/intl.dart';
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
-import 'package:nvc_cinemas/feature/user/widget/edit_account_information.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/gen/colors.gen.dart';
-import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
 import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
@@ -28,6 +25,7 @@ class AccountInformation extends ConsumerWidget {
     final ratio = height / size.width;
 
     final user = ref.watch(userProvider);
+    print(user);
 
     return Scaffold(
       backgroundColor: ColorName.pageBackground,
@@ -146,6 +144,8 @@ class AccountInformation extends ConsumerWidget {
                               RoundedButtonWidget(
                                 content: context.l10n.edit,
                                 onPressed: () {
+                                  InitUtil.initEditCustomerInfor(
+                                      ref: ref, context: context);
                                   CallModalSheet.editAccountInformation(
                                       context);
                                 },
@@ -193,6 +193,8 @@ class AccountInformation extends ConsumerWidget {
                             title: context.l10n.changePassword,
                             icon: Icons.arrow_forward_ios_outlined,
                             onPressed: () {
+                              InitUtil.initChangePassword(
+                                  ref: ref, context: context);
                               Navigator.pushNamed(context, '/change-password');
                             },
                           ),

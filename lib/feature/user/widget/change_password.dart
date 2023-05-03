@@ -179,9 +179,10 @@ class ChangePassword extends ConsumerWidget {
                                         .watch(userFormProvider)
                                         .buttonController,
                                     onPressed: () {
-                                      // ref
-                                      //     .read(userFormProvider)
-                                      //     .updatePassword(ref, context);
+                                      ref.read(userFormProvider).changePassword(
+                                          ref,
+                                          context,
+                                          ref.watch(userProvider));
                                     },
                                     child: Text(
                                       context.l10n.save,

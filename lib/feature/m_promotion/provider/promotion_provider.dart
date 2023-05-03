@@ -39,6 +39,13 @@ class PromotionNotifier extends StateNotifier<List<PromotionModel>> {
     state = [...state, room];
   }
 
+  void remove(String proId) {
+    state = [
+      for (final item in state)
+        if (item.id != proId) item,
+    ];
+  }
+
   void editPromotion(PromotionModel promotion) {
     state = [
       for (final item in state)

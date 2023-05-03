@@ -5,13 +5,13 @@ import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
-import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/service/file_service.dart';
+import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -31,9 +31,8 @@ class _HomeState extends ConsumerState<Home> {
     final width = size.width - (padding.left + padding.right + inset.right);
     final ratio = height / size.width;
     final user = ref.watch(userProvider);
-    final movies = ref
-        .watch(moviesProvider)
-        ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+    final movies = ref.watch(moviesProvider)
+      ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
     final language = ref.watch(languageProvider);
     ref.watch(seatTypesProvider);
     ref.watch(categoriesProvider);
@@ -87,7 +86,14 @@ class _HomeState extends ConsumerState<Home> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SearchWidget(searchHint: 'Sự trở lại của Askhan'),
+                    GestureDetector(
+                        onTap: () {
+                          InitUtil.initBookingByMovie(ref: ref);
+                          Navigator.pushNamed(context, '/search-page');
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                        child:
+                            SearchWidget(searchHint: 'Sự trở lại của Askhan')),
                     const SizedBox(
                       height: 10,
                     ),

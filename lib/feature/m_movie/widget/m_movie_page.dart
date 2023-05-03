@@ -4,12 +4,12 @@ import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
 import 'package:nvc_cinemas/feature/movie/model/category_model.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
-import 'package:nvc_cinemas/shared/widget/search_widget.dart';
 
 class MMoviePage extends ConsumerWidget {
   const MMoviePage({Key? key}) : super(key: key);
@@ -31,10 +31,27 @@ class MMoviePage extends ConsumerWidget {
           categoryNameEn: context.l10n.all),
       ...ref.watch(categoriesProvider)
     ];
-    final movies = ref.watch(moviesProvider)
-      ..sort(
-        (a, b) => a.startTime!.compareTo(b.startTime!),
-      );
+    final allMovies = ref.watch(moviesProvider);
+    var movies = <MovieModel>[];
+
+    final categorySelect = ref.watch(categorySelectFilterProvider);
+    final categoriesFilter = ref.watch(categoriesFilterProvider);
+    if (categorySelect == 'Tất cả') {
+      movies = ref.watch(moviesProvider)
+        ..sort(
+          (a, b) => a.startTime!.compareTo(b.startTime!),
+        );
+    }
+
+    if (categorySelect != 'Tất cả') {
+      for (final item in allMovies) {
+        final category =
+            ref.read(categoriesProvider.notifier).getByName(categorySelect);
+        if (item.category == category.id) {
+          movies.add(item);
+        }
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -79,10 +96,6 @@ class MMoviePage extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    SearchWidget(searchHint: 'Hạnh phúc của gia đình Tom'),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     SizedBox(
                       width: width,
                       height: 25,
@@ -98,22 +111,28 @@ class MMoviePage extends ConsumerWidget {
                               physics: AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
                               scrollDirection: Axis.horizontal,
-                              children: categories
+                              children: categoriesFilter
                                   .map(
                                     (e) => GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        ref
+                                            .read(categorySelectFilterProvider
+                                                .notifier)
+                                            .update(e);
+                                      },
                                       child: Container(
                                         margin: const EdgeInsets.only(
                                           left: 15,
                                           right: 5,
                                         ),
                                         child: Text(
-                                          isVietnamese
-                                              ? '${e.categoryName}'
-                                              : '${e.categoryNameEn}',
+                                          e,
                                           style: TextStyle(
                                             color: ColorName.btnText,
                                             fontSize: 15,
+                                            fontWeight: e == categorySelect
+                                                ? FontWeight.bold
+                                                : null,
                                           ),
                                         ),
                                       ),
@@ -125,8 +144,17 @@ class MMoviePage extends ConsumerWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Có ${movies.length} kết quả',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: ColorName.textNormal,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     Column(
                       children: movies.isNotEmpty

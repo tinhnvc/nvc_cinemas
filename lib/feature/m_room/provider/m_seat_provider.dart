@@ -1,13 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/shared/link/seats.dart';
-import 'package:nvc_cinemas/shared/util/function_ulti.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 final seatsProvider = StateNotifierProvider<SeatsNotifier, List<SeatModel>>(
   (ref) => SeatsNotifier(),
@@ -25,6 +20,25 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
 
   void add(SeatModel seat) {
     state = [...state, seat];
+  }
+
+  void addList(List<SeatModel> seats) {
+    state = [...state, ...seats];
+  }
+
+  void remove(String seatId) {
+    state = [
+      for (final item in state)
+        if (item.id != seatId) item,
+    ];
+  }
+
+  void removeOldSeat(String roomId) {
+    for (final item in state) {
+      if (item.roomId == roomId) {
+        remove(item.id!);
+      }
+    }
   }
 
   SeatModel getById(String id) {
@@ -128,6 +142,4 @@ class SeatsNotifier extends StateNotifier<List<SeatModel>> {
     print(soldSeats);
     return soldSeats.length == 0;
   }
-
-
 }

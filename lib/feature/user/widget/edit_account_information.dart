@@ -27,7 +27,8 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
       context.l10n.male,
       context.l10n.female,
     ];
-    final genderValue = ref.watch(genderSignUpProvider);
+    final genderValue = ref.watch(genderEditProfileProvider);
+    final formGroup = ref.read(userFormProvider).editProfileForm;
 
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
@@ -185,7 +186,8 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                                       value,
                                     );
                                     ref
-                                        .read(genderSignUpProvider.notifier)
+                                        .read(
+                                            genderEditProfileProvider.notifier)
                                         .update(value);
                                     ref
                                         .read(userFormProvider)
@@ -234,9 +236,10 @@ class EditAccountInformationModalSheet extends ConsumerWidget {
                               controller:
                                   ref.watch(userFormProvider).buttonController,
                               onPressed: () {
-                                // ref
-                                //     .read(userFormProvider)
-                                //     .edit(ref, customerId);
+                                final user = ref.watch(userProvider);
+                                ref
+                                    .read(userFormProvider)
+                                    .editCustomerInfo(ref, context, user);
                               },
                               child: Text(
                                 context.l10n.save,
