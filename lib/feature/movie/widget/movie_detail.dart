@@ -13,6 +13,7 @@ import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
 import 'package:nvc_cinemas/shared/widget/arrow_back_title.dart';
 import 'package:nvc_cinemas/shared/widget/call_modal_sheet.dart';
@@ -34,7 +35,7 @@ class MovieDetail extends ConsumerWidget {
     final isVietnamese = ref.watch(languageProvider) == 'vi';
     ref.watch(movieRatingsProvider);
     final category =
-    ref.read(categoriesProvider.notifier).getById(movie.category!);
+        ref.read(categoriesProvider.notifier).getById(movie.category!);
     final comments =
         ref.read(movieRatingsProvider.notifier).getByMovieId(movie.id!);
     final sumRate = ref.read(movieRatingsProvider.notifier).sumRate(movie.id!);
@@ -134,6 +135,20 @@ class MovieDetail extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 3),
                                   ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    FunctionUtil.ageToTitle(
+                                      context,
+                                      movie.type ?? 'P-',
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )
                                 ],
                               ),
                             ),

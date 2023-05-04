@@ -136,24 +136,34 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
     return time;
   }
 
-  bool checkShowtime(List<TimeModel> times, int from, int to) {
+  bool checkShowtime(List<TimeModel> times, int from, int to, String roomId) {
     var result = true;
     if (times.isNotEmpty) {
-      for (final item in times) {
-        if (from > item.from! && from < item.to!) {
-          return false;
-        }
-
-        if (from < item.from! && to > item.from!) {
-          return false;
-        }
-
-        if (from < item.from! && to > item.to!) {
-          return false;
+      final timesByRoom = <TimeModel>[];
+      for (final time in times) {
+        if (time.roomId == roomId) {
+          timesByRoom.add(time);
         }
       }
-    } else {
-      return true;
+      print(timesByRoom.length);
+
+      if (timesByRoom.isNotEmpty) {
+        for (final item in timesByRoom) {
+          if (from > item.from! && from < item.to!) {
+            return false;
+          }
+
+          if (from < item.from! && to > item.from!) {
+            return false;
+          }
+
+          if (from < item.from! && to > item.to!) {
+            return false;
+          }
+        }
+      } else {
+        return true;
+      }
     }
 
     return result;

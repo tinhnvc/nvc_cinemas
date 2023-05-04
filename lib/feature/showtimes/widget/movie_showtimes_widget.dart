@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
+import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_room/provider/m_seat_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
@@ -11,8 +12,10 @@ import 'package:nvc_cinemas/feature/movie/widget/time_booking_widget.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
+import 'package:nvc_cinemas/shared/provider/user_provider.dart';
 import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
+import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
 class MovieShowtimesWidget extends ConsumerWidget {
   const MovieShowtimesWidget({required this.movie, Key? key}) : super(key: key);
@@ -35,6 +38,10 @@ class MovieShowtimesWidget extends ConsumerWidget {
         .getSeatEmptyAmount(ref, timesShowByDay[0]);
     final category =
         ref.read(categoriesProvider.notifier).getById(movie.category!);
+
+    final user = ref.watch(userProvider);
+    final isAllowBookWithAge =
+        ref.read(moviesProvider.notifier).checkAge(user.yob!, movie.type!);
 
     return Container(
       child: Column(
@@ -132,20 +139,28 @@ class MovieShowtimesWidget extends ConsumerWidget {
               children: timesShowByDay.isNotEmpty
                   ? timesShowByDay.map((e) {
                       return GestureDetector(
-                          onTap: () {
-                            InitUtil.initBookingByMovieDetail(
-                              ref: ref,
-                              time: e,
-                            );
-                            Navigator.pushNamed(
-                              context,
-                              '/booking-by-movie-detail',
-                              arguments: {
-                                'movie': movie,
-                                'time': e,
-                              },
-                            );
-                          },
+                          onTap: isAllowBookWithAge
+                              ? () {
+                                  InitUtil.initBookingByMovieDetail(
+                                    ref: ref,
+                                    time: e,
+                                  );
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/booking-by-movie-detail',
+                                    arguments: {
+                                      'movie': movie,
+                                      'time': e,
+                                    },
+                                  );
+                                }
+                              : () {
+                                  SnackBarSupport.avoidBookWithAge(
+                                    context: context,
+                                    movieType: movie.type ?? 'T18-',
+                                    hideAction: true,
+                                  );
+                                },
                           child: TimeBookingWidget(time: e));
                     }).toList()
                   : [

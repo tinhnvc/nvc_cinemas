@@ -136,6 +136,18 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                       .getByName(value);
                                   formGroup.control('roomId').value =
                                       roomSelected.id!;
+                                  final checkShowtime = ref
+                                      .read(timesProvider.notifier)
+                                      .checkShowtime(
+                                        ref.watch(timesProvider),
+                                        int.parse(timeFrom),
+                                        int.parse(timeTo),
+                                        formGroup.control('roomId').value,
+                                      );
+                                  ref
+                                      .read(
+                                          isShowtimeAvailableProvider.notifier)
+                                      .changed = checkShowtime;
                                 },
                               ),
                             ),
@@ -196,6 +208,7 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                               ref.watch(timesProvider),
                                               int.parse(timeFrom),
                                               int.parse(timeTo),
+                                              formGroup.control('roomId').value,
                                             );
                                         ref
                                             .read(isShowtimeAvailableProvider

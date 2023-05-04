@@ -229,6 +229,22 @@ class FunctionUtil {
     return map[couponCode] ?? '';
   }
 
+  static String ageToTitle(
+    BuildContext context,
+    String age,
+  ) {
+    final map = {
+      'P-': 'Phù hợp mọi lứa tuổi',
+      'T13-': 'Khách hàng từ 13 tuổi',
+      'T16-': 'Khách hàng từ 16 tuổi',
+      'T18-': 'Khách hàng từ 18 tuổi',
+      'C-': 'Phim không phổ biến',
+      'K-': 'Phim cho trẻ dưới 13 tuổi, có người lớn đi cùng',
+    };
+
+    return map[age] ?? 'Phù hợp mọi lứa tuổi';
+  }
+
   static String couponCodeToDiscount(
     BuildContext context,
     String couponCode,

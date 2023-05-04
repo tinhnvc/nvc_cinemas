@@ -124,7 +124,7 @@ class BookingByMovieDetail extends ConsumerWidget {
                           height: 5,
                         ),
                         Text(
-                          '${context.l10n.twoDimensionalSubtitle} | '
+                          '${movie.dimension == '2D' ? context.l10n.twoDimensionalSubtitle : context.l10n.threeDimensionalSubtitle} | '
                           '${movie.duration} ${context.l10n.minutes.toLowerCase()} | '
                           '${FormatSupport.toDateTimeNonSecond(time.from!)}',
                           style: TextStyle(

@@ -91,6 +91,16 @@ class MoviesNotifier extends StateNotifier<List<MovieModel>> {
           item,
     ];
   }
+
+  bool checkAge(String yob, String movieType) {
+    final age = DateTime.now().year - int.parse(yob);
+    if (movieType == 'P-') return true;
+    if (movieType == 'K-') return true;
+    if (movieType == 'T13-') return age >= 13;
+    if (movieType == 'T16-') return age >= 16;
+    if (movieType == 'T18-') return age >= 18;
+    return false;
+  }
 }
 
 final movieFormProvider = Provider<MovieFormProvider>(

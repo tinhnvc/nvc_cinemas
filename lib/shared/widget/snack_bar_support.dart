@@ -1,6 +1,7 @@
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 
 class SnackBarSupport {
   static SnackBar createNotification({
@@ -275,6 +276,29 @@ class SnackBarSupport {
     final snackBar = SnackBar(
       content: Text('Không có phòng, thêm phòng trước khi thực hiện thao tác'),
       duration: const Duration(seconds: 2),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void avoidBookWithAge({
+    required BuildContext context,
+    required String movieType,
+    bool? hideAction,
+  }) {
+    final customerObj = FunctionUtil.ageToTitle(context, movieType);
+    final snackBar = SnackBar(
+      content: Text(
+          'Phim dành cho ${customerObj.toLowerCase()}\nKhách hàng vui lòng lựa chọn phim khác. Xin cảm ơn!'),
+      duration: const Duration(seconds: 4),
       backgroundColor: Colors.black.withOpacity(0.7),
       behavior: SnackBarBehavior.floating,
       action: hideAction ?? false
