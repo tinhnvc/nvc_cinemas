@@ -53,7 +53,7 @@ class MCategoryPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.categories,
+                          '${context.l10n.manage} ${context.l10n.categories.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,

@@ -84,7 +84,7 @@ class MMoviePage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.movie,
+                          '${context.l10n.manage} ${context.l10n.movie.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,

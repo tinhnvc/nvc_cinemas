@@ -160,7 +160,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.categories,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.categories.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mCategory,
                   icon: Icons.category,
@@ -169,7 +170,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.movie,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.movie.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mMovie,
                   icon: Icons.videocam_rounded,
@@ -178,7 +180,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.rooms,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.rooms.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mRoom,
                   icon: Icons.dataset,
@@ -187,7 +190,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.account,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.account.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mAccount,
                   icon: Icons.supervisor_account,
@@ -196,7 +200,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.seat,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.seat.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mSeat,
                   icon: Icons.chair,
@@ -205,7 +210,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.promotions,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.promotions.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mPromotion,
                   icon: Icons.percent_rounded,
@@ -214,7 +220,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.ticket,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.ticket.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mTicket,
                   icon: Icons.sticky_note_2_sharp,
@@ -223,7 +230,8 @@ class DrawerWidget extends ConsumerWidget {
                 buildNavigationItemDrawer(
                   context: context,
                   ref: ref,
-                  title: context.l10n.revenue,
+                  title:
+                      '${context.l10n.manage} ${context.l10n.revenue.toLowerCase()}',
                   currentSelected: currentSelected,
                   item: NavigationItem.mRevenue,
                   icon: Icons.stacked_bar_chart,

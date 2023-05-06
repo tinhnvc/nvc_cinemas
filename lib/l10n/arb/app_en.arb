@@ -226,5 +226,6 @@
     "payed": "Payed",
     "canceled": "Canceled",
     "chooseStartDate": "From date",
-    "chooseToDate": "To date"
+    "chooseToDate": "To date",
+    "manage": "Manage"
 }

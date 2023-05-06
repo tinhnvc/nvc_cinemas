@@ -178,7 +178,8 @@ class BottomNavigationWidget extends ConsumerWidget {
                   Icons.category_outlined,
                   color: ColorName.primary.withOpacity(0.8),
                 ),
-                label: context.l10n.categories,
+                label:
+                    '${context.l10n.manage} ${context.l10n.categories.toLowerCase()}',
               ),
             if (!isCustomer)
               NavigationDestination(
@@ -190,7 +191,8 @@ class BottomNavigationWidget extends ConsumerWidget {
                   Icons.videocam_outlined,
                   color: ColorName.primary.withOpacity(0.8),
                 ),
-                label: context.l10n.movie,
+                label:
+                '${context.l10n.manage} ${context.l10n.movie.toLowerCase()}',
               ),
             if (!isCustomer)
               NavigationDestination(
@@ -202,7 +204,8 @@ class BottomNavigationWidget extends ConsumerWidget {
                   Icons.dataset_outlined,
                   color: ColorName.primary.withOpacity(0.8),
                 ),
-                label: context.l10n.rooms,
+                label:
+                '${context.l10n.manage} ${context.l10n.rooms.toLowerCase()}',
               ),
             NavigationDestination(
               selectedIcon: Icon(

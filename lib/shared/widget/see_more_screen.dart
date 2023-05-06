@@ -94,7 +94,8 @@ class SeeMoreScreen extends ConsumerWidget {
                                   children: [
                                     SeeMoreItem(
                                       icon: Icons.supervisor_account_sharp,
-                                      content: context.l10n.account,
+                                      content:
+                                          '${context.l10n.manage} ${context.l10n.account.toLowerCase()}',
                                       onPressed: () => ref
                                           .read(navigationProvider.notifier)
                                           .setNavigationItem(
@@ -103,7 +104,8 @@ class SeeMoreScreen extends ConsumerWidget {
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.chair,
-                                      content: context.l10n.seat,
+                                      content:
+                                          '${context.l10n.manage} ${context.l10n.seat.toLowerCase()}',
                                       onPressed: () => ref
                                           .read(navigationProvider.notifier)
                                           .setNavigationItem(
@@ -112,7 +114,8 @@ class SeeMoreScreen extends ConsumerWidget {
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.percent_rounded,
-                                      content: context.l10n.promotions,
+                                      content:
+                                          '${context.l10n.manage} ${context.l10n.promotions.toLowerCase()}',
                                       onPressed: () => ref
                                           .read(navigationProvider.notifier)
                                           .setNavigationItem(
@@ -131,7 +134,8 @@ class SeeMoreScreen extends ConsumerWidget {
                                   children: [
                                     SeeMoreItem(
                                       icon: Icons.sticky_note_2_sharp,
-                                      content: context.l10n.ticket,
+                                      content:
+                                          '${context.l10n.manage} ${context.l10n.ticket.toLowerCase()}',
                                       onPressed: () => ref
                                           .read(navigationProvider.notifier)
                                           .setNavigationItem(
@@ -140,7 +144,8 @@ class SeeMoreScreen extends ConsumerWidget {
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.bar_chart,
-                                      content: context.l10n.revenue,
+                                      content:
+                                          '${context.l10n.manage} ${context.l10n.revenue.toLowerCase()}',
                                       onPressed: () {
                                         ref.refresh(
                                             isSelectRevenueMovieProvider);
