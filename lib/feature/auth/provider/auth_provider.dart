@@ -63,6 +63,12 @@ class AuthProvider {
     if (users.isNotEmpty) {
       for (final item in users) {
         if (item.email == email && item.password == password) {
+          if (!item.active!) {
+            SnackBarSupport.accountBaned(context: context);
+            buttonController.reset();
+            return;
+          }
+
           ref.read(userProvider.notifier).fetchUser(item);
           if (item.role!.roleName == 'admin' ||
               item.role!.roleName == 'manager') {

@@ -71,7 +71,7 @@ class MTicketPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.ticket,
+                          '${context.l10n.manage} ${context.l10n.ticket.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,
@@ -83,8 +83,8 @@ class MTicketPage extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    SearchWidget(searchHint: 'Hạnh phúc của gia đình Tom'),
-                    const SizedBox(height: 5),
+                    // SearchWidget(searchHint: 'Nhập mã vé, email khách hàng,...'),
+                    // const SizedBox(height: 5),
                     Row(
                       children: [
                         Row(

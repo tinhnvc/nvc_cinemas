@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
-import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
@@ -14,7 +13,6 @@ import 'package:nvc_cinemas/shared/provider/util_provider.dart';
 import 'package:nvc_cinemas/shared/util/format_support.dart';
 import 'package:nvc_cinemas/shared/util/function_ulti.dart';
 import 'package:nvc_cinemas/shared/util/init_util.dart';
-import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 
 class MMovieItem extends ConsumerWidget {
   const MMovieItem({required this.movie, Key? key}) : super(key: key);
@@ -53,10 +51,15 @@ class MMovieItem extends ConsumerWidget {
             child: movie.image != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.file(
-                      File(movie.image!),
-                      fit: BoxFit.cover,
-                    ),
+                    child: movie.image!.contains('/m/')
+                        ? Image.asset(
+                            movie.image!,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(movie.image!),
+                            fit: BoxFit.cover,
+                          ),
                   )
                 : Assets.images.logoPng.image(width: 100, fit: BoxFit.contain),
           ),

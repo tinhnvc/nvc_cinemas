@@ -105,12 +105,14 @@ class SeatTypesNotifier extends StateNotifier<List<SeatTypeModel>> {
     return seatType;
   }
 
-  String getPriceById(String id) {
+  String getPriceById(String id, WidgetRef ref) {
     var result = '45000';
     final today = DateTime.now().weekday;
+    final dayChoose = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final day = DateTime.fromMillisecondsSinceEpoch(dayChoose.day!).weekday;
     if (state.isNotEmpty) {
       final seatType = getById(id);
-      if (today == 6 || today == 7) {
+      if (day == 6 || day == 7) {
         result = seatType.otherPrice.toString();
       } else {
         result = seatType.price.toString();

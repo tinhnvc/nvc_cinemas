@@ -5,6 +5,7 @@ import 'package:nvc_cinemas/feature/home/widget/propose_movie_widget.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/link/assets.dart';
@@ -33,6 +34,12 @@ class _HomeState extends ConsumerState<Home> {
     final user = ref.watch(userProvider);
     final movies = ref.watch(moviesProvider)
       ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+    final moviesPro = <MovieModel>[];
+    for (final item in movies) {
+      if (item.active!) {
+        moviesPro.add(item);
+      }
+    }
     final language = ref.watch(languageProvider);
     ref.watch(seatTypesProvider);
     ref.watch(categoriesProvider);
@@ -149,9 +156,9 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisSpacing: 12.0,
                         mainAxisSpacing: 12.0,
                       ),
-                      itemCount: movies.length,
+                      itemCount: moviesPro.length,
                       itemBuilder: (context, index) => ProposeMovieWidget(
-                        movie: movies[index],
+                        movie: moviesPro[index],
                       ),
                     )
                   ],

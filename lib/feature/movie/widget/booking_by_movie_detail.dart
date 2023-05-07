@@ -324,7 +324,7 @@ class BookingByMovieDetail extends ConsumerWidget {
                     ),
                     Text(
                       seatSelected.seatTypeId != null
-                          ? '${FormatSupport.toMoney(int.parse(ref.read(seatTypesProvider.notifier).getPriceById(seatSelected.seatTypeId!)))}đ'
+                          ? '${FormatSupport.toMoney(int.parse(ref.read(seatTypesProvider.notifier).getPriceById(seatSelected.seatTypeId!, ref)))}đ'
                           : '0đ',
                       style: const TextStyle(
                         fontSize: 20,

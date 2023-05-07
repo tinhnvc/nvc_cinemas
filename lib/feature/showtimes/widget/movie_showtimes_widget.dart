@@ -33,9 +33,9 @@ class MovieShowtimesWidget extends ConsumerWidget {
     final weekMap = ref.watch(dayOfWeekProvider);
     final timesShowByDay =
         ref.read(timesProvider.notifier).getByDay(ref: ref, movieId: movie.id!);
-    final emptySeats = ref
-        .read(seatsProvider.notifier)
-        .getSeatEmptyAmount(ref, timesShowByDay[0]);
+    // final emptySeats = ref
+    //     .read(seatsProvider.notifier)
+    //     .getSeatEmptyAmount(ref, timesShowByDay[0]);
     final category =
         ref.read(categoriesProvider.notifier).getById(movie.category!);
 
@@ -60,10 +60,15 @@ class MovieShowtimesWidget extends ConsumerWidget {
                 child: movie.image != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.file(
-                          File(movie.image!),
-                          fit: BoxFit.cover,
-                        ),
+                        child: movie.image!.contains('/m/')
+                            ? Image.asset(
+                                movie.image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(movie.image!),
+                                fit: BoxFit.cover,
+                              ),
                       )
                     : Assets.images.logoPng
                         .image(width: 100, fit: BoxFit.contain),

@@ -38,7 +38,7 @@ class TicketItem extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
-        vertical: 5,
+        vertical: 10,
       ),
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(

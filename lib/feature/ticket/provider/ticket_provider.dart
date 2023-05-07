@@ -70,12 +70,18 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
   bool allowBookTicket(WidgetRef ref, String movieId) {
     final user = ref.watch(userProvider);
     var count = 0;
+    var countConfirm = 0;
     for (final item in state) {
       if (item.userId == user.userId! && item.status == 'waitPay') {
         count++;
       }
     }
-    return count <= 2;
+    for (final item in state) {
+      if (item.userId == user.userId! && item.status == 'waitConfirm') {
+        countConfirm++;
+      }
+    }
+    return count <= 2 && countConfirm <=2;
   }
 
   void waitConfirm(String id) {

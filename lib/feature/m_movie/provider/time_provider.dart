@@ -66,7 +66,8 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
         if (item.movieId == movieId &&
             item.from! > startTime! &&
             item.to! < endTime &&
-            item.from! > DateTime.now().millisecondsSinceEpoch) {
+            item.from! > DateTime.now().millisecondsSinceEpoch &&
+            movie.active!) {
           result.add(item);
         }
       }
@@ -116,7 +117,9 @@ class MoviesNotifier extends StateNotifier<List<TimeModel>> {
       for (final item in timeOfDay) {
         final movieById =
             ref.read(moviesProvider.notifier).getById(item.movieId!);
-        result.add(movieById);
+        if (movieById.active!) {
+          result.add(movieById);
+        }
       }
     }
 

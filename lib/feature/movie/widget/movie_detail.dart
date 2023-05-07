@@ -93,10 +93,15 @@ class MovieDetail extends ConsumerWidget {
                               child: movie.image != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.file(
-                                        File(movie.image!),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      child: movie.image!.contains('/m/')
+                                          ? Image.asset(
+                                              movie.image!,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              File(movie.image!),
+                                              fit: BoxFit.cover,
+                                            ),
                                     )
                                   : Assets.images.logoPng
                                       .image(width: 100, fit: BoxFit.contain),

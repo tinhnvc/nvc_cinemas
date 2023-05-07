@@ -34,7 +34,7 @@ class TicketPage extends ConsumerWidget {
         }
       }
     }
-    ticketByUser..sort((a, b) => a.createAt!.compareTo(b.createAt!));
+    ticketByUser..sort((a, b) => -a.createAt!.compareTo(b.createAt!));
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -54,7 +54,8 @@ class TicketPage extends ConsumerWidget {
                   children: [
                     const SizedBox(height: 20),
                     ArrowBackTitle(
-                      title: context.l10n.ticket,
+                      title:
+                          '${context.l10n.manage} ${context.l10n.ticket.toLowerCase()}',
                       textSize: 19,
                       onPressed: () => Navigator.pop(context),
                     ),

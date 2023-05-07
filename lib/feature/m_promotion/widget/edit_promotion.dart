@@ -116,10 +116,15 @@ class EditPromotion extends ConsumerWidget {
                                     ? ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(8.0),
-                                        child: Image.file(
-                                          File(pathValue),
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: pathValue.contains('/p/')
+                                            ? Image.asset(
+                                                pathValue,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                File(pathValue),
+                                                fit: BoxFit.cover,
+                                              ),
                                       )
                                     : Center(
                                         child: Icon(

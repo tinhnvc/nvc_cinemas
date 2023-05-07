@@ -53,7 +53,7 @@ class MSeatTypePage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.seat,
+                          '${context.l10n.manage} ${context.l10n.seat.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,

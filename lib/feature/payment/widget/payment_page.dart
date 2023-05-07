@@ -41,7 +41,7 @@ class PaymentPage extends ConsumerWidget {
     final category =
         ref.read(categoriesProvider.notifier).getById(movie.category!);
     final price =
-        ref.read(seatTypesProvider.notifier).getPriceById(seat.seatTypeId!);
+        ref.read(seatTypesProvider.notifier).getPriceById(seat.seatTypeId!, ref);
     final couponValue = ref.watch(couponCodeProvider);
     final promotions = ref.watch(promotionsProvider);
     final current = DateTime.now().millisecondsSinceEpoch;

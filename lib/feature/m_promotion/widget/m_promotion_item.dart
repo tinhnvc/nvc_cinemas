@@ -62,10 +62,15 @@ class MPromotionItem extends ConsumerWidget {
               child: promotion.image != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.file(
-                        File(promotion.image!),
-                        fit: BoxFit.cover,
-                      ),
+                      child: promotion.image!.contains('/p/')
+                          ? Image.asset(
+                              promotion.image!,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(promotion.image!),
+                              fit: BoxFit.cover,
+                            ),
                     )
                   : Assets.images.logoPng
                       .image(width: 100, fit: BoxFit.contain),

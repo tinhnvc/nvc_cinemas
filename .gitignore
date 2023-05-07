@@ -109,6 +109,8 @@ app.*.map.json
 coverage/
 lib/shared/link/
 assets/images/payment_qr.png
+assets/images/m/
+assets/images/p/
 
 # Submodules
 !pubspec.lock

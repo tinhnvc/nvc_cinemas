@@ -52,7 +52,7 @@ class MRevenuePage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.revenue,
+                          '${context.l10n.manage} ${context.l10n.revenue.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,

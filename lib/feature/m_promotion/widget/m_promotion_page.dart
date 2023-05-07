@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/widget/m_movie_item.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/m_promotion/widget/m_promotion_item.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
@@ -55,7 +56,7 @@ class MPromotionPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.l10n.promotions,
+                          '${context.l10n.manage} ${context.l10n.promotions.toLowerCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 20,

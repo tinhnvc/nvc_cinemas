@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nvc_cinemas/feature/m_promotion/model/promotion_model.dart';
 import 'package:nvc_cinemas/feature/m_promotion/provider/promotion_provider.dart';
 import 'package:nvc_cinemas/feature/promotion/widget/promotion_widget.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
@@ -25,6 +26,12 @@ class PromotionPage extends ConsumerWidget {
       ..sort(
         (a, b) => -a.startTime!.compareTo(b.startTime!),
       );
+    final promotionsActive = <PromotionModel>[];
+    for (final item in promotions) {
+      if (item.active!) {
+        promotionsActive.add(item);
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -52,28 +59,18 @@ class PromotionPage extends ConsumerWidget {
                     Row(
                       children: [
                         Text(
-                          context.l10n.news.toUpperCase(),
+                          '${context.l10n.news.toUpperCase()} & ${context.l10n.promotions.toUpperCase()}',
                           style: TextStyle(
                             color: ColorName.btnText,
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          context.l10n.promotions.toUpperCase(),
-                          style: TextStyle(
-                            color: ColorName.btnText,
-                            fontSize: 17,
-                          ),
-                        ),
                       ],
                     ),
-                    promotions.isNotEmpty
+                    promotionsActive.isNotEmpty
                         ? Column(
-                            children: promotions
+                            children: promotionsActive
                                 .map((e) => PromotionWidget(promotion: e))
                                 .toList(),
                           )

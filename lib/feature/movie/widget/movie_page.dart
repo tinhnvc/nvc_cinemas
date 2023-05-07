@@ -30,13 +30,15 @@ class MoviePage extends ConsumerWidget {
     final comingSoonMovies = <MovieModel>[];
 
     for (final item in movies) {
-      if (item.startTime! < DateTime.now().millisecondsSinceEpoch) {
+      if (item.startTime! < DateTime.now().millisecondsSinceEpoch &&
+          item.active!) {
         nowShowingMovies.add(item);
       }
     }
 
     for (final item in movies) {
-      if (item.startTime! > DateTime.now().millisecondsSinceEpoch) {
+      if (item.startTime! > DateTime.now().millisecondsSinceEpoch &&
+          item.active!) {
         comingSoonMovies.add(item);
       }
     }
