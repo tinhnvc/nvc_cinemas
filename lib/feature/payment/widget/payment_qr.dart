@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
+import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
 import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
 import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
@@ -31,9 +32,11 @@ class PaymentQrModalSheet extends ConsumerWidget {
     final ticketId = Uuid().v4();
     final seatType =
         ref.read(seatTypesProvider.notifier).getById(seat.seatTypeId!);
+    final dayChoose = ref.read(dayOfWeekProvider.notifier).getSelected();
+    final day = DateTime.fromMillisecondsSinceEpoch(dayChoose.day!).weekday;
     final today = DateTime.now().weekday;
     final price =
-        (today == 6 || today == 7) ? seatType.otherPrice! : seatType.price;
+        (day == 6 || day == 7) ? seatType.otherPrice! : seatType.price;
 
     final couponValue = ref.watch(couponCodeProvider);
     final isCouponSelect =

@@ -1,18 +1,7 @@
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
-import 'package:nvc_cinemas/feature/ticket/model/ticket_model.dart';
-import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
-import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
-import 'package:nvc_cinemas/l10n/l10n.dart';
-import 'package:nvc_cinemas/shared/link/assets.dart';
-import 'package:nvc_cinemas/shared/widget/rounded_button_widget.dart';
-import 'package:nvc_cinemas/shared/widget/select/selectable_text_custom.dart';
-import 'package:nvc_cinemas/shared/widget/snack_bar_support.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class TicketQrModalSheet extends ConsumerWidget {
   const TicketQrModalSheet({required this.ticketId, Key? key})
@@ -109,6 +98,44 @@ class TicketQrModalSheet extends ConsumerWidget {
                                 fontSize: 17,
                                 color: Colors.red,
                                 fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 7,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ColorName.primary),
+                                borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(20),
+                                  right: Radius.circular(20),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.download,
+                                    color: ColorName.primary,
+                                    size: 25,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Lưu mã QR',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: ColorName.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(

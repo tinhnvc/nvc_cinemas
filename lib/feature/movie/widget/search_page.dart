@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_category/provider/category_provider.dart';
 import 'package:nvc_cinemas/feature/m_movie/provider/m_movie_provider.dart';
+import 'package:nvc_cinemas/feature/movie/model/movie_model.dart';
 import 'package:nvc_cinemas/feature/movie/widget/custom_search_delegate.dart';
 import 'package:nvc_cinemas/gen/assets.gen.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
@@ -16,6 +17,13 @@ class SearchPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final movies = ref.watch(moviesProvider);
+    final moviesActive = <MovieModel>[];
+    for (final item in movies) {
+      if (item.active!) {
+        moviesActive.add(item);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorName.primary,
@@ -30,7 +38,8 @@ class SearchPage extends ConsumerWidget {
           IconButton(
               onPressed: () {
                 showSearch(
-                    context: context, delegate: CustomSearchDelegate(movies));
+                    context: context,
+                    delegate: CustomSearchDelegate(moviesActive));
               },
               icon: const Icon(
                 Icons.search,
@@ -48,21 +57,21 @@ class SearchPage extends ConsumerWidget {
       ),
       body: Center(
         child: ListView.builder(
-            itemCount: movies.length,
+            itemCount: moviesActive.length,
             itemBuilder: (context, index) {
               final category = ref
                   .read(categoriesProvider.notifier)
-                  .getById(movies[index].category!);
+                  .getById(moviesActive[index].category!);
 
               return GestureDetector(
                 onTap: () {
                   InitUtil.initBookingByMovie(ref: ref);
                   Navigator.pushNamed(context, '/booking-by-movie',
-                      arguments: movies[index]);
+                      arguments: moviesActive[index]);
                 },
                 child: ListTile(
                   title: Text(
-                    movies[index].movieNameVi!,
+                    moviesActive[index].movieNameVi!,
                     style: TextStyle(
                       color: ColorName.btnText,
                       fontSize: 16,
@@ -70,19 +79,24 @@ class SearchPage extends ConsumerWidget {
                     ),
                   ),
                   subtitle: Text(
-                    '${movies[index].duration} ${context.l10n.minutes.toLowerCase()} | ${category.categoryName}',
+                    '${moviesActive[index].duration} ${context.l10n.minutes.toLowerCase()} | ${category.categoryName}',
                     style: TextStyle(
                       color: ColorName.btnText,
                       fontSize: 15,
                     ),
                   ),
-                  leading: movies[index].image != null
+                  leading: moviesActive[index].image != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
-                          child: Image.file(
-                            File(movies[index].image!),
-                            fit: BoxFit.cover,
-                          ),
+                          child: moviesActive[index].image!.contains('/m/')
+                              ? Image.asset(
+                                  moviesActive[index].image!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(moviesActive[index].image!),
+                                  fit: BoxFit.cover,
+                                ),
                         )
                       : Assets.images.logoPng
                           .image(width: 100, fit: BoxFit.contain),

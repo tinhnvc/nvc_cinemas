@@ -218,6 +218,7 @@ class TicketFormProvider {
     buttonController.start();
     await Future.delayed(const Duration(milliseconds: 700));
     ref.read(ticketsProvider.notifier).add(ticket);
+    print(ticket);
     FunctionUtil.alertPopUpPayed(onPressedConfirm: () {
       ref
           .read(navigationProvider.notifier)

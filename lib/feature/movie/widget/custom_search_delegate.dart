@@ -41,8 +41,13 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     List<MovieModel> matchQuery = [];
     for (var item in movies) {
-      if (item.movieNameVi!.toLowerCase().contains(query.toLowerCase()) &&
-          query != '') {
+      final movie =
+          item.movieNameVi!.toLowerCase().contains(query.toLowerCase());
+      final actor = item.actor!.toLowerCase().contains(query.toLowerCase());
+      final director =
+          item.director!.toLowerCase().contains(query.toLowerCase());
+
+      if (movie || actor || director) {
         matchQuery.add(item);
       }
     }
@@ -81,10 +86,15 @@ class CustomSearchDelegate extends SearchDelegate {
                 leading: result.image != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.file(
-                          File(result.image!),
-                          fit: BoxFit.cover,
-                        ),
+                        child: result.image!.contains('/m/')
+                            ? Image.asset(
+                                result.image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(result.image!),
+                                fit: BoxFit.cover,
+                              ),
                       )
                     : Assets.images.logoPng
                         .image(width: 100, fit: BoxFit.contain),
@@ -105,8 +115,12 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
     for (var item in movies) {
-      if (item.movieNameVi!.toLowerCase().contains(query.toLowerCase()) &&
-          query != '') {
+      final movie =
+          item.movieNameVi!.toLowerCase().contains(query.toLowerCase());
+      final actor = item.actor!.toLowerCase().contains(query.toLowerCase());
+      final director =
+          item.director!.toLowerCase().contains(query.toLowerCase());
+      if (movie || director || actor) {
         matchQuery.add(item.movieNameVi!);
       }
     }

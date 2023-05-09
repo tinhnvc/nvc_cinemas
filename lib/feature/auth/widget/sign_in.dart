@@ -154,14 +154,14 @@ class SignIn extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(height: ratio < 1.95 ? 10 : 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.images.googleLogo
-                              .image(width: 50, fit: BoxFit.cover),
-                          Text(context.l10n.signInWithGoogle)
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Assets.images.googleLogo
+                      //         .image(width: 50, fit: BoxFit.cover),
+                      //     Text(context.l10n.signInWithGoogle)
+                      //   ],
+                      // ),
                       TextButton(
                         style: TextButton.styleFrom(
                           primary: const Color(0xFF4B5574),
