@@ -1,5 +1,6 @@
 import 'package:nvc_cinemas/feature/auth/provider/auth_provider.dart';
 import 'package:nvc_cinemas/feature/m_revenue/provider/revenue_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -332,6 +333,18 @@ class DrawerWidget extends ConsumerWidget {
             '/promotion-page',
           );
           selectItem(context, ref, NavigationItem.home);
+
+          return;
+        }
+        if (item == NavigationItem.ticket) {
+          print('rem');
+          ref.read(ticketsProvider.notifier).cancelTicketOverTime(ref);
+
+          return;
+        }
+        if (item == NavigationItem.mTicket) {
+          print('rem');
+          ref.read(ticketsProvider.notifier).cancelTicketOverTime(ref);
 
           return;
         }

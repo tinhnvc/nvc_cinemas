@@ -116,6 +116,12 @@ class RoomFormProvider {
 
   final buttonController = RoundedLoadingButtonController();
 
+  Future<void> resetButton() async {
+    buttonController.start();
+    await Future.delayed(const Duration(milliseconds: 700));
+    buttonController.reset();
+  }
+
   Future<void> addRoom(WidgetRef ref, BuildContext context) async {
     buttonController.start();
     await Future.delayed(const Duration(milliseconds: 700));

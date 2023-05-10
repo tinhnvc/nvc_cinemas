@@ -81,7 +81,7 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
         countConfirm++;
       }
     }
-    return count <= 2 && countConfirm <=2;
+    return count <= 2 && countConfirm <= 2;
   }
 
   void waitConfirm(String id) {
@@ -103,6 +103,27 @@ class MoviesNotifier extends StateNotifier<List<TicketModel>> {
       for (final item in state)
         if (item.id == id) item.copyWith(status: 'canceled') else item,
     ];
+  }
+
+  void cancelTicketOverTime(WidgetRef ref) {
+    for (final item in state) {
+      final time = ref.read(timesProvider.notifier).getById(item.timeId!);
+      final statusCancel =
+          item.status == 'waitPay' || item.status == 'waitConfirm';
+      if (statusCancel && time.to! < DateTime.now().millisecondsSinceEpoch) {
+        cancel(item.id!);
+        print('removed');
+      }
+    }
+  }
+
+  bool isAllowDeleteMovie(WidgetRef ref, String movieId) {
+    final movieIds = <String>[];
+    for (final item in state) {
+      final time = ref.read(timesProvider.notifier).getById(item.timeId!);
+      movieIds.add(time.movieId!);
+    }
+    return !movieIds.contains(movieId);
   }
 
   int ticketAmountByMovieId(WidgetRef ref, String movieId) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nvc_cinemas/feature/m_movie/model/time_model.dart';
 import 'package:nvc_cinemas/feature/m_room/model/seat_model.dart';
+import 'package:nvc_cinemas/feature/m_room/provider/m_room_provider.dart';
 import 'package:nvc_cinemas/feature/m_seat/provider/seat_type_provider.dart';
 import 'package:nvc_cinemas/feature/movie/provider/day_of_week_provider.dart';
 import 'package:nvc_cinemas/feature/payment/provider/payment_provider.dart';
@@ -41,6 +42,7 @@ class PaymentQrModalSheet extends ConsumerWidget {
     final couponValue = ref.watch(couponCodeProvider);
     final isCouponSelect =
         couponValue.isNotEmpty && couponValue != 'Chọn ưu đãi';
+    final user = ref.watch(userProvider);
 
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
@@ -140,131 +142,196 @@ class PaymentQrModalSheet extends ConsumerWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RoundedButtonWidget(
-                                  content: context.l10n.copyContent,
-                                  onPressed: () async {
-                                    await FlutterClipboard.copy(
-                                      'tt $ticketId',
-                                    );
-                                    SnackBarSupport.copied(context: context);
-                                  },
-                                ),
-                                RoundedButtonWidget(
-                                  content: context.l10n.copyBank,
-                                  onPressed: () async {
-                                    await FlutterClipboard.copy(
-                                      bankInformation[1],
-                                    );
-                                    SnackBarSupport.copied(context: context);
-                                  },
-                                ),
-                              ],
-                            ),
+                            if (user.email != 'customer@nvccinemas.com')
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RoundedButtonWidget(
+                                    content: context.l10n.copyContent,
+                                    onPressed: () async {
+                                      await FlutterClipboard.copy(
+                                        'tt $ticketId',
+                                      );
+                                      SnackBarSupport.copied(context: context);
+                                    },
+                                  ),
+                                  RoundedButtonWidget(
+                                    content: context.l10n.copyBank,
+                                    onPressed: () async {
+                                      await FlutterClipboard.copy(
+                                        bankInformation[1],
+                                      );
+                                      SnackBarSupport.copied(context: context);
+                                    },
+                                  ),
+                                ],
+                              ),
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                RoundedLoadingButton(
-                                  color: ColorName.primary,
-                                  borderRadius: 5,
-                                  height: 40,
-                                  width: 160,
-                                  animateOnTap: false,
-                                  controller: ref
-                                      .watch(ticketFormProvider)
-                                      .buttonController,
-                                  onPressed: () {
-                                    final ticket = TicketModel(
-                                      id: ticketId,
-                                      userId: ref.watch(userProvider).userId,
-                                      timeId: time.id,
-                                      seatId: seat.id,
-                                      status: 'waitConfirm',
-                                      discount: isCouponSelect
-                                          ? int.parse(
-                                              FunctionUtil.couponCodeToDiscount(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : 0,
-                                      totalPrice: isCouponSelect
-                                          ? int.parse(FunctionUtil
-                                              .couponCodeToTotalPrice(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : price,
-                                      createAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                      updateAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                    );
-                                    ref
-                                        .read(ticketFormProvider)
-                                        .addTicket(ref, context, ticket);
-                                  },
-                                  child: Text(
-                                    'Đã thanh toán',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
+                            user.email == 'customer@nvccinemas.com'
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      RoundedLoadingButton(
+                                        color: ColorName.primary,
+                                        borderRadius: 5,
+                                        height: 40,
+                                        width: 160,
+                                        animateOnTap: false,
+                                        controller: ref
+                                            .watch(ticketFormProvider)
+                                            .buttonController,
+                                        onPressed: () {
+                                          final ticket = TicketModel(
+                                            id: ticketId,
+                                            userId:
+                                                ref.watch(userProvider).userId,
+                                            timeId: time.id,
+                                            seatId: seat.id,
+                                            status: 'payed',
+                                            discount: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToDiscount(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : 0,
+                                            totalPrice: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToTotalPrice(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : price,
+                                            createAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                            updateAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                          );
+                                          ref
+                                              .read(ticketFormProvider)
+                                              .addTicket(ref, context, ticket);
+                                        },
+                                        child: Text(
+                                          'Đã thanh toán',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      RoundedLoadingButton(
+                                        color: ColorName.primary,
+                                        borderRadius: 5,
+                                        height: 40,
+                                        width: 160,
+                                        animateOnTap: false,
+                                        controller: ref
+                                            .watch(roomFormProvider)
+                                            .buttonController,
+                                        onPressed: () {
+                                          ref
+                                              .read(roomFormProvider)
+                                              .resetButton();
+                                          final ticket = TicketModel(
+                                            id: ticketId,
+                                            userId:
+                                                ref.watch(userProvider).userId,
+                                            timeId: time.id,
+                                            seatId: seat.id,
+                                            status: 'waitConfirm',
+                                            discount: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToDiscount(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : 0,
+                                            totalPrice: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToTotalPrice(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : price,
+                                            createAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                            updateAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                          );
+                                          ref
+                                              .read(ticketFormProvider)
+                                              .addTicket(ref, context, ticket);
+                                        },
+                                        child: Text(
+                                          'Đã thanh toán',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      RoundedLoadingButton(
+                                        color: ColorName.primary,
+                                        borderRadius: 5,
+                                        height: 40,
+                                        width: 160,
+                                        animateOnTap: false,
+                                        controller: ref
+                                            .watch(seatTypeFormProvider)
+                                            .buttonController,
+                                        onPressed: () {
+                                          ref
+                                              .read(seatTypeFormProvider)
+                                              .resetButton();
+                                          final ticket = TicketModel(
+                                            id: ticketId,
+                                            userId:
+                                                ref.watch(userProvider).userId,
+                                            timeId: time.id,
+                                            seatId: seat.id,
+                                            status: 'waitPay',
+                                            discount: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToDiscount(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : 0,
+                                            totalPrice: isCouponSelect
+                                                ? int.parse(FunctionUtil
+                                                    .couponCodeToTotalPrice(
+                                                        context,
+                                                        couponValue,
+                                                        price.toString()))
+                                                : price,
+                                            createAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                            updateAt: DateTime.now()
+                                                .millisecondsSinceEpoch,
+                                          );
+                                          ref
+                                              .read(ticketFormProvider)
+                                              .addTicket(ref, context, ticket);
+                                        },
+                                        child: Text(
+                                          'Thanh toán sau',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                RoundedLoadingButton(
-                                  color: ColorName.primary,
-                                  borderRadius: 5,
-                                  height: 40,
-                                  width: 160,
-                                  animateOnTap: false,
-                                  controller: ref
-                                      .watch(ticketFormProvider)
-                                      .buttonController,
-                                  onPressed: () {
-                                    final ticket = TicketModel(
-                                      id: ticketId,
-                                      userId: ref.watch(userProvider).userId,
-                                      timeId: time.id,
-                                      seatId: seat.id,
-                                      status: 'waitPay',
-                                      discount: isCouponSelect
-                                          ? int.parse(
-                                              FunctionUtil.couponCodeToDiscount(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : 0,
-                                      totalPrice: isCouponSelect
-                                          ? int.parse(FunctionUtil
-                                              .couponCodeToTotalPrice(
-                                                  context,
-                                                  couponValue,
-                                                  price.toString()))
-                                          : price,
-                                      createAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                      updateAt:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                    );
-                                    ref
-                                        .read(ticketFormProvider)
-                                        .addTicket(ref, context, ticket);
-                                  },
-                                  child: Text(
-                                    'Thanh toán sau',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
                             const SizedBox(
                               height: 15,
                             ),

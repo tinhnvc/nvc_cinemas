@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:nvc_cinemas/feature/m_movie/provider/time_provider.dart';
 import 'package:nvc_cinemas/feature/m_revenue/provider/revenue_provider.dart';
+import 'package:nvc_cinemas/feature/ticket/provider/ticket_provider.dart';
 import 'package:nvc_cinemas/gen/colors.gen.dart';
 import 'package:nvc_cinemas/l10n/l10n.dart';
 import 'package:nvc_cinemas/shared/enum/navigation_item.dart';
@@ -67,8 +69,13 @@ class SeeMoreScreen extends ConsumerWidget {
                                     SeeMoreItem(
                                       icon: Icons.sticky_note_2_sharp,
                                       content: context.l10n.ticket,
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, '/ticket-page'),
+                                      onPressed: () {
+                                        ref
+                                            .read(ticketsProvider.notifier)
+                                            .cancelTicketOverTime(ref);
+                                        Navigator.pushNamed(
+                                            context, '/ticket-page');
+                                      },
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.percent_rounded,
@@ -136,11 +143,16 @@ class SeeMoreScreen extends ConsumerWidget {
                                       icon: Icons.sticky_note_2_sharp,
                                       content:
                                           '${context.l10n.manage} ${context.l10n.ticket.toLowerCase()}',
-                                      onPressed: () => ref
-                                          .read(navigationProvider.notifier)
-                                          .setNavigationItem(
-                                            NavigationItem.mTicket,
-                                          ),
+                                      onPressed: () {
+                                        ref
+                                            .read(ticketsProvider.notifier)
+                                            .cancelTicketOverTime(ref);
+                                        ref
+                                            .read(navigationProvider.notifier)
+                                            .setNavigationItem(
+                                              NavigationItem.mTicket,
+                                            );
+                                      },
                                     ),
                                     SeeMoreItem(
                                       icon: Icons.bar_chart,

@@ -36,6 +36,7 @@ class AddShowtimes extends ConsumerWidget {
           times: timesShow,
         );
     final isActiveRoom = ref.read(roomsProvider.notifier).isActiveRoom();
+    final daySelect = ref.read(dayOfWeekProvider.notifier).getSelected();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -166,8 +167,16 @@ class AddShowtimes extends ConsumerWidget {
                     GestureDetector(
                       onTap: isActiveRoom
                           ? () {
-                              InitUtil.initAddShowtime(ref: ref);
-                              CallModalSheet.addShowtimes(context, movie);
+                        print(movie.startTime);
+                        print(daySelect.day);
+                              if (movie.startTime! <= daySelect.day!) {
+                                InitUtil.initAddShowtime(ref: ref);
+                                CallModalSheet.addShowtimes(context, movie);
+                              } else {
+                                SnackBarSupport
+                                    .avoidAddShowTimeBeforeReleaseDate(
+                                        context: context, hideAction: true);
+                              }
                             }
                           : () {
                               SnackBarSupport.noRoomToAddShowtime(

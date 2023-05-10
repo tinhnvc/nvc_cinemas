@@ -177,11 +177,14 @@ class AddShowtimesModalSheet extends ConsumerWidget {
                                       onPressed: () async {
                                         final timePicker = await DateTimePicker
                                             .pickDateTimeInit(
-                                                context: context,
-                                                initDate: dow.id != null
-                                                    ? dow.day!
-                                                    : DateTime.now()
-                                                        .millisecondsSinceEpoch);
+                                          context: context,
+                                          initDate: dow.id != null
+                                              ? dow.day!
+                                              : DateTime.now()
+                                                  .millisecondsSinceEpoch,
+                                          fromDate: movie.startTime!,
+                                          toDate: movie.endTime!,
+                                        );
                                         timeFrom = timePicker
                                             .millisecondsSinceEpoch
                                             .toString();

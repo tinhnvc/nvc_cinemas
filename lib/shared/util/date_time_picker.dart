@@ -64,6 +64,8 @@ class DateTimePicker {
   static Future<DateTime> pickDateTimeInit({
     required BuildContext context,
     required int initDate,
+    required int fromDate,
+    required int toDate,
   }) async {
     final initDateTime = initDate != 0
         ? DateTime.fromMillisecondsSinceEpoch(initDate)
@@ -71,8 +73,8 @@ class DateTimePicker {
     final date = await showDatePicker(
       context: context,
       initialDate: initDateTime,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(DateTime.now().year + 10),
+      firstDate: DateTime.fromMillisecondsSinceEpoch(fromDate),
+      lastDate: DateTime.fromMillisecondsSinceEpoch(toDate),
     );
     if (date == null) {
       return DateTime.now();

@@ -332,4 +332,25 @@ class SnackBarSupport {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  static void avoidAddShowTimeBeforeReleaseDate({
+    required BuildContext context,
+    bool? hideAction,
+  }) {
+    final snackBar = SnackBar(
+      content: Text(
+          'Ngày đang chọn phim chưa phát hành, chọn ngày khác để thêm lịch chiếu'),
+      duration: const Duration(seconds: 3),
+      backgroundColor: Colors.black.withOpacity(0.7),
+      behavior: SnackBarBehavior.floating,
+      action: hideAction ?? false
+          ? SnackBarAction(
+              onPressed: () {},
+              label: context.l10n.ok,
+            )
+          : null,
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

@@ -55,6 +55,13 @@ class MoviesNotifier extends StateNotifier<List<MovieModel>> {
     state = [...state, movie];
   }
 
+  void remove(String movieId) {
+    state = [
+      for (final item in state)
+        if (item.id != movieId) item,
+    ];
+  }
+
   void editMovie(MovieModel movie) {
     state = [
       for (final item in state)
